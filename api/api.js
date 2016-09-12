@@ -1,72 +1,88 @@
-import express from 'express';
+import feathers from 'feathers';
+import morgan from 'morgan';
 import session from 'express-session';
 import bodyParser from 'body-parser';
-import config from '../src/config';
-import * as actions from './actions/index';
-import {mapUrl} from 'utils/url.js';
+import cookieParser from 'cookie-parser';
+import globalConfig from '../src/config';
+import config from './config';
+import hooks from 'feathers-hooks';
+import rest from 'feathers-rest';
+import socketio from 'feathers-socketio';
+import middleware from './middleware';
+import services from './services';
+import * as actions from './actions';
+import { mapUrl } from './utils/url.js';
+import isPromise from 'is-promise';
 import PrettyError from 'pretty-error';
-import http from 'http';
-import SocketIo from 'socket.io';
+import authentication, { middleware as authMiddleware } from 'feathers-authentication';
+import authService, { socketAuth } from './services/authentication';
 
 const pretty = new PrettyError();
-const app = express();
+const app = feathers();
 
-const server = new http.Server(app);
+app.set('config', config);
 
-const io = new SocketIo(server);
-io.path('/ws');
+app.use(morgan('dev'));
 
+app.use(cookieParser());
 app.use(session({
   secret: 'react and redux rule!!!!',
   resave: false,
   saveUninitialized: false,
   cookie: { maxAge: 60000 }
 }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-
-app.use((req, res) => {
+const actionsHandler = (req, res, next) => {
   const splittedUrlPath = req.url.split('?')[0].split('/').slice(1);
 
-  const {action, params} = mapUrl(actions, splittedUrlPath);
+  const { action, params } = mapUrl(actions, splittedUrlPath);
+
+  const catchError = error => {
+    console.error('API ERROR:', pretty.render(error));
+    res.status(error.status || 500).json(error);
+  };
+
+  req.app = app;
 
   if (action) {
-    action(req, params)
-      .then((result) => {
-        if (result instanceof Function) {
-          result(res);
-        } else {
-          res.json(result);
-        }
-      }, (reason) => {
-        if (reason && reason.redirect) {
-          res.redirect(reason.redirect);
-        } else {
-          console.error('API ERROR:', pretty.render(reason));
-          res.status(reason.status || 500).json(reason);
-        }
-      });
-  } else {
-    res.status(404).end('NOT FOUND');
-  }
-});
-
-
-const bufferSize = 100;
-const messageBuffer = new Array(bufferSize);
-let messageIndex = 0;
-
-if (config.apiPort) {
-  const runnable = app.listen(config.apiPort, (err) => {
-    if (err) {
-      console.error(err);
+    try {
+      const handle = action(req, params);
+      (isPromise(handle) ? handle : Promise.resolve(handle))
+        .then(result => {
+          if (result instanceof Function) {
+            result(res);
+          } else {
+            res.json(result);
+          }
+        })
+        .catch(reason => {
+          if (reason && reason.redirect) {
+            res.redirect(reason.redirect);
+          } else {
+            catchError(reason);
+          }
+        });
+    } catch (error) {
+      catchError(error);
     }
-    console.info('----\n==> 🌎  API is running on port %s', config.apiPort);
-    console.info('==> 💻  Send requests to http://%s:%s', config.apiHost, config.apiPort);
-  });
+  } else {
+    next();
+  }
+};
 
-  io.on('connection', (socket) => {
-    socket.emit('news', {msg: `'Hello World!' from server`});
+const socketHandler = io => {
+  const bufferSize = 100;
+  const messageBuffer = new Array(bufferSize);
+  let messageIndex = 0;
+
+  io.use(socketAuth(app));
+  io.on('connection', authMiddleware.setupSocketIOAuthentication(app, app.get('auth')));
+
+  io.on('connection', socket => {
+    const user = socket.feathers.user ? { ...socket.feathers.user, password: undefined } : undefined;
+    socket.emit('news', { msg: '\'Hello World!\' from server', user });
 
     socket.on('history', () => {
       for (let index = 0; index < bufferSize; index++) {
@@ -78,14 +94,32 @@ if (config.apiPort) {
       }
     });
 
-    socket.on('msg', (data) => {
-      data.id = messageIndex;
-      messageBuffer[messageIndex % bufferSize] = data;
+    socket.on('msg', data => {
+      const message = { ...data, id: messageIndex };
+      messageBuffer[messageIndex % bufferSize] = message;
       messageIndex++;
-      io.emit('msg', data);
+      io.emit('msg', message);
     });
   });
-  io.listen(runnable);
+};
+
+app.configure(hooks())
+  .configure(authentication(config.auth))
+  .configure(rest())
+  .configure(socketio({ path: '/ws' }, socketHandler))
+  .configure(authService)
+  .use(actionsHandler)
+  .configure(services)
+  .configure(middleware);
+
+if (globalConfig.apiPort) {
+  app.listen(globalConfig.apiPort, (err) => {
+    if (err) {
+      console.error(err);
+    }
+    console.info('----\n==> 🌎  API is running on port %s', globalConfig.apiPort);
+    console.info('==> 💻  Send requests to http://%s:%s', globalConfig.apiHost, globalConfig.apiPort);
+  });
 } else {
-  console.error('==>     ERROR: No PORT environment variable has been specified');
+  console.error('==>     ERROR: No APIPORT environment variable has been specified');
 }

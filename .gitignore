@@ -1,8 +1,12 @@
 .idea/
 node_modules/
-dist/
+static/dist/
+static/service-worker.js
 *.iml
 webpack-assets.json
 webpack-stats.json
 npm-debug.log
-.project
+.happypack
+webpack/dlls/*.json
+.scratch
+api/**/*.nedb

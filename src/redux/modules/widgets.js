@@ -59,7 +59,7 @@ export default function reducer(state = initialState, action = {}) {
       data[action.result.id - 1] = action.result;
       return {
         ...state,
-        data: data,
+        data,
         editing: {
           ...state.editing,
           [action.id]: false

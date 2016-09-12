@@ -1,11 +1,8 @@
 # React Redux Universal Hot Example
 
-[![build status](https://img.shields.io/travis/erikras/react-redux-universal-hot-example/master.svg?style=flat-square)](https://travis-ci.org/erikras/react-redux-universal-hot-example)
-[![Dependency Status](https://david-dm.org/erikras/react-redux-universal-hot-example.svg?style=flat-square)](https://david-dm.org/erikras/react-redux-universal-hot-example)
-[![devDependency Status](https://david-dm.org/erikras/react-redux-universal-hot-example/dev-status.svg?style=flat-square)](https://david-dm.org/erikras/react-redux-universal-hot-example#info=devDependencies)
-[![react-redux-universal channel on discord](https://img.shields.io/badge/discord-react--redux--universal%40reactiflux-brightgreen.svg?style=flat-square)](https://discord.gg/0ZcbPKXt5bZZb1Ko)
-[![Demo on Heroku](https://img.shields.io/badge/demo-heroku-brightgreen.svg?style=flat-square)](https://react-redux.herokuapp.com)
-[![PayPal donate button](https://img.shields.io/badge/donate-paypal-brightgreen.svg?style=flat-square)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=E2LK57ZQ9YRMN)
+[![Build Status](https://travis-ci.org/bertho-zero/react-redux-universal-hot-example.svg?branch=master&style=flat-square)](https://travis-ci.org/bertho-zero/react-redux-universal-hot-example)
+[![Dependency Status](https://david-dm.org/bertho-zero/react-redux-universal-hot-example.svg?style=flat-square)](https://david-dm.org/bertho-zero/react-redux-universal-hot-example)
+[![devDependency Status](https://david-dm.org/bertho-zero/react-redux-universal-hot-example/dev-status.svg?style=flat-square)](https://david-dm.org/bertho-zero/react-redux-universal-hot-example#info=devDependencies)
 
 ---
 
@@ -16,15 +13,17 @@ This is a starter boilerplate app I've put together using the following technolo
 * ~~Isomorphic~~ [Universal](https://medium.com/@mjackson/universal-javascript-4761051b7ae9) rendering
 * Both client and server make calls to load data from separate API server
 * [React](https://github.com/facebook/react)
-* [React Router](https://github.com/rackt/react-router)
+* [React Router](https://github.com/reactjs/react-router)
 * [Express](http://expressjs.com)
+* [Feathers](http://feathersjs.com/)
+* [Passport](http://passportjs.org) for authentication
 * [Babel](http://babeljs.io) for ES6 and ES7 magic
 * [Webpack](http://webpack.github.io) for bundling
 * [Webpack Dev Middleware](http://webpack.github.io/docs/webpack-dev-middleware.html)
 * [Webpack Hot Middleware](https://github.com/glenjamin/webpack-hot-middleware)
-* [Redux](https://github.com/rackt/redux)'s futuristic [Flux](https://facebook.github.io/react/blog/2014/05/06/flux.html) implementation
-* [Redux Dev Tools](https://github.com/rackt/redux-devtools) for next generation DX (developer experience). Watch [Dan Abramov's talk](https://www.youtube.com/watch?v=xsSnOQynTHs).
-* [Redux Router](https://github.com/acdlite/redux-router) Keep your router state in your Redux store
+* [Redux](https://github.com/reactjs/redux)'s futuristic [Flux](https://facebook.github.io/react/blog/2014/05/06/flux.html) implementation
+* [Redux Dev Tools](https://github.com/reactjs/redux-devtools) for next generation DX (developer experience). Watch [Dan Abramov's talk](https://www.youtube.com/watch?v=xsSnOQynTHs).
+* [React Router Redux](https://github.com/reactjs/react-router-redux) Redux/React Router bindings.
 * [ESLint](http://eslint.org) to maintain a consistent code style
 * [redux-form](https://github.com/erikras/redux-form) to manage form state in Redux
 * [lru-memoize](https://github.com/erikras/lru-memoize) to speed up form validation
@@ -43,6 +42,23 @@ I cobbled this together from a wide variety of similar "starter" repositories. A
 npm install
 ```
 
+### Database
+
+#### Mongoose, Sequelize, Waterline and other connectors
+
+For those who prefer to use Mongoose, Sequelize or others you can remove `feathers-nedb` dependencies, install a Feathers adapter below and configure it with feathers in [api.js](https://github.com/bertho-zero/react-redux-universal-hot-example/blob/master/api/api.js).  
+And to finish create the schema/model `User` (eg: `/api/database/User.js` or directly in service), and modify [Users service](https://github.com/bertho-zero/react-redux-universal-hot-example/blob/master/api/services/users/index.js) for use your favorite adapter.
+
+- [feathers-memory](https://github.com/feathersjs/feathers-memory)
+- [feathers-mongodb](https://github.com/feathersjs/feathers-mongodb)
+- [feathers-mongoose](https://github.com/feathersjs/feathers-mongoose)
+- [feathers-nedb](https://github.com/feathersjs/feathers-nedb)
+- [feathers-rethinkdb](https://github.com/feathersjs/feathers-rethinkdb)
+- [feathers-sequelize](https://github.com/feathersjs/feathers-sequelize)
+- [feathers-waterline](https://github.com/feathersjs/feathers-waterline)
+- [feathers-localstorage](https://github.com/feathersjs/feathers-localstorage) (A client side service based on feathers-memory that persists to LocalStorage)
+- ...
+
 ## Running Dev Server
 
 ```bash
@@ -55,8 +71,8 @@ The first time it may take a little while to generate the first `webpack-assets.
 
 [Redux Devtools](https://github.com/gaearon/redux-devtools) are enabled by default in development.
 
-- <kbd>H</kbd> Toggle DevTools Dock
-- <kbd>Q</kbd> Move DevTools Dock Position
+- <kbd>CTRL</kbd>+<kbd>H</kbd> Toggle DevTools Dock
+- <kbd>CTRL</kbd>+<kbd>Q</kbd> Move DevTools Dock Position
 - see [redux-devtools-dock-monitor](https://github.com/gaearon/redux-devtools-dock-monitor) for more detailed information.
 
 If you have the 
@@ -79,6 +95,9 @@ A demonstration of this app can be seen [running on heroku](https://react-redux.
 ## Documentation
 
 * [Exploring the Demo App](docs/ExploringTheDemoApp/ExploringTheDemoApp.md) is a guide that can be used before you install the kit.
+* [Installing the Kit](docs/InstallingTheKit/InstallingTheKit.md) guides you through installation and running the development server locally.
+* [Adding Text to the Home Page](docs/AddingToHomePage/AddingToHomePage.md) guides you through adding "Hello, World!" to the home page.
+* [Adding A Page](docs/AddingAPage/AddingAPage.md) guides you through adding a new page.
 * [React Tutorial - Converting Reflux to Redux](http://engineering.wework.com/process/2015/10/01/react-reflux-to-redux/), by Matt Star
    If you are the kind of person that learns best by following along a tutorial, I can recommend Matt Star's overview and examples.
 
@@ -103,7 +122,7 @@ We also spit out the `redux` state into a global `window.__data` variable in the
 
 #### Server-side Data Fetching
 
-We ask `react-router` for a list of all the routes that match the current request and we check to see if any of the matched routes has a static `fetchData()` function. If it does, we pass the redux dispatcher to it and collect the promises returned. Those promises will be resolved when each matching route has loaded its necessary data from the API server.
+The [redux-connect](https://www.npmjs.com/package/redux-connect) package exposes an API to return promises that need to be fulfilled before a route is rendered. It exposes a `<ReduxAsyncConnect />` container, which wraps our render tree on both [server](https://github.com/erikras/react-redux-universal-hot-example/blob/master/src/server.js) and [client](https://github.com/erikras/react-redux-universal-hot-example/blob/master/src/client.js). More documentation is available on the [redux-connect](https://www.npmjs.com/package/redux-connect) page.
 
 #### Client Side
 
@@ -114,7 +133,7 @@ The client side entry point is reasonably named `client.js`. All it does is load
 The middleware, [`clientMiddleware.js`](https://github.com/erikras/react-redux-universal-hot-example/blob/master/src/redux/middleware/clientMiddleware.js), serves two functions:
 
 1. To allow the action creators access to the client API facade. Remember this is the same on both the client and the server, and cannot simply be `import`ed because it holds the cookie needed to maintain session on server-to-server requests.
-2. To allow some actions to pass a "promise generator", a function that takes the API client and returns a promise. Such actions require three action types, the `REQUEST` action that initiates the data loading, and a `SUCCESS` and `FAILURE` action that will be fired depending on the result of the promise. There are other ways to accomplish this, some discussed [here](https://github.com/rackt/redux/issues/99), which you may prefer, but to the author of this example, the middleware way feels cleanest.
+2. To allow some actions to pass a "promise generator", a function that takes the API client and returns a promise. Such actions require three action types, the `REQUEST` action that initiates the data loading, and a `SUCCESS` and `FAILURE` action that will be fired depending on the result of the promise. There are other ways to accomplish this, some discussed [here](https://github.com/reactjs/redux/issues/99), which you may prefer, but to the author of this example, the middleware way feels cleanest.
 
 #### Redux Modules... *What the Duck*?
 
@@ -140,10 +159,12 @@ let logoImage = require('./logo.png');
 
 #### Styles
 
-This project uses [local styles](https://medium.com/seek-ui-engineering/the-end-of-global-css-90d2a4a06284) using [css-loader](https://github.com/webpack/css-loader). The way it works is that you import your stylesheet at the top of the class with your React Component, and then you use the classnames returned from that import. Like so:
+This project uses [local styles](https://medium.com/seek-ui-engineering/the-end-of-global-css-90d2a4a06284) using [css-loader](https://github.com/webpack/css-loader). The way it works is that you import your stylesheet at the top of the `render()` function in your React Component, and then you use the classnames returned from that import. Like so:
 
 ```javascript
+render() {
 const styles = require('./App.scss');
+...
 ```
 
 Then you set the `className` of your element to match one of the CSS classes in your SCSS file, and you're good to go!
@@ -151,6 +172,64 @@ Then you set the `className` of your element to match one of the CSS classes in 
 ```jsx
 <div className={styles.mySection}> ... </div>
 ```
+
+#### Alternative to Local Styles
+
+If you'd like to use plain inline styles this is possible with a few modifications to your webpack configuration.
+
+**1. Configure Isomorphic Tools to Accept CSS**
+
+In `webpack-isomorphic-tools.js` add **css** to the list of style module extensions
+
+```javascript
+    style_modules: {
+      extensions: ['less','scss','css'],
+```
+
+**2. Add a CSS loader to webpack dev config**
+
+In `dev.config.js` modify **module loaders** to include a test and loader for css
+
+```javascript
+  module: {
+    loaders: [
+      { test: /\.css$/, loader: 'style-loader!css-loader'},
+```
+
+**3. Add a CSS loader to the webpack prod config**
+
+You must use the **ExtractTextPlugin** in this loader. In `prod.config.js` modify **module loaders** to include a test and loader for css
+
+```javascript
+  module: {
+    loaders: [
+      { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader')},
+```
+
+**Now you may simply omit assigning the `required` stylesheet to a variable and keep it at the top of your `render()` function.**
+
+```javascript
+render() {
+require('./App.css');
+require('aModule/dist/style.css');
+...
+```
+
+**NOTE** In order to use this method with **scss or less** files one more modification must be made. In both `dev.config.js` and `prod.config.js` in the loaders for less and scss files remove 
+
+1. `modules`
+2. `localIdentName...`
+
+Before:
+```javascript
+{ test: /\.less$/, loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!less?outputStyle=expanded&sourceMap' },
+```
+After:
+```javascript
+{ test: /\.less$/, loader: 'style!css?importLoaders=2&sourceMap!autoprefixer?browsers=last 2 version!less?outputStyle=expanded&sourceMap' },
+```
+
+After this modification to both loaders you will be able to use scss and less files in the same way as css files.
 
 #### Unit Tests
 
@@ -181,7 +260,6 @@ This project moves fast and has an active community, so if you have a question t
 
 Although this isn't a library, we recently started versioning to make it easier to track breaking changes and emerging best practices. 
 
-* [Babel 6](https://github.com/babel/babel) - Coming soon with v1 (see [#488](https://github.com/erikras/react-redux-universal-hot-example/issues/488))
 * [Inline Styles](docs/InlineStyles.md) - CSS is dead
 
 ## Contributing
