@@ -2,6 +2,7 @@ import feathers from 'feathers';
 import morgan from 'morgan';
 import session from 'express-session';
 import bodyParser from 'body-parser';
+import multer from 'multer';
 import cookieParser from 'cookie-parser';
 import globalConfig from '../src/config';
 import config from './config';
@@ -33,6 +34,7 @@ app.use(session({
 }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(multer().any());
 
 const actionsHandler = (req, res, next) => {
   const splittedUrlPath = req.url.split('?')[0].split('/').slice(1);
