@@ -1,0 +1,19 @@
+{
+  "name": "<%- name %>",
+  "description": "<%- description %>",
+  "repository": "https://github.com/erikras/react-redux-universal-hot-example",
+  "logo": "http://node-js-sample.herokuapp.com/node.svg",
+  "keywords": [
+    "react",
+    "isomorphic",
+    "universal",
+    "webpack",
+    "express",
+    "hot reloading",
+    "react-hot-reloader",
+    "redux",
+    "starter",
+    "boilerplate",
+    "babel"
+  ]
+}

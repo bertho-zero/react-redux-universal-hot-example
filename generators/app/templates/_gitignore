@@ -1,0 +1,11 @@
+.idea/
+node_modules/
+static/dist/
+static/service-worker.js
+*.iml
+webpack-assets.json
+webpack-stats.json
+npm-debug.log
+.happypack
+webpack/dlls/*.json
+api/**/*.nedb
