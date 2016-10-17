@@ -8,7 +8,7 @@ import notifs from './modules/notifs';
 import counter from './modules/counter';
 import info from './modules/info';<% if(examples.indexOf('forms') !== -1) { %>
 import widgets from './modules/widgets';
-import survey from './modules/survey';<% } %><% if(examples.indexOf('chat') !== -1) { %>
+import survey from './modules/survey';<% } %><% if(examples.indexOf('chatFeathers') !== -1) { %>
 import chat from './modules/chat';<% } %>
 
 export default combineReducers({
@@ -24,6 +24,6 @@ export default combineReducers({
   }),
   info<% if(examples.indexOf('forms') !== -1) { %>,
   widgets,
-  survey<% } %><% if(examples.indexOf('chat') !== -1) { %>,
+  survey<% } %><% if(examples.indexOf('chatFeathers') !== -1) { %>,
   chat<% } %>
 });

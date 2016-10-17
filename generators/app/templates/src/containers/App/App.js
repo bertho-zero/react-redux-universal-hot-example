@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { IndexLink } from 'react-router';
-import { LinkContainer } from 'react-router-bootstrap';
+<% if(!auth && examples.indexOf('chatFeathers') === -1 && examples.indexOf('chat') === -1 && examples.indexOf('forms') === -1 && examples.indexOf('about') === -1) { %>/* <% } %>import { LinkContainer } from 'react-router-bootstrap';<% if(!auth && examples.indexOf('chatFeathers') === -1 && examples.indexOf('chat') === -1 && examples.indexOf('forms') === -1 && examples.indexOf('about') === -1) { %> */<% } %>
 import Navbar from 'react-bootstrap/lib/Navbar';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
@@ -79,7 +79,7 @@ export default class App extends Component {
             <Navbar.Toggle />
           </Navbar.Header>
 
-          <Navbar.Collapse eventKey={0}><% if(auth || examples.indexOf('chatFeathers') !== -1 || examples.indexOf('chat') !== -1 || examples.indexOf('forms') !== -1 || examples.indexOf('about') !== -1) { %>
+          <Navbar.Collapse eventKey={0}>
             <Nav navbar>
               <% if(examples.indexOf('chatFeathers') !== -1) { %>{user && <LinkContainer to="/chatFeathers">
                 <NavItem>Chat with Feathers</NavItem>
@@ -96,7 +96,7 @@ export default class App extends Component {
               </LinkContainer>
               <% } %><% if(examples.indexOf('about') !== -1) { %><LinkContainer to="/about">
                 <NavItem eventKey={4}>About Us</NavItem>
-              </LinkContainer><% } %><% if( auth && (examples.indexOf('chat') !== -1 || examples.indexOf('forms') !== -1 || examples.indexOf('about') !== -1)) { %>
+              </LinkContainer><% } %><% if(auth && (examples.indexOf('chat') !== -1 || examples.indexOf('forms') !== -1 || examples.indexOf('about') !== -1)) { %>
 
               <% } %><% if(auth) { %>{!user && <LinkContainer to="/login">
                 <NavItem eventKey={5}>Login</NavItem>
@@ -108,8 +108,10 @@ export default class App extends Component {
                 <NavItem eventKey={7} className="logout-link" onClick={this.handleLogout}>
                   Logout
                 </NavItem>
-              </LinkContainer>}<% } %>
-            </Nav><% } %>
+              </LinkContainer>}<% } %><% if(!auth && examples.indexOf('chatFeathers') === -1 && examples.indexOf('chat') === -1 && examples.indexOf('forms') === -1 && examples.indexOf('about') === -1) { %>{/* <LinkContainer to="/example">
+                <NavItem eventKey={1}>Example</NavItem>
+              </LinkContainer> */}
+            <% } %></Nav>
             <% if(auth) { %>{user && <p className="navbar-text">
               Logged in as <strong>{user.email}</strong>.
             </p>}

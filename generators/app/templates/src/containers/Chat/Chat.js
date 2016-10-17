@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';<% if(auth) { %>
+import React, { Component<% if(auth) { %>, PropTypes<% } %> } from 'react';<% if(auth) { %>
 import { connect } from 'react-redux';<% } %>
 
 <% if(auth) { %>@connect(
@@ -39,8 +39,8 @@ import { connect } from 'react-redux';<% } %>
   handleSubmit = event => {
     event.preventDefault();
 
-    const { user } = this.props;
-    const msg = this.state.message;
+    <% if(auth) { %>const { user } = this.props;
+    <% } %>const msg = this.state.message;
 
     this.setState({ message: '' });
 

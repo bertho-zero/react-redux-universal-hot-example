@@ -35,7 +35,7 @@ Promise.all([window.__data ? true : checkNet(), getStoredState(offlinePersistCon
   .then(store => {
     const history = syncHistoryWithStore(_browserHistory, store);
 
-    function initSocket() {
+    <% if (realtime) { %>function initSocket() {
       socket.on('news', data => {
         console.log(data);
         socket.emit('my other event', { my: 'data from client' });
@@ -50,7 +50,7 @@ Promise.all([window.__data ? true : checkNet(), getStoredState(offlinePersistCon
     global.socket = initSocket();
 
 
-    const renderRouter = props => <ReduxAsyncConnect {...props} helpers={{ client }} filter={item => !item.deferred} />;
+    <% } %>const renderRouter = props => <ReduxAsyncConnect {...props} helpers={{ client }} filter={item => !item.deferred} />;
     const render = routes => {
       ReactDOM.render(
         <HotEnabler>
@@ -112,7 +112,7 @@ if (!__DEVELOPMENT__ && 'serviceWorker' in navigator) {
 const store = createStore(_browserHistory, client, window.__data);
 const history = syncHistoryWithStore(_browserHistory, store);
 
-function initSocket() {
+<% if (realtime) { %>function initSocket() {
   socket.on('news', data => {
     console.log(data);
     socket.emit('my other event', { my: 'data from client' });
@@ -127,7 +127,7 @@ function initSocket() {
 global.socket = initSocket();
 
 
-const renderRouter = props => <ReduxAsyncConnect {...props} helpers={{ client }} filter={item => !item.deferred} />;
+<% } %>const renderRouter = props => <ReduxAsyncConnect {...props} helpers={{ client }} filter={item => !item.deferred} />;
 const render = routes => {
   ReactDOM.render(
     <HotEnabler>

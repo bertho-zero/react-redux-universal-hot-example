@@ -6,8 +6,11 @@ import {
   <% if(auth) { %>Register, Login, LoginSuccess, <% } %><% if(examples.indexOf('forms') !== -1) { %>Survey, <% } %>NotFound
 } from 'containers';
 
-export default store => {
-  <% if(auth) { %>const loadAuthIfNeeded = cb => {
+<% if(!auth) { %>/**
+ * Please keep routes in alphabetical order
+ */
+<% } %>export default <% if(!auth) { %>(/* <% } %>store<% if(!auth) { %> */)<% } %> =><% if(auth) { %> {
+  const loadAuthIfNeeded = cb => {
     if (!isAuthLoaded(store.getState())) {
       return store.dispatch(loadAuth()).then(() => cb());
     }
@@ -28,13 +31,13 @@ export default store => {
     loadAuthIfNeeded(() => checkUser(cond, replace, cb));
   };
 
-  <% } %>/**
+  /**
    * Please keep routes in alphabetical order
    */
   return (
     <Route path="/" component={App}>
       {/* Home (main) route */}
-      <IndexRoute component={Home} /><% if(auth) { %>
+      <IndexRoute component={Home} />
 
       {/* Routes requiring login */}
       <Route onEnter={requireLogin}>
@@ -45,19 +48,31 @@ export default store => {
       {/* Routes disallow login */}
       <Route onEnter={requireNotLogged}>
         <Route path="register" component={Register} />
-      </Route><% } %>
+      </Route>
 
-      {/* Routes */}<% if(auth) { %>
-      <Route path="login" component={Login} /><% } %><% if(examples.indexOf('about') !== -1) { %>
+      {/* Routes */}
+      <Route path="login" component={Login} /><% if(examples.indexOf('about') !== -1) { %>
       <Route path="about" component={About} /><% } %><% if(examples.indexOf('forms') !== -1) { %>
       <Route path="survey" component={Survey} />
       <Route path="widgets" component={Widgets} /><% } %><% if(examples.indexOf('chat') !== -1) { %>
-      <Route path="chat" component={Chat} /><% } %><% if(!auth && examples.indexOf('about') === -1 && examples.indexOf('forms') === -1 && examples.indexOf('chat') === -1) { %>
-      // <Route path="example" component={Example} />
-      <% } %>
+      <Route path="chat" component={Chat} /><% } %>
 
       {/* Catch all route */}
       <Route path="*" component={NotFound} status={404} />
     </Route>
   );
-};
+};<% } else { %>
+  <Route path="/" component={App}>
+    {/* Home (main) route */}
+    <IndexRoute component={Home} />
+
+    {/* Routes */}<% if(examples.indexOf('about') !== -1) { %>
+    <Route path="about" component={About} /><% } %><% if(examples.indexOf('forms') !== -1) { %>
+    <Route path="survey" component={Survey} />
+    <Route path="widgets" component={Widgets} /><% } %><% if(examples.indexOf('chat') !== -1) { %>
+    <Route path="chat" component={Chat} /><% } %><% if(!auth && examples.indexOf('about') === -1 && examples.indexOf('forms') === -1 && examples.indexOf('chat') === -1) { %>
+    {/* <Route path="example" component={Example} /> */}<% } %>
+
+    {/* Catch all route */}
+    <Route path="*" component={NotFound} status={404} />
+  </Route>;<% } %>

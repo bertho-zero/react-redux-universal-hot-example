@@ -1,8 +1,8 @@
 import hooks from 'feathers-hooks';
 import {
   TokenService as tokenService,
-  LocalService as localService,
-  OAuth2Service as oauth2Service
+  LocalService as localService<% if(auth && oauth.indexOf('Facebook') !== -1) { %>,
+  OAuth2Service as oauth2Service<% } %>
 } from 'feathers-authentication';
 import authMiddleware from 'feathers-authentication/lib/middleware';
 
