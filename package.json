@@ -40,12 +40,6 @@
     "yeoman-assert": "^2.0.0",
     "yeoman-test": "^1.0.0"
   },
-  "eslintConfig": {
-    "extends": "xo-space",
-    "env": {
-      "mocha": true
-    }
-  },
   "repository": "https://github.com/bertho-zero/react-redux-universal-hot-example.git",
   "scripts": {
     "prepublish": "gulp prepublish",
