@@ -96,7 +96,7 @@ export default class App extends Component {
               </LinkContainer>
               <% } %><% if(examples.indexOf('about') !== -1) { %><LinkContainer to="/about">
                 <NavItem eventKey={4}>About Us</NavItem>
-              </LinkContainer><% } %><% if(auth && (examples.indexOf('chat') !== -1 || examples.indexOf('forms') !== -1 || examples.indexOf('about') !== -1)) { %>
+              </LinkContainer><% } %><% if(auth && examples.indexOf('chatFeathers') !== -1 && (examples.indexOf('chat') !== -1 || examples.indexOf('forms') !== -1 || examples.indexOf('about') !== -1)) { %>
 
               <% } %><% if(auth) { %>{!user && <LinkContainer to="/login">
                 <NavItem eventKey={5}>Login</NavItem>
@@ -110,15 +110,15 @@ export default class App extends Component {
                 </NavItem>
               </LinkContainer>}<% } %><% if(!auth && examples.indexOf('chatFeathers') === -1 && examples.indexOf('chat') === -1 && examples.indexOf('forms') === -1 && examples.indexOf('about') === -1) { %>{/* <LinkContainer to="/example">
                 <NavItem eventKey={1}>Example</NavItem>
-              </LinkContainer> */}
-            <% } %></Nav>
+              </LinkContainer> */}<% } %>
+            </Nav>
             <% if(auth) { %>{user && <p className="navbar-text">
               Logged in as <strong>{user.email}</strong>.
             </p>}
             <% } %><Nav navbar pullRight>
               <NavItem
                 eventKey={1} target="_blank" title="View on Github"
-                href="https://github.com/erikras/react-redux-universal-hot-example">
+                href="https://github.com/bertho-zero/react-redux-universal-hot-example">
                 <i className="fa fa-github" />
               </NavItem>
             </Nav>
@@ -140,7 +140,7 @@ export default class App extends Component {
 
         <div className="well text-center">
           Have questions? Ask for help{' '}
-          <a href="https://github.com/erikras/react-redux-universal-hot-example/issues" target="_blank">on Github</a>
+          <a href="https://github.com/bertho-zero/react-redux-universal-hot-example/issues" target="_blank">on Github</a>
           {' '}or in the{' '}
           <a href="https://discord.gg/0ZcbPKXt5bZZb1Ko" target="_blank">#react-redux-universal</a>
           {' '}Discord channel.

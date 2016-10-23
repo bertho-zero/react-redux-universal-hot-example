@@ -16,11 +16,11 @@ module.exports = Object.assign({
   apiPort: process.env.APIPORT,
   app: {
     title: '<%- name %>',
-    description: 'All the modern best practices in one example.',
+    description: '<%- description %>',
     head: {
       titleTemplate: '<%- name %>: %s',
       meta: [
-        { name: 'description', content: 'All the modern best practices in one example.' },
+        { name: 'description', content: '<%- description %>' },
         { charset: 'utf-8' },
         { property: 'og:site_name', content: '<%- name %>' },
         { property: 'og:image', content: 'https://react-redux.herokuapp.com/logo.jpg' },

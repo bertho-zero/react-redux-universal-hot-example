@@ -1,5 +1,5 @@
-const ADD_MESSAGE = 'redux-example/chat/ADD_MESSAGE';
-const CLEAN = 'redux-example/chat/CLEAN';
+const ADD_MESSAGE = '<%- slug %>/chat/ADD_MESSAGE';
+const CLEAN = '<%- slug %>/chat/CLEAN';
 
 const initialState = {
   messages: []

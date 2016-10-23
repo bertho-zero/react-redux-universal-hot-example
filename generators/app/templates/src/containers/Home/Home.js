@@ -26,20 +26,20 @@ export default class Home extends Component {
             <p>
               <a
                 className={styles.github}
-                href="https://github.com/erikras/react-redux-universal-hot-example"
+                href="https://github.com/bertho-zero/react-redux-universal-hot-example"
                 target="_blank">
                 <i className="fa fa-github" /> View on Github
               </a>
             </p>
             <GithubButton
-              user="erikras"
+              user="bertho-zero"
               repo="react-redux-universal-hot-example"
               type="star"
               width={160}
               height={30}
               count large />
             <GithubButton
-              user="erikras"
+              user="bertho-zero"
               repo="react-redux-universal-hot-example"
               type="fork"
               width={160}

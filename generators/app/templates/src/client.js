@@ -20,12 +20,24 @@ import localForage from 'localforage';
 
 const offlinePersistConfig = {
   storage: localForage,
-  whitelist: ['auth', 'info', 'chat']
+  whitelist: [<% if(auth) { %>'auth', <% } %>'info'<% if(examples.indexOf('chatFeathers') !== -1) { %>, 'chat'<% } %>]
 };<% } %>
 
 const client = new ApiClient();
 const _browserHistory = withScroll(browserHistory);
-const dest = document.getElementById('content');<% if(offline) { %>
+const dest = document.getElementById('content');<% if(offline) { %><% if (realtime) { %>
+
+function initSocket() {
+  socket.on('news', data => {
+    console.log(data);
+    socket.emit('my other event', { my: 'data from client' });
+  });
+  socket.on('msg', data => {
+    console.log(data);
+  });
+
+  return socket;
+}<% } %>
 
 Promise.all([window.__data ? true : checkNet(), getStoredState(offlinePersistConfig)])
   .then(([online, storedData]) => {
@@ -35,20 +47,7 @@ Promise.all([window.__data ? true : checkNet(), getStoredState(offlinePersistCon
   .then(store => {
     const history = syncHistoryWithStore(_browserHistory, store);
 
-    <% if (realtime) { %>function initSocket() {
-      socket.on('news', data => {
-        console.log(data);
-        socket.emit('my other event', { my: 'data from client' });
-      });
-      socket.on('msg', data => {
-        console.log(data);
-      });
-
-      return socket;
-    }
-
-    global.socket = initSocket();
-
+    <% if (realtime) { %>global.socket = initSocket();
 
     <% } %>const renderRouter = props => <ReduxAsyncConnect {...props} helpers={{ client }} filter={item => !item.deferred} />;
     const render = routes => {

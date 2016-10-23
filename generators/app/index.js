@@ -5,6 +5,7 @@ var path = require('path');
 var objectAssign = require('object-assign');
 var chalk = require('chalk');
 var yosay = require('yosay');
+var slug = require('slug');
 
 module.exports = yeoman.Base.extend({
   initializing: function () {
@@ -99,8 +100,7 @@ module.exports = yeoman.Base.extend({
           }.bind(this))
       }.bind(this))
       .then(function (props) {
-        this.props = props;
-        console.log(props);
+        return objectAssign(this.props, props, { slug: slug(this.props.name) });
       }.bind(this));
   },
 

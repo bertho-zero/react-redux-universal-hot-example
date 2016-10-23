@@ -1,11 +1,11 @@
-const LOAD = 'redux-example/widgets/LOAD';
-const LOAD_SUCCESS = 'redux-example/widgets/LOAD_SUCCESS';
-const LOAD_FAIL = 'redux-example/widgets/LOAD_FAIL';
-const EDIT_START = 'redux-example/widgets/EDIT_START';
-const EDIT_STOP = 'redux-example/widgets/EDIT_STOP';
-const SAVE = 'redux-example/widgets/SAVE';
-const SAVE_SUCCESS = 'redux-example/widgets/SAVE_SUCCESS';
-const SAVE_FAIL = 'redux-example/widgets/SAVE_FAIL';
+const LOAD = '<%- slug %>/widgets/LOAD';
+const LOAD_SUCCESS = '<%- slug %>/widgets/LOAD_SUCCESS';
+const LOAD_FAIL = '<%- slug %>/widgets/LOAD_FAIL';
+const EDIT_START = '<%- slug %>/widgets/EDIT_START';
+const EDIT_STOP = '<%- slug %>/widgets/EDIT_STOP';
+const SAVE = '<%- slug %>/widgets/SAVE';
+const SAVE_SUCCESS = '<%- slug %>/widgets/SAVE_SUCCESS';
+const SAVE_FAIL = '<%- slug %>/widgets/SAVE_FAIL';
 
 const initialState = {
   loaded: false,

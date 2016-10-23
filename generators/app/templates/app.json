@@ -1,7 +1,7 @@
 {
   "name": "<%- name %>",
   "description": "<%- description %>",
-  "repository": "https://github.com/erikras/react-redux-universal-hot-example",
+  "repository": "https://github.com/bertho-zero/react-redux-universal-hot-example",
   "logo": "http://node-js-sample.herokuapp.com/node.svg",
   "keywords": [
     "react",

@@ -2,21 +2,21 @@ import app<% if(realtime) { %>, { restApp, socket }<% } %> from 'app';
 import { SubmissionError } from 'redux-form';
 import cookie from 'js-cookie';
 
-const LOAD = 'redux-example/auth/LOAD';
-const LOAD_SUCCESS = 'redux-example/auth/LOAD_SUCCESS';
-const LOAD_FAIL = 'redux-example/auth/LOAD_FAIL';
-const LOGIN = 'redux-example/auth/LOGIN';
-const LOGIN_SUCCESS = 'redux-example/auth/LOGIN_SUCCESS';
-const LOGIN_FAIL = 'redux-example/auth/LOGIN_FAIL';
-const REGISTER = 'redux-example/auth/REGISTER';
-const REGISTER_SUCCESS = 'redux-example/auth/REGISTER_SUCCESS';
-const REGISTER_FAIL = 'redux-example/auth/REGISTER_FAIL';<% if(oauth.length) { %>
-const OAUTHLOGIN = 'redux-example/auth/OAUTHLOGIN';
-const OAUTHLOGIN_SUCCESS = 'redux-example/auth/OAUTHLOGIN_SUCCESS';
-const OAUTHLOGIN_FAIL = 'redux-example/auth/OAUTHLOGIN_FAIL';<% } %>
-const LOGOUT = 'redux-example/auth/LOGOUT';
-const LOGOUT_SUCCESS = 'redux-example/auth/LOGOUT_SUCCESS';
-const LOGOUT_FAIL = 'redux-example/auth/LOGOUT_FAIL';
+const LOAD = '<%- slug %>/auth/LOAD';
+const LOAD_SUCCESS = '<%- slug %>/auth/LOAD_SUCCESS';
+const LOAD_FAIL = '<%- slug %>/auth/LOAD_FAIL';
+const LOGIN = '<%- slug %>/auth/LOGIN';
+const LOGIN_SUCCESS = '<%- slug %>/auth/LOGIN_SUCCESS';
+const LOGIN_FAIL = '<%- slug %>/auth/LOGIN_FAIL';
+const REGISTER = '<%- slug %>/auth/REGISTER';
+const REGISTER_SUCCESS = '<%- slug %>/auth/REGISTER_SUCCESS';
+const REGISTER_FAIL = '<%- slug %>/auth/REGISTER_FAIL';<% if(oauth.length) { %>
+const OAUTHLOGIN = '<%- slug %>/auth/OAUTHLOGIN';
+const OAUTHLOGIN_SUCCESS = '<%- slug %>/auth/OAUTHLOGIN_SUCCESS';
+const OAUTHLOGIN_FAIL = '<%- slug %>/auth/OAUTHLOGIN_FAIL';<% } %>
+const LOGOUT = '<%- slug %>/auth/LOGOUT';
+const LOGOUT_SUCCESS = '<%- slug %>/auth/LOGOUT_SUCCESS';
+const LOGOUT_FAIL = '<%- slug %>/auth/LOGOUT_FAIL';
 
 const userService = <%- realtime ? 'restApp' : 'app' %>.service('users');
 

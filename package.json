@@ -23,6 +23,7 @@
     "babel-register": "^6.16.3",
     "chalk": "^1.0.0",
     "object-assign": "^4.1.0",
+    "slug": "^0.9.1",
     "yeoman-generator": "^0.23.0",
     "yosay": "^1.0.0"
   },
