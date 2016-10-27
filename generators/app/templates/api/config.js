@@ -4,7 +4,6 @@ import FacebookTokenStrategy from 'passport-facebook-token';
 
 <% } %>module.exports = {<% if(auth) { %>
   auth: {
-    setupMiddleware: false,
     user: {
       idField: '_id'
     },

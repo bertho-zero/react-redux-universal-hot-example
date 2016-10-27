@@ -1,6 +1,6 @@
-const LOAD = '<%- slug %>/LOAD';
-const LOAD_SUCCESS = '<%- slug %>/LOAD_SUCCESS';
-const LOAD_FAIL = '<%- slug %>/LOAD_FAIL';
+const LOAD = '<%- slug %>/info/LOAD';
+const LOAD_SUCCESS = '<%- slug %>/info/LOAD_SUCCESS';
+const LOAD_FAIL = '<%- slug %>/info/LOAD_FAIL';
 
 const initialState = {
   loaded: false

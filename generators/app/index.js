@@ -349,7 +349,7 @@ module.exports = yeoman.Base.extend({
       'superagent@^2.2.0'
     ].concat(this.props.auth ? [
       'async@^2.1.2',
-      'git+https://github.com/bertho-zero/feathers-authentication.git',
+      'feathers-authentication@^0.8.0-beta-1',
       'feathers-nedb@^2.5.0', // TODO other database
       'js-cookie@^2.1.3',
       'localstorage-memory@^1.0.2',

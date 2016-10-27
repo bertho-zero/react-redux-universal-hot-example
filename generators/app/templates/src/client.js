@@ -37,7 +37,9 @@ function initSocket() {
   });
 
   return socket;
-}<% } %>
+}
+
+global.socket = initSocket();<% } %>
 
 Promise.all([window.__data ? true : checkNet(), getStoredState(offlinePersistConfig)])
   .then(([online, storedData]) => {
@@ -47,9 +49,7 @@ Promise.all([window.__data ? true : checkNet(), getStoredState(offlinePersistCon
   .then(store => {
     const history = syncHistoryWithStore(_browserHistory, store);
 
-    <% if (realtime) { %>global.socket = initSocket();
-
-    <% } %>const renderRouter = props => <ReduxAsyncConnect {...props} helpers={{ client }} filter={item => !item.deferred} />;
+    const renderRouter = props => <ReduxAsyncConnect {...props} helpers={{ client }} filter={item => !item.deferred} />;
     const render = routes => {
       ReactDOM.render(
         <HotEnabler>
@@ -124,7 +124,6 @@ const history = syncHistoryWithStore(_browserHistory, store);
 }
 
 global.socket = initSocket();
-
 
 <% } %>const renderRouter = props => <ReduxAsyncConnect {...props} helpers={{ client }} filter={item => !item.deferred} />;
 const render = routes => {

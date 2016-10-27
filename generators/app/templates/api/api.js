@@ -14,8 +14,7 @@ import * as actions from './actions';
 import { mapUrl } from './utils/url.js';
 import isPromise from 'is-promise';
 import PrettyError from 'pretty-error';<% if(auth) { %>
-import authentication<% if(realtime) { %>, { middleware as authMiddleware }<% } %> from 'feathers-authentication';
-import authService<% if(realtime) { %>, { socketAuth }<% } %> from './services/authentication';<% } %>
+import authentication<% if(realtime) { %>, { socketAuth }<% } %> from './services/authentication';<% } %>
 
 const pretty = new PrettyError();
 const app = feathers();
@@ -68,44 +67,12 @@ const actionsHandler = (req, res, next) => {
   } else {
     next();
   }
-};<% if(realtime) { %>
+};
 
-const socketHandler = io => {
-  const bufferSize = 100;
-  const messageBuffer = new Array(bufferSize);
-  let messageIndex = 0;<% if(auth) { %>
-
-  io.use(socketAuth(app));
-  io.on('connection', authMiddleware.setupSocketIOAuthentication(app, app.get('auth')));<% } %>
-
-  io.on('connection', socket => {<% if(auth) { %>
-    const user = socket.feathers.user ? { ...socket.feathers.user, password: undefined } : undefined;<% } %>
-    socket.emit('news', { msg: '\'Hello World!\' from server'<% if(auth) { %>, user<% } %> });
-
-    socket.on('history', () => {
-      for (let index = 0; index < bufferSize; index++) {
-        const msgNo = (messageIndex + index) % bufferSize;
-        const msg = messageBuffer[msgNo];
-        if (msg) {
-          socket.emit('msg', msg);
-        }
-      }
-    });
-
-    socket.on('msg', data => {
-      const message = { ...data, id: messageIndex };
-      messageBuffer[messageIndex % bufferSize] = message;
-      messageIndex++;
-      io.emit('msg', message);
-    });
-  });
-};<% } %>
-
-app.configure(hooks())<% if(auth) { %>
-  .configure(authentication(config.auth))<% } %>
+app.configure(hooks())
   .configure(rest())<% if(realtime) { %>
-  .configure(socketio({ path: '/ws' }, socketHandler))<% } %><% if(auth) { %>
-  .configure(authService)<% } %>
+  .configure(socketio({ path: '/ws' }))<% } %><% if(auth) { %>
+  .configure(authenthication)<% } %>
   .use(actionsHandler)
   .configure(services)
   .configure(middleware);
@@ -120,4 +87,32 @@ if (publicConfig.apiPort) {
   });
 } else {
   console.error('==>     ERROR: No APIPORT environment variable has been specified');
-}
+}<% if(realtime) { %>
+
+const bufferSize = 100;
+const messageBuffer = new Array(bufferSize);
+let messageIndex = 0;<% if(auth) { %>
+
+app.io.use(socketAuth(app));<% } %>
+
+app.io.on('connection', socket => {<% if(auth) { %>
+  const user = socket.feathers.user ? { ...socket.feathers.user, password: undefined } : undefined;<% } %>
+  socket.emit('news', { msg: '\'Hello World!\' from server'<% if(auth) { %>, user<% } %> });
+
+  socket.on('history', () => {
+    for (let index = 0; index < bufferSize; index++) {
+      const msgNo = (messageIndex + index) % bufferSize;
+      const msg = messageBuffer[msgNo];
+      if (msg) {
+        socket.emit('msg', msg);
+      }
+    }
+  });
+
+  socket.on('msg', data => {
+    const message = { ...data, id: messageIndex };
+    messageBuffer[messageIndex % bufferSize] = message;
+    messageIndex++;
+    app.io.emit('msg', message);
+  });
+});<% } %>
