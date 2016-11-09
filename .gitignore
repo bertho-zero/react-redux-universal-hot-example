@@ -1,3 +1,4 @@
 .idea/
+yarn.lock
 node_modules/
 npm-debug.log

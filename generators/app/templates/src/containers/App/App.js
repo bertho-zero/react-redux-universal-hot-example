@@ -98,7 +98,8 @@ export default class App extends Component {
                 <NavItem eventKey={4}>About Us</NavItem>
               </LinkContainer><% } %><% if(auth && examples.indexOf('chatFeathers') !== -1 && (examples.indexOf('chat') !== -1 || examples.indexOf('forms') !== -1 || examples.indexOf('about') !== -1)) { %>
 
-              <% } %><% if(auth) { %>{!user && <LinkContainer to="/login">
+              <% } %><% if(auth) { %>
+              {!user && <LinkContainer to="/login">
                 <NavItem eventKey={5}>Login</NavItem>
               </LinkContainer>}
               {!user && <LinkContainer to="/register">

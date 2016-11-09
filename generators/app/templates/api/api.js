@@ -72,7 +72,7 @@ const actionsHandler = (req, res, next) => {
 app.configure(hooks())
   .configure(rest())<% if(realtime) { %>
   .configure(socketio({ path: '/ws' }))<% } %><% if(auth) { %>
-  .configure(authenthication)<% } %>
+  .configure(authentication)<% } %>
   .use(actionsHandler)
   .configure(services)
   .configure(middleware);
