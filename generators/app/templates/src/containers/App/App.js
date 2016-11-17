@@ -84,8 +84,8 @@ export default class App extends Component {
               <% if(examples.indexOf('chatFeathers') !== -1) { %>{user && <LinkContainer to="/chatFeathers">
                 <NavItem>Chat with Feathers</NavItem>
               </LinkContainer>}<% if(examples.indexOf('chat') !== -1 || examples.indexOf('forms') !== -1 || examples.indexOf('about') !== -1) { %>
-
-              <% } %><% } %><% if(examples.indexOf('chat') !== -1) { %><LinkContainer to="/chat">
+<% } %><% } %>
+              <% if(examples.indexOf('chat') !== -1) { %><LinkContainer to="/chat">
                 <NavItem eventKey={1}>Chat</NavItem>
               </LinkContainer>
               <% } %><% if(examples.indexOf('forms') !== -1) { %><LinkContainer to="/widgets">
@@ -97,8 +97,8 @@ export default class App extends Component {
               <% } %><% if(examples.indexOf('about') !== -1) { %><LinkContainer to="/about">
                 <NavItem eventKey={4}>About Us</NavItem>
               </LinkContainer><% } %><% if(auth && examples.indexOf('chatFeathers') !== -1 && (examples.indexOf('chat') !== -1 || examples.indexOf('forms') !== -1 || examples.indexOf('about') !== -1)) { %>
-
-              <% } %><% if(auth) { %>
+<% } %>
+              <% if(auth) { %>
               {!user && <LinkContainer to="/login">
                 <NavItem eventKey={5}>Login</NavItem>
               </LinkContainer>}
@@ -141,7 +141,9 @@ export default class App extends Component {
 
         <div className="well text-center">
           Have questions? Ask for help{' '}
-          <a href="https://github.com/bertho-zero/react-redux-universal-hot-example/issues" target="_blank">on Github</a>
+          <a href="https://github.com/bertho-zero/react-redux-universal-hot-example/issues" target="_blank">
+            on Github
+          </a>
           {' '}or in the{' '}
           <a href="https://discord.gg/0ZcbPKXt5bZZb1Ko" target="_blank">#react-redux-universal</a>
           {' '}Discord channel.
