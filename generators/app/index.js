@@ -2,18 +2,24 @@
 
 var yeoman = require('yeoman-generator');
 var path = require('path');
+var updateMixin = require('../../lib/updateMixin');
 var objectAssign = require('object-assign');
 var chalk = require('chalk');
 var yosay = require('yosay');
 var slug = require('slug');
 
 module.exports = yeoman.Base.extend({
+  constructor: function() {
+    yeoman.Base.apply(this, arguments);
+    updateMixin.extend(this);
+  },
+
   initializing: function () {
     var done = this.async();
     this.props = {
       name: process.cwd().split(path.sep).pop()
     };
-    done();
+    this.mixins.notifyUpdate(done);
   },
 
   prompting: function () {
@@ -138,7 +144,9 @@ module.exports = yeoman.Base.extend({
         'server.babel.js',
         'tests.webpack.js',
         'static/manifest.json'
-      ]
+      ].concat(this.props.offline ? [
+        'lighthouse.json'
+      ] : [])
         .forEach(function (file) {
           this.fs.copyTpl(
             this.templatePath(file),
@@ -338,12 +346,12 @@ module.exports = yeoman.Base.extend({
       'react-dom@^15.3.1',
       'react-helmet@^3.1.0',
       'react-redux@^4.4.5',
-      'react-router@^2.8.0',
+      'react-router@^3.0.0',
       'react-router-bootstrap@^0.23.1',
       'react-router-redux@^4.0.5',
+      'react-router-scroll@^0.4.1',
       'redux@^3.6.0',
       'redux-connect@^3.0.0',
-      'scroll-behavior@^0.8.1',
       'serialize-javascript@^1.3.0',
       'serve-favicon@^2.3.0',
       'superagent@^2.2.0'
@@ -375,6 +383,7 @@ module.exports = yeoman.Base.extend({
     var devDependencies = [
       'autoprefixer-loader@^3.2.0',
       'babel-eslint@^7.0.0',
+      'babel-jest@^17.0.0',
       'babel-loader@^6.2.5',
       'babel-plugin-typecheck@^3.9.0',
       'better-npm-run@^0.0.11',
@@ -384,18 +393,19 @@ module.exports = yeoman.Base.extend({
       'clean-webpack-plugin@^0.1.10',
       'concurrently@^3.1.0',
       'css-loader@^0.25.0',
-      'eslint@^3.5.0',
+      'eslint@^3.9.1',
       'eslint-config-airbnb@^12.0.0',
       'eslint-loader@^1.5.0',
-      'eslint-plugin-import@^2.0.1',
-      'eslint-plugin-jsx-a11y@^2.2.2',
-      'eslint-plugin-react@^6.2.0',
+      'eslint-plugin-import@^2.2.0',
+      'eslint-plugin-jsx-a11y@^2.2.3',
+      'eslint-plugin-react@^6.6.0',
       'extract-text-webpack-plugin@^1.0.1',
       'file-loader@^0.9.0',
       'font-awesome@^4.6.3',
       'font-awesome-webpack@^0.0.4',
       'happypack@^2.2.1',
       'html-webpack-plugin@^2.22.0',
+      'jest@^17.0.0',
       'json-loader@^0.5.4',
       'karma@^1.3.0',
       'karma-cli@^1.0.1',
@@ -406,6 +416,7 @@ module.exports = yeoman.Base.extend({
       'karma-webpack@^1.8.0',
       'less@^2.7.1',
       'less-loader@^2.2.3',
+      'lighthouse@^1.1.7',
       'mocha@^3.0.2',
       'node-sass@^3.9.3',
       'phantomjs-polyfill@^0.0.2',

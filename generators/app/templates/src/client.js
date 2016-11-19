@@ -4,19 +4,19 @@
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import createStore from './redux/create';
-import ApiClient from './helpers/ApiClient';
 import { Provider } from 'react-redux';
-import { Router, browserHistory } from 'react-router';
+import { applyRouterMiddleware, Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { ReduxAsyncConnect } from 'redux-connect';
 import { AppContainer as HotEnabler } from 'react-hot-loader';
-import withScroll from 'scroll-behavior';
-import getRoutes from './routes';<% if(realtime) { %>
-import { socket } from 'app';<% } %><% if(offline) { %>
-import checkNet from './utils/checkNet';
+import { useScroll } from 'react-router-scroll';<% if(offline) { %>
 import { getStoredState } from 'redux-persist';
-import localForage from 'localforage';
+import localForage from 'localforage';<% } %><% if(realtime) { %>
+import { init, socket } from 'app';<% } %>
+import createStore from './redux/create';
+import ApiClient from './helpers/ApiClient';
+import getRoutes from './routes';<% if(offline) { %>
+import checkNet from './utils/checkNet';
 
 const offlinePersistConfig = {
   storage: localForage,
@@ -24,7 +24,6 @@ const offlinePersistConfig = {
 };<% } %>
 
 const client = new ApiClient();
-const _browserHistory = withScroll(browserHistory);
 const dest = document.getElementById('content');<% if(offline) { %><% if (realtime) { %>
 
 function initSocket() {
@@ -44,12 +43,16 @@ global.socket = initSocket();<% } %>
 Promise.all([window.__data ? true : checkNet(), getStoredState(offlinePersistConfig)])
   .then(([online, storedData]) => {
     const data = !online ? { ...storedData, ...window.__data } : window.__data;
-    return createStore(_browserHistory, client, data, online, offlinePersistConfig);
-  })
-  .then(store => {
-    const history = syncHistoryWithStore(_browserHistory, store);
+    const store = createStore(browserHistory, client, data, online, offlinePersistConfig);
+    const history = syncHistoryWithStore(browserHistory, store);
 
-    const renderRouter = props => <ReduxAsyncConnect {...props} helpers={{ client }} filter={item => !item.deferred} />;
+    const renderRouter = props => <ReduxAsyncConnect
+      {...props}
+      helpers={{ client }}
+      filter={item => !item.deferred}
+      render={applyRouterMiddleware(useScroll())}
+    />;
+
     const render = routes => {
       ReactDOM.render(
         <HotEnabler>
@@ -63,6 +66,8 @@ Promise.all([window.__data ? true : checkNet(), getStoredState(offlinePersistCon
       );
     };
 
+    init();<% if (realtime) { %>
+    if (online) socket.open();<% } %>
     render(getRoutes(store));
 
     if (module.hot) {
@@ -82,7 +87,7 @@ Promise.all([window.__data ? true : checkNet(), getStoredState(offlinePersistCon
       }
     }
 
-    if (__DEVTOOLS__ && !window.devToolsExtension) {
+    if (online && __DEVTOOLS__ && !window.devToolsExtension) {
       const devToolsDest = document.createElement('div');
       window.document.body.insertBefore(devToolsDest, null);
       const DevTools = require('./containers/DevTools/DevTools');
@@ -93,23 +98,23 @@ Promise.all([window.__data ? true : checkNet(), getStoredState(offlinePersistCon
         devToolsDest
       );
     }
-  });
 
-if (!__DEVELOPMENT__ && 'serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
-    .then(() => {
-      console.log('Service worker registered!');
-    })
-    .catch(error => {
-      console.log('Error registering service worker: ', error);
-    });
+    if (!__DEVELOPMENT__ && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
+        .then(() => {
+          console.log('Service worker registered!');
+        })
+        .catch(error => {
+          console.log('Error registering service worker: ', error);
+        });
 
-  navigator.serviceWorker.ready.then((/* registration */) => {
-    console.log('Service Worker Ready');
-  });
-}<% } else { %>
-const store = createStore(_browserHistory, client, window.__data);
-const history = syncHistoryWithStore(_browserHistory, store);
+      navigator.serviceWorker.ready.then((/* registration */) => {
+        console.log('Service Worker Ready');
+      });
+    }
+  });<% } else { %>
+const store = createStore(browserHistory, client, window.__data);
+const history = syncHistoryWithStore(browserHistory, store);
 
 <% if (realtime) { %>function initSocket() {
   socket.on('news', data => {
@@ -125,7 +130,13 @@ const history = syncHistoryWithStore(_browserHistory, store);
 
 global.socket = initSocket();
 
-<% } %>const renderRouter = props => <ReduxAsyncConnect {...props} helpers={{ client }} filter={item => !item.deferred} />;
+<% } %>const renderRouter = props => <ReduxAsyncConnect
+  {...props}
+  helpers={{ client }}
+  filter={item => !item.deferred}
+  render={applyRouterMiddleware(useScroll())}
+/>;
+
 const render = routes => {
   ReactDOM.render(
     <HotEnabler>
@@ -139,6 +150,8 @@ const render = routes => {
   );
 };
 
+init();<% if (realtime) { %>
+if (online) socket.open();<% } %>
 render(getRoutes(store));
 
 if (module.hot) {

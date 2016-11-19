@@ -1,6 +1,6 @@
 {
   "name": "generator-react-redux-universal",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "A full-stack starter kit with react, redux and feathers",
   "homepage": "http://github.com/bertho-zero/react-redux-universal-hot-example",
   "author": {
@@ -22,8 +22,12 @@
   "dependencies": {
     "babel-register": "^6.16.3",
     "chalk": "^1.0.0",
+    "cross-spawn-async": "^2.2.5",
     "object-assign": "^4.1.0",
+    "repeating": "^3.0.0",
     "slug": "^0.9.1",
+    "string-length": "^1.0.1",
+    "update-notifier": "^1.0.2",
     "yeoman-generator": "^0.23.0",
     "yosay": "^1.0.0"
   },

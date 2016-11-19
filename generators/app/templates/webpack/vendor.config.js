@@ -68,10 +68,10 @@ module.exports = {
       'react-router',
       'react-router-bootstrap',
       'react-router-redux',
+      'react-router-scroll',
       'redux',
       'redux-connect',<% if(auth || examples.indexOf('forms') !== -1) { %>
       'redux-form',<% } %>
-      'scroll-behavior',
       'serialize-javascript'<% if(realtime) { %>,
       'socket.io-client'<% } %>,
       'superagent'

@@ -2,6 +2,7 @@ import { createStore as _createStore, applyMiddleware, compose } from 'redux';
 import createMiddleware from './middleware/clientMiddleware';
 import { routerMiddleware } from 'react-router-redux';<% if(offline) { %>
 import { autoRehydrate, createPersistor } from 'redux-persist';<% } %>
+import createReducer, { injectAsyncReducer } from './reducer';
 
 export default function createStore(history, client, data<% if(offline) { %>, online = true, persistConfig = null<% } %>) {
   const reduxRouterMiddleware = routerMiddleware(history);
@@ -22,15 +23,17 @@ export default function createStore(history, client, data<% if(offline) { %>, on
     finalCreateStore = compose(<% if(offline) { %>...enhancers<% } else { %>enhancers<% } %>)(_createStore);
   }
 
-  const reducer = require('./reducer');
+  const store = finalCreateStore(createReducer(), data);
 
-  const store = finalCreateStore(reducer, data);<% if(offline) { %>
+  store.asyncReducers = {};
+  store.injectAsyncReducer = injectAsyncReducer.bind(null, store);<% if(offline) { %>
+
   if (persistConfig) createPersistor(store, persistConfig);
   store.dispatch({ type: 'PERSIST' });<% } %>
 
   if (__DEVELOPMENT__ && module.hot) {
     module.hot.accept('./reducer', () => {
-      store.replaceReducer(require('./reducer'));
+      store.replaceReducer(require('./reducer').default());
     });
   }
 

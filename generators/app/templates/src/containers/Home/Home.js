@@ -1,11 +1,23 @@
-import React, { Component } from 'react';<% if(auth || realtime || examples.indexOf('about') !== -1 || examples.indexOf('forms') !== -1 ) { %>
+import React, { Component<% if(offline) { %>, PropTypes<% } %> } from 'react';<% if(auth || realtime || examples.indexOf('about') !== -1 || examples.indexOf('forms') !== -1 ) { %>
 import { Link } from 'react-router';<% } %>
 import { CounterButton, GithubButton } from 'components';
 import config from 'config';
-import Helmet from 'react-helmet';
+import Helmet from 'react-helmet';<% if(offline) { %>
+import { connect } from 'react-redux';<% } %>
 
-export default class Home extends Component {
-  render() {
+<% if(offline) { %>@connect(
+  state => ({
+    online: state.online
+  })
+)
+<% } %>export default class Home extends Component {
+<% if(offline) { %>
+  static propTypes = {
+    online: PropTypes.bool
+  };
+
+<% } %>  render() {<% if(offline) { %>
+    const { online } = this.props;<% } %>
     const styles = require('./Home.scss');
     // require the logo image both from client and server
     const logoImage = require('./logo.png');
@@ -31,20 +43,20 @@ export default class Home extends Component {
                 <i className="fa fa-github" /> View on Github
               </a>
             </p>
-            <GithubButton
+            <% if(offline) { %>{online && <% } %><GithubButton
               user="bertho-zero"
               repo="react-redux-universal-hot-example"
               type="star"
               width={160}
               height={30}
-              count large />
-            <GithubButton
+              count large /><% if(offline) { %>}<% } %>
+            <% if(offline) { %>{online && <% } %><GithubButton
               user="bertho-zero"
               repo="react-redux-universal-hot-example"
               type="fork"
               width={160}
               height={30}
-              count large />
+              count large /><% if(offline) { %>}<% } %>
 
             <p className={styles.humility}>
               Created and maintained by <a href="https://twitter.com/erikras" target="_blank">@erikras</a>.

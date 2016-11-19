@@ -3,17 +3,17 @@ import morgan from 'morgan';
 import session from 'express-session';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import publicConfig from '../src/config';
-import config from './config';
 import hooks from 'feathers-hooks';
 import rest from 'feathers-rest';<% if(realtime) { %>
 import socketio from 'feathers-socketio';<% } %>
+import isPromise from 'is-promise';
+import PrettyError from 'pretty-error';
+import publicConfig from '../src/config';
+import config from './config';
 import middleware from './middleware';
 import services from './services';
 import * as actions from './actions';
-import { mapUrl } from './utils/url.js';
-import isPromise from 'is-promise';
-import PrettyError from 'pretty-error';<% if(auth) { %>
+import { mapUrl } from './utils/url.js';<% if(auth) { %>
 import authentication<% if(realtime) { %>, { socketAuth }<% } %> from './services/authentication';<% } %>
 
 const pretty = new PrettyError();
