@@ -1,6 +1,6 @@
 {
   "name": "generator-react-redux-universal",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A full-stack starter kit with react, redux and feathers",
   "homepage": "http://github.com/bertho-zero/react-redux-universal-hot-example",
   "author": {
@@ -9,7 +9,8 @@
     "url": ""
   },
   "files": [
-    "generators"
+    "generators",
+    "lib"
   ],
   "main": "generators/index.js",
   "keywords": [
