@@ -354,7 +354,7 @@ module.exports = yeoman.Base.extend({
       'redux-connect@^3.0.0',
       'serialize-javascript@^1.3.0',
       'serve-favicon@^2.3.0',
-      'superagent@^2.2.0'
+      'superagent@^3.0.0'
     ].concat(this.props.auth ? [
       'async@^2.1.2',
       'feathers-authentication@^0.8.0-beta-1',
@@ -392,7 +392,7 @@ module.exports = yeoman.Base.extend({
       'chai@^3.5.0',
       'clean-webpack-plugin@^0.1.10',
       'concurrently@^3.1.0',
-      'css-loader@^0.25.0',
+      'css-loader@^0.26.0',
       'eslint@^3.9.1',
       'eslint-config-airbnb@^12.0.0',
       'eslint-loader@^1.5.0',
@@ -403,7 +403,7 @@ module.exports = yeoman.Base.extend({
       'file-loader@^0.9.0',
       'font-awesome@^4.6.3',
       'font-awesome-webpack@^0.0.4',
-      'happypack@^2.2.1',
+      'happypack@^3.0.0',
       'html-webpack-plugin@^2.22.0',
       'jest@^17.0.0',
       'json-loader@^0.5.4',
@@ -432,7 +432,7 @@ module.exports = yeoman.Base.extend({
       'sass-loader@^4.0.2',
       'strip-loader@^0.1.2',
       'style-loader@^0.13.1',
-      'sw-precache-webpack-plugin@^0.5.1',
+      'sw-precache-webpack-plugin@^0.6.1',
       'timekeeper@^0.1.1',
       'url-loader@^0.5.7',
       'webpack@^1.13.2',
