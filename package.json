@@ -112,7 +112,7 @@
     "express": "^4.14.0",
     "express-session": "^1.14.2",
     "feathers": "^2.0.2",
-    "feathers-authentication": "^0.8.0-beta-1",
+    "feathers-authentication": "^1.0.0",
     "feathers-errors": "^2.5.0",
     "feathers-hooks": "^1.7.0",
     "feathers-hooks-common": "^2.0.2",
