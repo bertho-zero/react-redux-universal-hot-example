@@ -4,10 +4,11 @@ require('babel-polyfill');
 var fs = require('fs');
 var path = require('path');
 var webpack = require('webpack');
+var helpers = require('./helpers');
+
 var assetsPath = path.resolve(__dirname, '../static/dist');
 var host = (process.env.HOST || 'localhost');
 var port = (+process.env.PORT + 1) || 3001;
-var helpers = require('./helpers');
 
 // https://github.com/halt-hammerzeit/webpack-isomorphic-tools
 var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
@@ -29,8 +30,12 @@ var babelrcObjectDevelopment = babelrcObject.env && babelrcObject.env.developmen
 var combinedPlugins = babelrcObject.plugins || [];
 combinedPlugins = combinedPlugins.concat(babelrcObjectDevelopment.plugins);
 
-var babelLoaderQuery = Object.assign({}, babelrcObjectDevelopment, babelrcObject, { plugins: combinedPlugins });
+var babelLoaderQuery = Object.assign({}, babelrcObject, babelrcObjectDevelopment, { plugins: combinedPlugins });
 delete babelLoaderQuery.env;
+
+babelLoaderQuery.presets = babelLoaderQuery.presets.map(function (v) {
+  return v === 'es2015' ? ['es2015', { modules: false }] : v;
+});
 
 var validDLLs = helpers.isValidDLLs(['vendor'], assetsPath);
 if (process.env.WEBPACK_DLLS === '1' && !validDLLs) {
@@ -45,7 +50,7 @@ var webpackConfig = module.exports = {
     'main': [
       'webpack-hot-middleware/client?path=http://' + host + ':' + port + '/__webpack_hmr',
       'react-hot-loader/patch',
-      'bootstrap-sass!./src/theme/bootstrap.config.js',
+      'bootstrap-loader',
       'font-awesome-webpack!./src/theme/font-awesome.config.js',
       './src/client.js'
     ]
@@ -57,41 +62,62 @@ var webpackConfig = module.exports = {
     publicPath: 'http://' + host + ':' + port + '/dist/'
   },
   module: {
-    loaders: [
-      helpers.createSourceLoader({
-        happy: { id: 'jsx' },
+    rules: [
+      {
         test: /\.jsx?$/,
-        loaders: ['react-hot-loader/webpack', 'babel?' + JSON.stringify(babelLoaderQuery), 'eslint-loader']
-      }),
-      helpers.createSourceLoader({
-        happy: { id: 'json' },
+        loader: 'happypack/loader?id=jsx',
+        include: [path.resolve(__dirname, '../src')]
+      }, {
         test: /\.json$/,
-        loader: 'json-loader'
-      }),
-      helpers.createSourceLoader({
-        happy: { id: 'less' },
+        loader: 'happypack/loader?id=json',
+        include: [path.resolve(__dirname, '../src')]
+      }, {
         test: /\.less$/,
-        loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!less?outputStyle=expanded&sourceMap'
-      }),
-      helpers.createSourceLoader({
-        happy: { id: 'sass' },
+        loader: 'happypack/loader?id=less',
+        include: [path.resolve(__dirname, '../src')]
+      }, {
         test: /\.scss$/,
-        loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap'
-      }),
-      { test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=application/font-woff' },
-      { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=application/octet-stream' },
-      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file' },
-      { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=image/svg+xml' },
-      { test: webpackIsomorphicToolsPlugin.regular_expression('images'), loader: 'url-loader?limit=10240' }
+        loader: 'happypack/loader?id=sass',
+        include: [path.resolve(__dirname, '../src')]
+      }, {
+        test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10240,
+          mimetype: 'application/font-woff'
+        }
+      }, {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10240,
+          mimetype: 'application/octet-stream'
+        }
+      }, {
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'file-loader'
+      }, {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10240,
+          mimetype: 'image/svg+xml'
+        }
+      }, {
+        test: webpackIsomorphicToolsPlugin.regular_expression('images'),
+        loader: 'url-loader',
+        options: {
+          limit: 10240
+        }
+      }
     ]
   },
-  progress: true,
   resolve: {
-    modulesDirectories: [
+    modules: [
       'src',
       'node_modules'
     ],
-    extensions: ['', '.json', '.js', '.jsx']
+    extensions: ['.json', '.js', '.jsx']
   },
   plugins: [
     // hot reload
@@ -101,15 +127,86 @@ var webpackConfig = module.exports = {
       __CLIENT__: true,
       __SERVER__: false,
       __DEVELOPMENT__: true,
-      __DEVTOOLS__: true,  // <-------- DISABLE redux-devtools HERE
-      __DLLS__: process.env.WEBPACK_DLLS === '1'
+      __DEVTOOLS__: true  // <-------- DISABLE redux-devtools HERE
     }),
     webpackIsomorphicToolsPlugin.development(),
 
-    helpers.createHappyPlugin('jsx'),
-    helpers.createHappyPlugin('json'),
-    helpers.createHappyPlugin('less'),
-    helpers.createHappyPlugin('sass')
+    new webpack.LoaderOptionsPlugin({
+      test: /\.jsx?$/,
+      happy: { id: 'jsx' }
+    }),
+    new webpack.LoaderOptionsPlugin({
+      test: /\.json$/,
+      happy: { id: 'json' }
+    }),
+    new webpack.LoaderOptionsPlugin({
+      test: /\.less$/,
+      happy: { id: 'less' }
+    }),
+    new webpack.LoaderOptionsPlugin({
+      test: /\.scss$/,
+      happy: { id: 'sass' }
+    }),
+
+    helpers.createHappyPlugin('jsx', [
+      {
+        loader: 'react-hot-loader/webpack'
+      }, {
+        loader: 'babel-loader',
+        query: babelLoaderQuery
+      }, {
+        loader: 'eslint-loader'
+      }
+    ]),
+    helpers.createHappyPlugin('json', ['json-loader']),
+    helpers.createHappyPlugin('less', [
+      {
+        loader: 'style-loader'
+      }, {
+        loader: 'css-loader',
+        query: {
+          modules: true,
+          importLoaders: 2,
+          sourceMap: true,
+          localIdentName: '[local]___[hash:base64:5]'
+        }
+      }, {
+        loader: 'autoprefixer-loader',
+        query: {
+          browser: 'last 2 version'
+        }
+      }, {
+        loader: 'less-loader',
+        query: {
+          outputStyle: 'expanded',
+          sourceMap: true
+        }
+      }
+    ]),
+    helpers.createHappyPlugin('sass', [
+      {
+        loader: 'style-loader'
+      }, {
+        loader: 'css-loader',
+        query: {
+          modules: true,
+          importLoaders: 2,
+          sourceMap: true,
+          localIdentName: '[local]___[hash:base64:5]'
+        }
+      }, {
+        loader: 'autoprefixer-loader',
+        query: {
+          browsers: 'last 2 version'
+        }
+      }, {
+        loader: 'sass-loader',
+        query: {
+          outputStyle: 'expanded',
+          sourceMap: true
+        }
+      }
+    ])
   ]
 };
 

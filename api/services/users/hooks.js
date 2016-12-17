@@ -1,7 +1,9 @@
-import hooks from 'feathers-hooks';
-import { hooks as auth } from 'feathers-authentication';
-import { validateHook } from '../../hooks';
-import { required, email, match, unique } from '../../utils/validation';
+import hooks from 'feathers-hooks-common';
+import auth from 'feathers-authentication';
+import local from 'feathers-authentication-local';
+import errors from 'feathers-errors';
+import { validateHook, restrictToOwner } from 'hooks';
+import { required, email, match, unique } from 'utils/validation';
 
 const schemaValidator = {
   email: [required, email, unique('email')],
@@ -10,51 +12,38 @@ const schemaValidator = {
 };
 
 function validate() {
-  return function (hook) { // eslint-disable-line func-names
-    if (hook.data.facebook) {
-      hook.data.email = hook.data.facebook.email;
-      return hook;
+  return hook => {
+    if (hook.data.facebook && !hook.data.email) {
+      throw new errors.BadRequest('Incomplete oauth registration', hook.data);
     }
-    return validateHook(schemaValidator).bind(this)(hook);
+    return validateHook(schemaValidator)(hook);
   };
 }
 
 const userHooks = {
   before: {
-    all: [],
     find: [
-      auth.verifyToken(),
-      auth.populateUser(),
-      auth.restrictToAuthenticated()
+      auth.hooks.authenticate('jwt')
     ],
     get: [
-      auth.verifyToken(),
-      auth.populateUser(),
-      auth.restrictToAuthenticated(),
-      auth.restrictToOwner({ ownerField: 'id' })
+      auth.hooks.authenticate('jwt')
     ],
     create: [
       validate(),
       hooks.remove('password_confirmation'),
-      auth.hashPassword()
+      local.hooks.hashPassword()
     ],
     update: [
-      auth.verifyToken(),
-      auth.populateUser(),
-      auth.restrictToAuthenticated(),
-      auth.restrictToOwner({ ownerField: 'id' })
+      auth.hooks.authenticate('jwt'),
+      restrictToOwner({ ownerField: '_id' })
     ],
     patch: [
-      auth.verifyToken(),
-      auth.populateUser(),
-      auth.restrictToAuthenticated(),
-      auth.restrictToOwner({ ownerField: 'id' })
+      auth.hooks.authenticate('jwt'),
+      restrictToOwner({ ownerField: '_id' })
     ],
     remove: [
-      auth.verifyToken(),
-      auth.populateUser(),
-      auth.restrictToAuthenticated(),
-      auth.restrictToOwner({ ownerField: 'id' })
+      auth.hooks.authenticate('jwt'),
+      restrictToOwner({ ownerField: '_id' })
     ]
   },
   after: {

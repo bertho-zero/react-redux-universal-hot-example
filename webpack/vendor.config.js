@@ -68,21 +68,14 @@ module.exports = {
       'react-router',
       'react-router-bootstrap',
       'react-router-redux',
+      'react-router-scroll',
       'redux',
       'redux-connect',
       'redux-form',
-      'scroll-behavior',
       'serialize-javascript',
       'socket.io-client',
-      'superagent',
-      'warning',
+      'superagent'
     ]
-  },
-
-  resolve: {
-    root: path.resolve(projectRootPath, 'node_modules'),
-    extensions: ['', '.js'],
-    postfixes: [],
   },
 
   plugins: [

@@ -1,14 +1,10 @@
 import express from 'express';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
-import config from './config';
 import favicon from 'serve-favicon';
 import compression from 'compression';
 import httpProxy from 'http-proxy';
 import path from 'path';
-import createStore from './redux/create';
-import ApiClient from './helpers/ApiClient';
-import Html from './helpers/Html';
 import PrettyError from 'pretty-error';
 import http from 'http';
 import { match } from 'react-router';
@@ -16,6 +12,10 @@ import { syncHistoryWithStore } from 'react-router-redux';
 import { ReduxAsyncConnect, loadOnServer } from 'redux-connect';
 import createHistory from 'react-router/lib/createMemoryHistory';
 import { Provider } from 'react-redux';
+import config from './config';
+import createStore from './redux/create';
+import ApiClient from './helpers/ApiClient';
+import Html from './helpers/Html';
 import getRoutes from './routes';
 
 const targetUrl = `http://${config.apiHost}:${config.apiPort}`;
@@ -35,6 +35,7 @@ app.use(express.static(path.join(__dirname, '..', 'static')));
 
 app.use((req, res, next) => {
   res.setHeader('Service-Worker-Allowed', '*');
+  res.setHeader('X-Forwarded-For', req.ip);
   return next();
 });
 
@@ -81,8 +82,7 @@ app.use((req, res) => {
   }
 
   if (__DISABLE_SSR__) {
-    hydrateOnClient();
-    return;
+    return hydrateOnClient();
   }
 
   match({
@@ -123,7 +123,7 @@ app.use((req, res) => {
 });
 
 if (config.port) {
-  server.listen(config.port, (err) => {
+  server.listen(config.port, err => {
     if (err) {
       console.error(err);
     }

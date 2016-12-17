@@ -1,13 +1,13 @@
-import hooks from 'feathers-hooks';
-import { hooks as auth } from 'feathers-authentication';
-import { validateHook as validate } from '../../hooks';
-import { required } from '../../utils/validation';
+import hooks from 'feathers-hooks-common';
+import auth from 'feathers-authentication';
+import { required } from 'utils/validation';
+import { validateHook as validate } from 'hooks';
 
 const schemaValidator = {
   text: [required]
 };
 
-const options = {
+const populateUserOptions = {
   service: 'users',
   field: 'sentBy'
 };
@@ -15,9 +15,7 @@ const options = {
 const messagesHooks = {
   before: {
     all: [
-      auth.verifyToken(),
-      auth.populateUser(),
-      auth.restrictToAuthenticated()
+      auth.hooks.authenticate('jwt')
     ],
     find: [],
     get: [],
@@ -27,21 +25,19 @@ const messagesHooks = {
         hook.data = {
           text: hook.data.text,
           sentBy: hook.params.user._id, // Set the id of current user
+          createdAt: new Date()
         };
-      },
-      hook => {
-        hook.data.createdAt = new Date();
       }
     ],
-    update: [hooks.disable()], // TODO: restrict to sender
-    patch: [hooks.disable()], // TODO: restrict to sender
-    remove: [hooks.disable()] // TODO: restrict to sender
+    update: [hooks.disable()],
+    patch: [hooks.disable()],
+    remove: [hooks.disable()]
   },
   after: {
     all: [],
-    find: [hooks.populate('sentBy', options), hooks.remove('sentBy.password')],
-    get: [hooks.populate('sentBy', options), hooks.remove('sentBy.password')],
-    create: [hooks.populate('sentBy', options), hooks.remove('sentBy.password')],
+    find: [hooks.populate('sentBy', populateUserOptions), hooks.remove('sentBy.password')],
+    get: [hooks.populate('sentBy', populateUserOptions), hooks.remove('sentBy.password')],
+    create: [hooks.populate('sentBy', populateUserOptions), hooks.remove('sentBy.password')],
     update: [],
     patch: [],
     remove: []

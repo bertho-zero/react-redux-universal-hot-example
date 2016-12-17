@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { initialize } from 'redux-form';
-import { SurveyForm } from 'components';
+import SurveyForm from 'components/SurveyForm/SurveyForm';
 
 @connect(
   () => ({}),
@@ -12,7 +12,7 @@ export default class Survey extends Component {
     initialize: PropTypes.func.isRequired
   }
 
-  handleSubmit = (data) => {
+  handleSubmit = data => {
     window.alert(`Data submitted! ${JSON.stringify(data)}`);
     this.props.initialize('survey', {});
   }

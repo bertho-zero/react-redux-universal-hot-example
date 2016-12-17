@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import { LoginForm, FacebookLogin } from 'components';
+import LoginForm from 'components/LoginForm/LoginForm';
+import FacebookLogin from 'components/FacebookLogin/FacebookLogin';
 import * as authActions from 'redux/modules/auth';
 import * as notifActions from 'redux/modules/notifs';
 
@@ -12,18 +13,29 @@ export default class Login extends Component {
   static propTypes = {
     user: PropTypes.object,
     login: PropTypes.func,
-    oauthLogin: PropTypes.func,
     logout: PropTypes.func,
     notifSend: PropTypes.func
   }
 
+  static contextTypes = {
+    router: PropTypes.object
+  }
+
   onFacebookLogin = (err, data) => {
     if (err) return;
-    this.props.oauthLogin('facebook', data)
-      .then(this.successLogin); // TODO: finalize register (associate to an email & password for local auth) ?
+    this.props.login('facebook', data, false)
+      .then(this.successLogin)
+      .catch(error => {
+        if (error.message === 'Incomplete oauth registration') {
+          this.context.router.push({
+            pathname: '/register',
+            state: { oauth: error.data }
+          });
+        }
+      });
   };
 
-  login = data => this.props.login(data).then(this.successLogin);
+  login = data => this.props.login('local', data).then(this.successLogin);
 
   successLogin = data => {
     this.props.notifSend({
@@ -49,10 +61,10 @@ export default class Login extends Component {
           <LoginForm onSubmit={this.login} />
           <p>This will "log you in" as this user, storing the username in the session of the API server.</p>
           <FacebookLogin
-            appId="619121718248110"
+            appId="635147529978862"
             /* autoLoad={true} */
             fields="name,email,picture"
-            callback={this.onFacebookLogin}
+            onLogin={this.onFacebookLogin}
             component={this.FacebookLoginButton}
           />
         </div>

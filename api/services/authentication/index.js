@@ -1,15 +1,26 @@
-import hooks from 'feathers-hooks';
-import {
-  TokenService as tokenService,
-  LocalService as localService,
-  OAuth2Service as oauth2Service
-} from 'feathers-authentication';
-import authMiddleware from 'feathers-authentication/lib/middleware';
+import auth from 'feathers-authentication';
+import jwt from 'feathers-authentication-jwt';
+import local from 'feathers-authentication-local';
+// import oauth1 from 'feathers-authentication-oauth1';
+import oauth2 from 'feathers-authentication-oauth2';
+import FacebookTokenStrategy from 'passport-facebook-token';
+import hooks from 'feathers-hooks-common';
+import { verifyJWT } from 'feathers-authentication/lib/utils';
+
+export socketAuth from './socketAuth';
+
+function populateUser(authConfig) {
+  return hook => verifyJWT(hook.result.accessToken, authConfig)
+    .then(payload => hook.app.service('users').get(payload.userId))
+    .then(user => {
+      hook.result.user = user;
+    });
+}
 
 function addTokenExpiration() {
   return hook => {
-    if (hook.result.token) {
-      hook.result.expires = hook.app.get('auth').cookies['feathers-session'].maxAge || null;
+    if (hook.result.accessToken) {
+      hook.result.expires = hook.app.get('auth').cookie.maxAge || null;
     }
     return hook;
   };
@@ -18,60 +29,51 @@ function addTokenExpiration() {
 function restToSocketAuth() {
   return hook => {
     if (hook.params.provider !== 'rest') return hook;
-    const { token, user } = hook.result;
+    const { accessToken, user } = hook.result;
     const { socketId } = hook.data;
-    if (socketId && hook.app.io && token) {
+    if (socketId && hook.app.io && accessToken) {
       const userSocket = Object.values(hook.app.io.sockets.connected).find(socket => socket.client.id === socketId);
-      userSocket.feathers.token = token;
-      userSocket.feathers.user = user;
+      if (userSocket) {
+        Object.assign(userSocket.feathers, {
+          accessToken,
+          user,
+          authenticated: true
+        });
+      }
     }
     return hook;
   };
 }
 
-export socketAuth from './socketAuth';
-
 export default function authenticationService() {
   const app = this;
 
-  const config = app.get('auth');
+  const config = app.get('config').auth;
 
-  const { exposeRequestResponse, tokenParser, decodeToken, populateUser, logout } = authMiddleware;
-
-  const middleware = [
-    exposeRequestResponse(config),
-    tokenParser(config),
-    decodeToken(config),
-    populateUser(config),
-    logout(config)
-  ];
-
-  app.use(middleware)
-    .configure(tokenService())
-    .configure(localService())
-    .configure(oauth2Service(config.facebook));
+  app.configure(auth(config))
+    .configure(jwt())
+    .configure(local())
+    // .configure(oauth1()) // TODO twitter example
+    .configure(oauth2({
+      name: 'facebook', // if the name differs from your config key you need to pass your config options explicitly
+      Strategy: FacebookTokenStrategy
+    }));
 
 
-  app.service('auth/local')
-    .after({
+  app.service('authentication')
+    .before({
       create: [
-        hooks.remove('user.password'),
-        addTokenExpiration(),
-        restToSocketAuth()
+        // You can chain multiple strategies
+        auth.hooks.authenticate(['jwt', 'local', 'facebook'])
+      ],
+      remove: [
+        auth.hooks.authenticate('jwt')
       ]
-    });
-
-  app.service('auth/facebook')
+    })
     .after({
       create: [
-        // TODO: cf src/containers/Login/Login.js l25 (and stop use facebook email)
-        /* hook => { // Share the facebook email if the user email does not exist
-          const { email, facebook } = hook.result.user;
-          if (facebook && facebook.email && !email) {
-            hook.result.user.email = facebook.email;
-            return hook;
-          }
-        }, */
+        populateUser(config),
+        hooks.remove('user.password'),
         addTokenExpiration(),
         restToSocketAuth()
       ]

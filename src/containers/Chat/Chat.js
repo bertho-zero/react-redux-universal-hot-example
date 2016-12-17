@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { socket } from 'app';
 
 @connect(
   state => ({ user: state.auth.user })
@@ -16,18 +17,14 @@ export default class Chat extends Component {
   };
 
   componentDidMount() {
-    if (socket) {
-      socket.on('msg', this.onMessageReceived);
-      setTimeout(() => {
-        socket.emit('history', { offset: 0, length: 100 });
-      }, 100);
-    }
+    socket.on('msg', this.onMessageReceived);
+    setTimeout(() => {
+      socket.emit('history', { offset: 0, length: 100 });
+    }, 100);
   }
 
   componentWillUnmount() {
-    if (socket) {
-      socket.removeListener('msg', this.onMessageReceived);
-    }
+    socket.removeListener('msg', this.onMessageReceived);
   }
 
   onMessageReceived = data => {
@@ -61,7 +58,7 @@ export default class Chat extends Component {
           <ul>
             {this.state.messages.map(msg => <li key={`chat.msg.${msg.id}`}>{msg.from}: {msg.text}</li>)}
           </ul>
-          <form className="login-form" onSubmit={this.handleSubmit}>
+          <form onSubmit={this.handleSubmit}>
             <input
               type="text" ref={c => { this.message = c; }} placeholder="Enter your message" value={this.state.message}
               onChange={event => {

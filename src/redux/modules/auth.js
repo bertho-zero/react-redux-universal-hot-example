@@ -21,16 +21,6 @@ const initialState = {
   loaded: false
 };
 
-const catchValidation = error => {
-  if (error.message) {
-    if (error.message === 'Validation failed' && error.data) {
-      throw new SubmissionError(error.data);
-    }
-    throw new SubmissionError({ _error: error.message });
-  }
-  return Promise.reject(error);
-};
-
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case LOAD:
@@ -43,7 +33,7 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         loading: false,
         loaded: true,
-        token: action.result.token,
+        accessToken: action.result.accessToken,
         user: action.result.user
       };
     case LOAD_FAIL:
@@ -62,14 +52,13 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         loggingIn: false,
-        token: action.result.token,
+        accessToken: action.result.accessToken,
         user: action.result.user
       };
     case LOGIN_FAIL:
       return {
         ...state,
         loggingIn: false,
-        token: null,
         loginError: action.error
       };
     case REGISTER:
@@ -86,7 +75,7 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         registeringIn: false,
-        loginError: action.error
+        registerError: action.error
       };
     case LOGOUT:
       return {
@@ -97,8 +86,8 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         loggingOut: false,
-        user: null,
-        token: null
+        accessToken: null,
+        user: null
       };
     case LOGOUT_FAIL:
       return {
@@ -111,31 +100,36 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-function shareFeathersAuth(response) {
-  const { token, user } = response;
-  const storage = app.get('storage');
-  if (token) {
-    storage.setItem('feathers-jwt', token);
-  } else {
-    storage.removeItem('feathers-jwt');
+const catchValidation = error => {
+  if (error.message) {
+    if (error.message === 'Validation failed' && error.data) {
+      throw new SubmissionError(error.data);
+    }
+    throw new SubmissionError({ _error: error.message });
   }
+  return Promise.reject(error);
+};
 
-  app.set('token', token); // -> set manually the JWT
-  app.set('user', user); // -> set manually the user
-  restApp.set('token', token);
-  restApp.set('user', user);
+function setToken(client, response) {
+  const { accessToken } = response;
 
-  console.log(app.get('token')); // -> the JWT
-  console.log(app.get('user')); // -> the user
+  // set manually the JWT for both instances of feathers/client
+  app.set('accessToken', accessToken);
+  restApp.set('accessToken', accessToken);
+  client.setJwtToken(accessToken);
 
   return response;
 }
 
-function setCookie(result) {
-  const options = result.expires ? { expires: result.expires / (60 * 60 * 24 * 1000) } : undefined;
-  cookie.set('feathers-session', app.get('token'), options);
-  return result;
+function setCookie(response) {
+  const options = response.expires ? { expires: response.expires / (60 * 60 * 24 * 1000) } : undefined;
+  cookie.set('feathers-jwt', app.get('accessToken'), options);
+  return response;
 }
+
+/*
+* Actions
+* * * * */
 
 export function isLoaded(globalState) {
   return globalState.auth && globalState.auth.loaded;
@@ -155,39 +149,29 @@ export function register(data) {
   };
 }
 
-export function login(data) {
+export function login(strategy, data, validation = true) {
   const socketId = socket.io.engine.id;
   return {
     types: [LOGIN, LOGIN_SUCCESS, LOGIN_FAIL],
-    promise: () => restApp.authenticate({
-      type: 'local',
-      email: data.email,
-      password: data.password,
+    promise: client => restApp.authenticate({
+      strategy,
+      ...data,
       socketId
     })
-      .then(shareFeathersAuth)
+      .then(response => setToken(client, response))
       .then(setCookie)
-      .catch(catchValidation)
-  };
-}
-
-export function oauthLogin(provider, data) {
-  const socketId = socket.io.engine.id;
-  return {
-    types: [LOGIN, LOGIN_SUCCESS, LOGIN_FAIL],
-    promise: () => restApp.service(`/auth/${provider}`)
-      .create({ ...data, socketId })
-      .then(shareFeathersAuth)
-      .then(setCookie)
-      .catch(catchValidation)
+      .then(response => {
+        app.set('user', response.user);
+        return response;
+      })
+      .catch(validation ? catchValidation : error => Promise.reject(error))
   };
 }
 
 export function logout() {
   return {
     types: [LOGOUT, LOGOUT_SUCCESS, LOGOUT_FAIL],
-    promise: () => (socket.connected ? app : restApp).logout().then(() => {
-      cookie.set('feathers-session', '', { expires: -1 });
-    })
+    promise: client => app.logout()
+      .then(() => setToken(client, { accessToken: null }))
   };
 }

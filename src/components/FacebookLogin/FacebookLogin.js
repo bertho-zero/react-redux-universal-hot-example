@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 
 class FacebookLogin extends React.Component {
   static propTypes = {
-    callback: PropTypes.func.isRequired,
+    onLogin: PropTypes.func.isRequired,
     appId: PropTypes.string.isRequired,
     xfbml: PropTypes.bool,
     cookie: PropTypes.bool,
@@ -60,32 +60,31 @@ class FacebookLogin extends React.Component {
     })(document, 'facebook-jssdk');
   }
 
-  checkLoginState = response => {
-    if (response.authResponse) {
-      this.props.callback(null, response.authResponse);
-    } else {
-      this.props.callback(response);
-    }
-  };
-
   click = () => {
     const { scope, appId } = this.props;
     if (navigator.userAgent.match('CriOS')) {
       window.location.href = `https://www.facebook.com/dialog/oauth?client_id=${appId}` +
         `&redirect_uri=${window.location.href}&state=facebookdirect&${scope}`;
     } else {
-      window.FB.login(this.checkLoginState, { scope });
+      window.FB.login(response => {
+        if (response.authResponse) {
+          this.props.onLogin(null, response.authResponse);
+        } else {
+          this.props.onLogin(response);
+        }
+      }, { scope });
     }
   };
 
   render() {
     const { className, textButton, typeButton, component: Component } = this.props;
 
+    if (Component) return <Component facebookLogin={this.click} />;
+
     return (
-      Component ? <Component facebookLogin={this.click} /> :
-        <button className={className} onClick={this.click} type={typeButton}>
-          {textButton}
-        </button>
+      <button className={className} onClick={this.click} type={typeButton}>
+        {textButton}
+      </button>
     );
   }
 }
