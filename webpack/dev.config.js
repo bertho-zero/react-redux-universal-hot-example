@@ -134,19 +134,6 @@ var webpackConfig = module.exports = {
     }),
     webpackIsomorphicToolsPlugin.development(),
 
-    new webpack.LoaderOptionsPlugin({
-      test: /\.jsx?$/,
-      happy: { id: 'jsx' }
-    }),
-    new webpack.LoaderOptionsPlugin({
-      test: /\.less$/,
-      happy: { id: 'less' }
-    }),
-    new webpack.LoaderOptionsPlugin({
-      test: /\.scss$/,
-      happy: { id: 'sass' }
-    }),
-
     helpers.createHappyPlugin('jsx', [
       {
         loader: 'react-hot-loader/webpack'
@@ -164,7 +151,7 @@ var webpackConfig = module.exports = {
         loader: 'css-loader',
         query: {
           modules: true,
-          importLoaders: 2,
+          importLoaders: 3,
           sourceMap: true,
           localIdentName: '[local]___[hash:base64:5]'
         }
@@ -173,6 +160,8 @@ var webpackConfig = module.exports = {
         query: {
           browser: 'last 2 version'
         }
+      }, {
+        loader: 'resolve-url-loader',
       }, {
         loader: 'less-loader',
         query: {
@@ -188,7 +177,7 @@ var webpackConfig = module.exports = {
         loader: 'css-loader',
         query: {
           modules: true,
-          importLoaders: 2,
+          importLoaders: 3,
           sourceMap: true,
           localIdentName: '[local]___[hash:base64:5]'
         }
@@ -197,6 +186,8 @@ var webpackConfig = module.exports = {
         query: {
           browsers: 'last 2 version'
         }
+      }, {
+        loader: 'resolve-url-loader',
       }, {
         loader: 'sass-loader',
         query: {
