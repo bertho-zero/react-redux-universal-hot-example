@@ -208,7 +208,7 @@
     "redux-devtools": "^3.3.2",
     "redux-devtools-dock-monitor": "^1.1.1",
     "redux-devtools-log-monitor": "^1.2.0",
-    "resolve-url-loader": "^1.6.1",
+    "resolve-url-loader": "^2.0.0",
     "sass-loader": "^4.1.1",
     "sinon": "^1.17.7",
     "strip-loader": "^0.1.2",
