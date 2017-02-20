@@ -81,7 +81,7 @@ styles:
   breadcrumb: false
   pagination: false
   jumbotron: false
-  alert: false
+  alert: true
   progress: false
   media: false
   list-group: false

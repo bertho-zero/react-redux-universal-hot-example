@@ -62,10 +62,8 @@ module.exports = {
                 sourceMap: true
               }
             }, {
-              loader: 'autoprefixer-loader',
-              query: {
-                browsers: 'last 2 version'
-              }
+              loader: 'postcss-loader',
+              options: { plugins: () => [ require('autoprefixer') ] }
             }, {
               loader: 'resolve-url-loader',
             }, {
@@ -91,10 +89,8 @@ module.exports = {
                 sourceMap: true
               }
             }, {
-              loader: 'autoprefixer-loader',
-              query: {
-                browsers: 'last 2 version'
-              }
+              loader: 'postcss-loader',
+              options: { plugins: () => [ require('autoprefixer') ] }
             }, {
               loader: 'resolve-url-loader',
             }, {
