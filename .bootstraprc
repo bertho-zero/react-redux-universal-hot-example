@@ -1,70 +1,113 @@
-{
-  "bootstrapVersion": 3,
-  "preBootstrapCustomizations": "./src/theme/variables.scss",
-  "appStyles": "./src/theme/bootstrap.overrides.scss",
-  "loglevel": "disabled",
-  "env": {
-    "development": {
-      "styleLoaders": ["style-loader", "css-loader", "resolve-url-loader", "sass-loader"],
-      "extractStyles": false
-    },
-    "production": {
-      "styleLoaders": ["style-loader", "css-loader", "sass-loader"],
-      "extractStyles": true
-    }
-  },
-  "scripts": {
-    "transition": false,
-    "alert": false,
-    "button": false,
-    "carousel": false,
-    "collapse": false,
-    "dropdown": false,
-    "modal": false,
-    "tooltip": false,
-    "popover": false,
-    "scrollspy": false,
-    "tab": false,
-    "affix": false
-  },
-  "styles": {
-    "mixins": true,
-    "normalize": true,
-    "print": true,
-    "glyphicons": true,
-    "scaffolding": true,
-    "type": true,
-    "code": true,
-    "grid": true,
-    "tables": true,
-    "forms": true,
-    "buttons": true,
-    "component-animations": true,
-    "dropdowns": true,
-    "button-groups": true,
-    "input-groups": true,
-    "navs": true,
-    "navbar": true,
-    "breadcrumbs": true,
-    "pagination": true,
-    "pager": true,
-    "labels": true,
-    "badges": true,
-    "jumbotron": true,
-    "thumbnails": true,
-    "alerts": true,
-    "progress-bars": true,
-    "media": true,
-    "list-group": true,
-    "panels": true,
-    "wells": true,
-    "responsive-embed": true,
-    "close": true,
-    "modals": true,
-    "tooltip": true,
-    "popovers": true,
-    "carousel": true,
-    "utilities": true,
-    "responsive-utilities": true
-  }
-}
+---
+# Output debugging info
+# loglevel: debug
+
+# Major version of Bootstrap: 3 or 4
+bootstrapVersion: 4
+
+# If Bootstrap version 4 is used - turn on/off flexbox model
+useFlexbox: true
+
+# Webpack loaders, order matters
+styleLoaders:
+  - style-loader
+  - css-loader
+  - postcss-loader
+  - resolve-url-loader
+  - sass-loader
+
+# Extract styles to stand-alone css file
+# Different settings for different environments can be used,
+# It depends on value of NODE_ENV environment variable
+# This param can also be set in webpack config:
+#   entry: 'bootstrap-loader/extractStyles'
+extractStyles: false
+# env:
+#   development:
+#     extractStyles: false
+#   production:
+#     extractStyles: true
+
+
+# Customize Bootstrap variables that get imported before the original Bootstrap variables.
+# Thus, derived Bootstrap variables can depend on values from here.
+# See the Bootstrap _variables.scss file for examples of derived Bootstrap variables.
+#
+# preBootstrapCustomizations: ./path/to/bootstrap/pre-customizations.scss
+
+
+# This gets loaded after bootstrap/variables is loaded
+# Thus, you may customize Bootstrap variables
+# based on the values established in the Bootstrap _variables.scss file
+#
+# bootstrapCustomizations: ./path/to/bootstrap/customizations.scss
+
+
+# Import your custom styles here
+# Usually this endpoint-file contains list of @imports of your application styles
+#
+# appStyles: ./path/to/your/app/styles/endpoint.scss
+
+
+### Bootstrap styles
+styles:
+
+  # Mixins
+  mixins: true
+
+  # Reset and dependencies
+  normalize: true
+  print: true
+
+  # Core CSS
+  reboot: true
+  type: true
+  images: true
+  code: true
+  grid: true
+  tables: true
+  forms: true
+  buttons: true
+
+  # Components
+  transitions: false
+  dropdown: false
+  button-group: true
+  input-group: true
+  custom-forms: true
+  nav: true
+  navbar: true
+  card: false
+  breadcrumb: false
+  pagination: false
+  jumbotron: false
+  alert: true
+  progress: false
+  media: false
+  list-group: false
+  responsive-embed: false
+  close: false
+  badge: false
+
+  # Components w/ JavaScript
+  modal: true
+  tooltip: false
+  popover: false
+  carousel: false
+
+  # Utility classes
+  utilities: false
+
+### Bootstrap scripts
+scripts:
+  alert: false
+  button: false
+  carousel: false
+  collapse: false
+  dropdown: false
+  modal: false
+  popover: false
+  scrollspy: false
+  tab: false
+  tooltip: false
+  util: false

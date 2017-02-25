@@ -156,10 +156,8 @@ var webpackConfig = module.exports = {
           localIdentName: '[local]___[hash:base64:5]'
         }
       }, {
-        loader: 'autoprefixer-loader',
-        query: {
-          browser: 'last 2 version'
-        }
+        loader: 'postcss-loader',
+        options: { plugins: () => [ require('autoprefixer') ] }
       }, {
         loader: 'resolve-url-loader',
       }, {
@@ -182,10 +180,8 @@ var webpackConfig = module.exports = {
           localIdentName: '[local]___[hash:base64:5]'
         }
       }, {
-        loader: 'autoprefixer-loader',
-        query: {
-          browsers: 'last 2 version'
-        }
+        loader: 'postcss-loader',
+        options: { plugins: () => [ require('autoprefixer') ] }
       }, {
         loader: 'resolve-url-loader',
       }, {
