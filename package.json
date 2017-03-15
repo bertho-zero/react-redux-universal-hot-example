@@ -212,7 +212,7 @@
     "sass-loader": "^6.0.1",
     "sinon": "^1.17.7",
     "strip-loader": "^0.1.2",
-    "style-loader": "^0.13.1",
+    "style-loader": "^0.14.0",
     "sw-precache-webpack-plugin": "^0.9.0",
     "timekeeper": "^1.0.0",
     "url-loader": "^0.5.7",
