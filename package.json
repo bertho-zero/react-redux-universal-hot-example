@@ -122,7 +122,7 @@
     "feathers-authentication-oauth1": "^0.2.3",
     "feathers-authentication-oauth2": "^0.2.3",
     "feathers-errors": "^2.5.0",
-    "feathers-hooks": "^1.7.1",
+    "feathers-hooks": "^2.0.1",
     "feathers-hooks-common": "^2.0.3",
     "feathers-nedb": "^2.6.0",
     "feathers-rest": "^1.6.0",
