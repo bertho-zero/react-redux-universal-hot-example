@@ -205,7 +205,7 @@
     "postcss-import": "^10.0.0",
     "postcss-loader": "^2.0.5",
     "postcss-reporter": "^3.0.0",
-    "postcss-url": "^6.1.0",
+    "postcss-url": "^7.0.0",
     "react-a11y": "^0.3.3",
     "react-addons-test-utils": "^15.4.2",
     "react-hot-loader": "^3.0.0-beta.3",
