@@ -6,6 +6,7 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import httpProxy from 'http-proxy';
 import path from 'path';
+import VError from 'verror';
 import PrettyError from 'pretty-error';
 import http from 'http';
 import { match } from 'react-router';
@@ -110,10 +111,8 @@ app.use((req, res) => {
       res.status(500);
       hydrateOnClient();
     } else if (renderProps) {
-      const redirect = ::res.redirect;
+      const redirect = to => { throw new VError({ name: 'RedirectError', info: { to } }); };
       loadOnServer({ ...renderProps, store, helpers: { ...providers, redirect } }).then(() => {
-        if (res.headersSent) return;
-
         const component = (
           <Provider store={store} app={providers.app} restApp={providers.restApp} key="provider">
             <ReduxAsyncConnect {...renderProps} />
@@ -129,6 +128,9 @@ app.use((req, res) => {
           <Html assets={webpackIsomorphicTools.assets()} component={component} store={store} />
         )}`);
       }).catch(mountError => {
+        if (mountError.name === 'RedirectError') {
+          return res.redirect(VError.info(mountError).to);
+        }
         console.error('MOUNT ERROR:', pretty.render(mountError));
         res.status(500);
         hydrateOnClient();
