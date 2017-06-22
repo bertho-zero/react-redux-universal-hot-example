@@ -119,7 +119,7 @@
     "feathers-authentication-client": "^0.3.2",
     "feathers-authentication-hooks": "^0.1.3",
     "feathers-authentication-jwt": "^0.3.1",
-    "feathers-authentication-local": "^0.3.3",
+    "feathers-authentication-local": "^0.4.0",
     "feathers-authentication-oauth1": "^0.2.3",
     "feathers-authentication-oauth2": "^0.2.3",
     "feathers-errors": "^2.5.0",
