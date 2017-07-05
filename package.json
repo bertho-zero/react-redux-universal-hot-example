@@ -202,7 +202,7 @@
     "piping": "^1.0.0-rc.4",
     "postcss": "^6.0.1",
     "postcss-browser-reporter": "^0.5.0",
-    "postcss-cssnext": "^2.11.0",
+    "postcss-cssnext": "^3.0.0",
     "postcss-import": "^10.0.0",
     "postcss-loader": "^2.0.5",
     "postcss-reporter": "^4.0.0",
