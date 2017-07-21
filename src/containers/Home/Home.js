@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { CounterButton, GithubButton } from 'components';
 import config from 'config';
@@ -51,14 +52,18 @@ export default class Home extends Component {
               type="star"
               width={160}
               height={30}
-              count large />}
+              count
+              large
+            />}
             {online && <GithubButton
               user="erikras"
               repo="react-redux-universal-hot-example"
               type="fork"
               width={160}
               height={30}
-              count large />}
+              count
+              large
+            />}
 
             <p className={styles.humility}>
               Created and maintained by{' '}
@@ -107,7 +112,8 @@ export default class Home extends Component {
             <li>
               <a
                 href="http://webpack.github.io/docs/webpack-dev-middleware.html"
-                target="_blank" rel="noopener noreferrer"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 Webpack Dev Middleware
               </a>
@@ -122,7 +128,8 @@ export default class Home extends Component {
               's futuristic{' '}
               <a
                 href="https://facebook.github.io/react/blog/2014/05/06/flux.html"
-                target="_blank" rel="noopener noreferrer"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 Flux
               </a>
@@ -163,7 +170,9 @@ export default class Home extends Component {
               </a>
               {' '}and{' '}
               <a
-                href="https://github.com/jtangelder/sass-loader" target="_blank" rel="noopener noreferrer">
+                href="https://github.com/jtangelder/sass-loader"
+                target="_blank"
+                rel="noopener noreferrer">
                 sass-loader
               </a>
               {' '}to allow import of stylesheets
@@ -174,7 +183,10 @@ export default class Home extends Component {
               </a>
               {' '}and{' '}
               <a
-                href="https://github.com/gowravshekar/font-awesome-webpack" target="_blank" rel="noopener noreferrer">
+                href="https://github.com/gowravshekar/font-awesome-webpack"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 font-awesome-webpack
               </a>
               {' '}to customize Bootstrap and FontAwesome

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class GithubButton extends Component {
   static propTypes = {
@@ -19,6 +20,7 @@ export default class GithubButton extends Component {
 
     return (
       <iframe
+        title={`github-button-${user}-${repo}-${type}`}
         src={src}
         frameBorder="0"
         allowTransparency="true"

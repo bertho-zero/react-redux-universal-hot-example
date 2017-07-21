@@ -18,8 +18,8 @@ function getMissingReducers(reducers, data) {
   );
 }
 
-export default function createStore(history, client, data, persistConfig = null) {
-  const middleware = [createMiddleware(client), routerMiddleware(history)];
+export default function createStore(history, { client, app, restApp }, data, persistConfig = null) {
+  const middleware = [createMiddleware({ client, app, restApp }), routerMiddleware(history)];
 
   let enhancers = [applyMiddleware(...middleware)];
   if (__CLIENT__ && __DEVTOOLS__) {
@@ -46,7 +46,8 @@ export default function createStore(history, client, data, persistConfig = null)
 
   if (__DEVELOPMENT__ && module.hot) {
     module.hot.accept('./reducer', () => {
-      store.replaceReducer(combineReducers(require('./reducer').default(store.asyncReducers)));
+      const reducer = require('./reducer');
+      store.replaceReducer(combineReducers((reducer.default || reducer)(store.asyncReducers)));
     });
   }
 

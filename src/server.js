@@ -6,19 +6,20 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import httpProxy from 'http-proxy';
 import path from 'path';
+import VError from 'verror';
 import PrettyError from 'pretty-error';
 import http from 'http';
 import { match } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import { ReduxAsyncConnect, loadOnServer } from 'redux-connect';
 import createHistory from 'react-router/lib/createMemoryHistory';
-import { Provider } from 'react-redux';
+import { Provider } from 'components';
 import config from 'config';
 import createStore from 'redux/create';
 import ApiClient from 'helpers/ApiClient';
 import Html from 'helpers/Html';
 import getRoutes from 'routes';
-import { exposeInitialRequest } from 'app';
+import { createApp } from 'app';
 
 process.on('unhandledRejection', error => console.error(error));
 
@@ -36,10 +37,14 @@ app.use(compression());
 app.use(favicon(path.join(__dirname, '..', 'static', 'favicon.ico')));
 app.get('/manifest.json', (req, res) => res.sendFile(path.join(__dirname, '..', 'static', 'manifest.json')));
 
+app.use('/dist/service-worker.js', (req, res, next) => {
+  res.setHeader('Service-Worker-Allowed', '/');
+  return next();
+});
+
 app.use(express.static(path.join(__dirname, '..', 'static')));
 
 app.use((req, res, next) => {
-  res.setHeader('Service-Worker-Allowed', '*');
   res.setHeader('X-Forwarded-For', req.ip);
   return next();
 });
@@ -76,9 +81,13 @@ app.use((req, res) => {
     // hot module replacement is enabled in the development env
     webpackIsomorphicTools.refresh();
   }
-  const client = new ApiClient(req);
+  const providers = {
+    client: new ApiClient(req),
+    app: createApp(req),
+    restApp: createApp(req)
+  };
   const memoryHistory = createHistory(req.originalUrl);
-  const store = createStore(memoryHistory, client);
+  const store = createStore(memoryHistory, providers);
   const history = syncHistoryWithStore(memoryHistory, store);
 
   function hydrateOnClient() {
@@ -89,9 +98,6 @@ app.use((req, res) => {
   if (__DISABLE_SSR__) {
     return hydrateOnClient();
   }
-
-  // Re-configure restApp for apply client cookies
-  exposeInitialRequest(req);
 
   match({
     history,
@@ -105,9 +111,10 @@ app.use((req, res) => {
       res.status(500);
       hydrateOnClient();
     } else if (renderProps) {
-      loadOnServer({ ...renderProps, store, helpers: { client } }).then(() => {
+      const redirect = to => { throw new VError({ name: 'RedirectError', info: { to } }); };
+      loadOnServer({ ...renderProps, store, helpers: { ...providers, redirect } }).then(() => {
         const component = (
-          <Provider store={store} key="provider">
+          <Provider store={store} app={providers.app} restApp={providers.restApp} key="provider">
             <ReduxAsyncConnect {...renderProps} />
           </Provider>
         );
@@ -121,6 +128,9 @@ app.use((req, res) => {
           <Html assets={webpackIsomorphicTools.assets()} component={component} store={store} />
         )}`);
       }).catch(mountError => {
+        if (mountError.name === 'RedirectError') {
+          return res.redirect(VError.info(mountError).to);
+        }
         console.error('MOUNT ERROR:', pretty.render(mountError));
         res.status(500);
         hydrateOnClient();

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import LoginForm from 'components/LoginForm/LoginForm';
@@ -50,10 +51,11 @@ export default class Login extends Component {
     return data;
   };
 
-  FacebookLoginButton = ({ facebookLogin }) =>
+  FacebookLoginButton = ({ facebookLogin }) => (
     <button className="btn btn-primary" onClick={facebookLogin}>
       Login with <i className="fa fa-facebook-f" />
-    </button>;
+    </button>
+  );
 
   render() {
     const { user, logout } = this.props;

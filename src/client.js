@@ -4,15 +4,16 @@
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
 import { applyRouterMiddleware, Router, browserHistory, match } from 'react-router';
-import { syncHistoryWithStore } from 'react-router-redux';
+import { bindActionCreators } from 'redux';
+import { syncHistoryWithStore, replace } from 'react-router-redux';
 import { ReduxAsyncConnect } from 'redux-connect';
 import { AppContainer as HotEnabler } from 'react-hot-loader';
 import { useScroll } from 'react-router-scroll';
 import { getStoredState } from 'redux-persist';
 import localForage from 'localforage';
-import { socket } from 'app';
+import { socket, createApp } from 'app';
+import { Provider } from 'components';
 import createStore from './redux/create';
 import ApiClient from './helpers/ApiClient';
 import getRoutes from './routes';
@@ -24,6 +25,8 @@ const offlinePersistConfig = {
 };
 
 const client = new ApiClient();
+const app = createApp();
+const restApp = createApp('rest');
 const dest = document.getElementById('content');
 
 function initSocket() {
@@ -48,21 +51,25 @@ Promise.all([window.__data ? true : isOnline(), getStoredState(offlinePersistCon
     // if (online) app.authenticate().catch(() => null);
 
     const data = !online ? { ...storedData, ...window.__data, online } : { ...window.__data, online };
-    const store = createStore(browserHistory, client, data, offlinePersistConfig);
+    const store = createStore(browserHistory, { client, app, restApp }, data, offlinePersistConfig);
     const history = syncHistoryWithStore(browserHistory, store);
 
-    const renderRouter = props => <ReduxAsyncConnect
-      {...props}
-      helpers={{ client }}
-      filter={item => !item.deferred}
-      render={applyRouterMiddleware(useScroll())}
-    />;
+    const redirect = bindActionCreators(replace, store.dispatch);
+
+    const renderRouter = props => (
+      <ReduxAsyncConnect
+        {...props}
+        helpers={{ client, app, restApp, redirect }}
+        filter={item => !item.deferred}
+        render={applyRouterMiddleware(useScroll())}
+      />
+    );
 
     const render = routes => {
       match({ history, routes }, (error, redirectLocation, renderProps) => {
         ReactDOM.render(
           <HotEnabler>
-            <Provider store={store} key="provider">
+            <Provider store={store} app={app} restApp={restApp} key="provider">
               <Router {...renderProps} render={renderRouter} history={history}>
                 {routes}
               </Router>
@@ -105,7 +112,7 @@ Promise.all([window.__data ? true : isOnline(), getStoredState(offlinePersistCon
     }
 
     if (online && !__DEVELOPMENT__ && 'serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
+      navigator.serviceWorker.register('/dist/service-worker.js', { scope: '/' })
         .then(() => {
           console.log('Service worker registered!');
         })

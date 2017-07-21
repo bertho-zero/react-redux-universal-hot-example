@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { socket } from 'app';
 
@@ -13,7 +14,7 @@ export default class Chat extends Component {
 
   static defaultProps = {
     user: null
-  }
+  };
 
   state = {
     message: '',
@@ -64,7 +65,10 @@ export default class Chat extends Component {
           </ul>
           <form onSubmit={this.handleSubmit}>
             <input
-              type="text" ref={c => { this.message = c; }} placeholder="Enter your message" value={this.state.message}
+              type="text"
+              ref={c => { this.message = c; }}
+              placeholder="Enter your message"
+              value={this.state.message}
               onChange={event => {
                 this.setState({ message: event.target.value });
               }}

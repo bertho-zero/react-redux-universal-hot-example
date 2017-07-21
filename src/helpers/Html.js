@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom/server';
 import serialize from 'serialize-javascript';
 import Helmet from 'react-helmet';
@@ -26,7 +27,7 @@ export default class Html extends Component {
   render() {
     const { assets, component, store } = this.props;
     const content = component ? ReactDOM.renderToString(component) : '';
-    const head = Helmet.rewind();
+    const head = Helmet.renderStatic();
 
     return (
       <html lang="en-US">
@@ -47,11 +48,15 @@ export default class Html extends Component {
           <meta name="apple-mobile-web-app-title" content="React Hot" />
           <meta name="theme-color" content="#3677dd" />
           {/* styles (will be present only in production with webpack extract text plugin) */}
-          {assets.styles && Object.keys(assets.styles).map(style =>
+          {assets.styles && Object.keys(assets.styles).map(style => (
             <link
-              href={assets.styles[style]} key={style} media="screen, projection"
-              rel="stylesheet" type="text/css" charSet="UTF-8" />
-          )}
+              href={assets.styles[style]}
+              key={style}
+              media="screen, projection"
+              rel="stylesheet"
+              type="text/css"
+              charSet="UTF-8" />
+          ))}
 
           {/* (will be present only in development mode) */}
           {assets.styles && Object.keys(assets.styles).length === 0 ?

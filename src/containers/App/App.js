@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { IndexLink } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -121,7 +122,8 @@ export default class App extends Component {
             </p>}
             <Nav navbar pullRight>
               <NavItem
-                target="_blank" title="View on Github"
+                target="_blank"
+                title="View on Github"
                 href="https://github.com/erikras/react-redux-universal-hot-example"
               >
                 <i className="fa fa-github" />
@@ -147,14 +149,16 @@ export default class App extends Component {
           Have questions? Ask for help{' '}
           <a
             href="https://github.com/erikras/react-redux-universal-hot-example/issues"
-            target="_blank" rel="noopener noreferrer"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             on Github
           </a>
           {' '}or in the{' '}
           <a
             href="https://discord.gg/0ZcbPKXt5bZZb1Ko"
-            target="_blank" rel="noopener noreferrer"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             #react-redux-universal
           </a>
