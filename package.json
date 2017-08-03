@@ -216,7 +216,7 @@
     "redux-devtools-log-monitor": "^1.2.0",
     "resolve-url-loader": "^2.0.2",
     "sass-loader": "^6.0.1",
-    "sinon": "^2.1.0",
+    "sinon": "^3.0.0",
     "style-loader": "^0.17.0",
     "sw-precache-webpack-plugin": "^0.11.3",
     "timekeeper": "^1.0.0",
