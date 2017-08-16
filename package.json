@@ -24,6 +24,8 @@
   ],
   "main": "bin/server.js",
   "scripts": {
+    "precommit": "lint-staged",
+    "precommit-prettier": "eslint --print-config .eslintrc.js | prettier-eslint --write",
     "start": "concurrently --kill-others \"npm run start-prod\" \"npm run start-prod-api\"",
     "start-prod": "better-npm-run start-prod",
     "start-prod-api": "better-npm-run start-prod-api",
@@ -34,6 +36,7 @@
     "build": "better-npm-run build",
     "build-dlls": "webpack --colors --display-error-details --config webpack/vendor.config.js",
     "postinstall": "concurrently \"npm run build\" \"npm run build-dlls\"",
+    "prettier": "npm run precommit-prettier -- \"./src/**/*.js\"",
     "lint": "eslint -c .eslintrc api src",
     "test": "karma start",
     "test-node": "jest $(find api -name '*-test.js')",
@@ -42,6 +45,12 @@
     "docker-dev": ". ./docker/run.dev.sh",
     "docker-prod": ". ./docker/run.prod.sh",
     "lighthouse-report": "LIGHTHOUSE_CHROMIUM_PATH=$(which google-chrome) lighthouse http://localhost:8080"
+  },
+  "lint-staged": {
+    "src/**/*.js": [
+      "npm run precommit-prettier",
+      "git add"
+    ]
   },
   "betterScripts": {
     "start-prod": {
@@ -183,6 +192,7 @@
     "font-awesome-webpack": "^0.0.5-beta.2",
     "happypack": "^3.0.2",
     "html-webpack-plugin": "^2.28.0",
+    "husky": "^0.14.3",
     "jest": "^20.0.1",
     "jest-cli": "^20.0.1",
     "karma": "^1.4.1",
@@ -195,6 +205,7 @@
     "less": "^2.7.2",
     "less-loader": "^4.0.3",
     "lighthouse": "^2.1.0",
+    "lint-staged": "^4.0.3",
     "mocha": "^3.2.0",
     "node-sass": "^4.5.0",
     "phantomjs-polyfill": "^0.0.2",
@@ -207,6 +218,7 @@
     "postcss-loader": "^2.0.5",
     "postcss-reporter": "^4.0.0",
     "postcss-url": "^7.0.0",
+    "prettier-eslint": "^6.4.2",
     "react-a11y": "^0.3.3",
     "react-addons-test-utils": "^15.4.2",
     "react-hot-loader": "^3.0.0-beta.3",

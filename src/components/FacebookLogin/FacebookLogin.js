@@ -27,7 +27,7 @@ class FacebookLogin extends Component {
     version: '2.3',
     language: 'en_US',
     autoLoad: false
-  }
+  };
 
   componentDidMount() {
     const { appId, xfbml, cookie, version, autoLoad, language } = this.props;
@@ -45,7 +45,7 @@ class FacebookLogin extends Component {
         version: `v${version}`,
         appId,
         xfbml,
-        cookie,
+        cookie
       });
 
       if (autoLoad || window.location.search.includes('facebookdirect')) {
@@ -65,16 +65,20 @@ class FacebookLogin extends Component {
   click = () => {
     const { scope, appId } = this.props;
     if (navigator.userAgent.match('CriOS')) {
-      window.location.href = `https://www.facebook.com/dialog/oauth?client_id=${appId}` +
+      window.location.href =
+        `https://www.facebook.com/dialog/oauth?client_id=${appId}` +
         `&redirect_uri=${window.location.href}&state=facebookdirect&${scope}`;
     } else {
-      window.FB.login(response => {
-        if (response.authResponse) {
-          this.props.onLogin(null, response.authResponse);
-        } else {
-          this.props.onLogin(response);
-        }
-      }, { scope });
+      window.FB.login(
+        response => {
+          if (response.authResponse) {
+            this.props.onLogin(null, response.authResponse);
+          } else {
+            this.props.onLogin(response);
+          }
+        },
+        { scope }
+      );
     }
   };
 

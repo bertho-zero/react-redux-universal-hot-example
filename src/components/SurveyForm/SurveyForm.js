@@ -12,24 +12,46 @@ function asyncValidate(data, dispatch) {
 
 /* eslint-disable react/prop-types */
 const Input = ({
-  input, label, type, showAsyncValidating, className, styles,
+  input,
+  label,
+  type,
+  showAsyncValidating,
+  className,
+  styles,
   meta: { touched, error, dirty, active, visited, asyncValidating }
-}) => (
-  <div className={`form-group ${error && touched ? 'has-error' : ''}`}>
-    <label htmlFor={input.name} className="col-sm-2">{label}</label>
+}) =>
+  (<div className={`form-group ${error && touched ? 'has-error' : ''}`}>
+    <label htmlFor={input.name} className="col-sm-2">
+      {label}
+    </label>
     <div className={`col-sm-8 ${styles.inputGroup}`}>
       {showAsyncValidating && asyncValidating && <i className={`fa fa-cog fa-spin ${styles.cog}`} />}
       <input {...input} type={type} className={className} id={input.name} />
-      {error && touched && <div className="text-danger">{error}</div>}
+      {error &&
+        touched &&
+        <div className="text-danger">
+          {error}
+        </div>}
       <div className={styles.flags}>
-        {dirty && <span className={styles.dirty} title="Dirty">D</span>}
-        {active && <span className={styles.active} title="Active">A</span>}
-        {visited && <span className={styles.visited} title="Visited">V</span>}
-        {touched && <span className={styles.touched} title="Touched">T</span>}
+        {dirty &&
+          <span className={styles.dirty} title="Dirty">
+            D
+          </span>}
+        {active &&
+          <span className={styles.active} title="Active">
+            A
+          </span>}
+        {visited &&
+          <span className={styles.visited} title="Visited">
+            V
+          </span>}
+        {touched &&
+          <span className={styles.touched} title="Touched">
+            T
+          </span>}
       </div>
     </div>
-  </div>
-);
+  </div>);
 /* eslint-enable react/prop-types */
 
 @reduxForm({
@@ -38,55 +60,33 @@ const Input = ({
   asyncValidate,
   asyncBlurFields: ['email']
 })
-@connect(
-  state => ({
-    active: state.form.survey.active
-  })
-)
-export default
-class SurveyForm extends Component {
+@connect(state => ({
+  active: state.form.survey.active
+}))
+export default class SurveyForm extends Component {
   static propTypes = {
     active: PropTypes.string,
-    asyncValidating: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.string
-    ]).isRequired,
+    asyncValidating: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]).isRequired,
     dirty: PropTypes.bool.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     reset: PropTypes.func.isRequired,
     invalid: PropTypes.bool.isRequired,
     pristine: PropTypes.bool.isRequired,
     valid: PropTypes.bool.isRequired
-  }
+  };
 
   static defaultProps = {
     active: null
-  }
+  };
 
   render() {
-    const {
-      asyncValidating,
-      dirty,
-      active,
-      handleSubmit,
-      invalid,
-      reset,
-      pristine,
-      valid
-    } = this.props;
+    const { asyncValidating, dirty, active, handleSubmit, invalid, reset, pristine, valid } = this.props;
     const styles = require('./SurveyForm.scss');
 
     return (
       <div>
         <form className="form-horizontal" onSubmit={handleSubmit}>
-          <Field
-            name="name"
-            type="text"
-            component={Input}
-            label="Full Name"
-            className="form-control"
-            styles={styles}
-          />
+          <Field name="name" type="text" component={Input} label="Full Name" className="form-control" styles={styles} />
 
           <Field
             name="email"
@@ -116,7 +116,9 @@ class SurveyForm extends Component {
           />
 
           <div className="form-group">
-            <label className="col-sm-2" htmlFor="sex">Sex</label>
+            <label className="col-sm-2" htmlFor="sex">
+              Sex
+            </label>
             <div className="col-sm-8">
               <label htmlFor="sex-male" className={styles.radioLabel}>
                 <Field name="sex" component="input" type="radio" id="sex-male" value="male" /> Male
@@ -145,23 +147,33 @@ class SurveyForm extends Component {
           <tbody>
             <tr>
               <th>Active Field</th>
-              <td>{active}</td>
+              <td>
+                {active}
+              </td>
             </tr>
             <tr>
               <th>Dirty</th>
-              <td className={dirty ? 'success' : 'danger'}>{dirty ? 'true' : 'false'}</td>
+              <td className={dirty ? 'success' : 'danger'}>
+                {dirty ? 'true' : 'false'}
+              </td>
             </tr>
             <tr>
               <th>Pristine</th>
-              <td className={pristine ? 'success' : 'danger'}>{pristine ? 'true' : 'false'}</td>
+              <td className={pristine ? 'success' : 'danger'}>
+                {pristine ? 'true' : 'false'}
+              </td>
             </tr>
             <tr>
               <th>Valid</th>
-              <td className={valid ? 'success' : 'danger'}>{valid ? 'true' : 'false'}</td>
+              <td className={valid ? 'success' : 'danger'}>
+                {valid ? 'true' : 'false'}
+              </td>
             </tr>
             <tr>
               <th>Invalid</th>
-              <td className={invalid ? 'success' : 'danger'}>{invalid ? 'true' : 'false'}</td>
+              <td className={invalid ? 'success' : 'danger'}>
+                {invalid ? 'true' : 'false'}
+              </td>
             </tr>
           </tbody>
         </table>

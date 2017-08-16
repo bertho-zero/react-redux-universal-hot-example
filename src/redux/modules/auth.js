@@ -121,8 +121,8 @@ function setToken({ client, app, restApp }) {
 }
 
 function setCookie({ app }) {
-  return response => app.passport.verifyJWT(response.accessToken)
-    .then(payload => {
+  return response =>
+    app.passport.verifyJWT(response.accessToken).then(payload => {
       const options = payload.exp ? { expires: new Date(payload.exp * 1000) } : undefined;
       cookie.set('feathers-jwt', app.get('accessToken'), options);
       return response;
@@ -148,10 +148,12 @@ export function isLoaded(globalState) {
 export function load() {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: ({ app, restApp, client }) => restApp.authenticate()
-      .then(setToken({ client, app, restApp }))
-      .then(setCookie({ app }))
-      .then(setUser({ app, restApp }))
+    promise: ({ app, restApp, client }) =>
+      restApp
+        .authenticate()
+        .then(setToken({ client, app, restApp }))
+        .then(setCookie({ app }))
+        .then(setUser({ app, restApp }))
   };
 }
 
@@ -166,22 +168,24 @@ export function login(strategy, data, validation = true) {
   const socketId = socket.io.engine.id;
   return {
     types: [LOGIN, LOGIN_SUCCESS, LOGIN_FAIL],
-    promise: ({ client, restApp, app }) => restApp.authenticate({
-      ...data,
-      strategy,
-      socketId
-    })
-      .then(setToken({ client, app, restApp }))
-      .then(setCookie({ app }))
-      .then(setUser({ app, restApp }))
-      .catch(validation ? catchValidation : error => Promise.reject(error))
+    promise: ({ client, restApp, app }) =>
+      restApp
+        .authenticate({
+          ...data,
+          strategy,
+          socketId
+        })
+        .then(setToken({ client, app, restApp }))
+        .then(setCookie({ app }))
+        .then(setUser({ app, restApp }))
+        .catch(validation ? catchValidation : error => Promise.reject(error))
   };
 }
 
 export function logout() {
   return {
     types: [LOGOUT, LOGOUT_SUCCESS, LOGOUT_FAIL],
-    promise: ({ client, app, restApp }) => app.logout()
-      .then(() => setToken({ client, app, restApp })({ accessToken: null }))
+    promise: ({ client, app, restApp }) =>
+      app.logout().then(() => setToken({ client, app, restApp })({ accessToken: null }))
   };
 }

@@ -9,10 +9,7 @@ import getRoutesUtils from 'utils/routes';
 if (typeof System.import === 'undefined') System.import = module => Promise.resolve(require(module));
 
 export default store => {
-  const {
-    injectReducerAndRender,
-    permissionsComponent
-  } = getRoutesUtils(store);
+  const { injectReducerAndRender, permissionsComponent } = getRoutesUtils(store);
 
   /* Permissions */
 
@@ -48,10 +45,11 @@ export default store => {
         <Route path="loginSuccess" getComponent={() => System.import('./containers/LoginSuccess/LoginSuccess')} />
         <Route
           path="chatFeathers"
-          getComponent={() => injectReducerAndRender(
-            { chat: System.import('./redux/modules/chat') },
-            System.import('./containers/ChatFeathers/ChatFeathers')
-          )}
+          getComponent={() =>
+            injectReducerAndRender(
+              { chat: System.import('./redux/modules/chat') },
+              System.import('./containers/ChatFeathers/ChatFeathers')
+            )}
         />
       </Route>
 
@@ -65,17 +63,19 @@ export default store => {
       <Route path="about" getComponent={() => System.import('./containers/About/About')} />
       <Route
         path="survey"
-        getComponent={() => injectReducerAndRender(
-          { survey: System.import('./redux/modules/survey') },
-          System.import('./containers/Survey/Survey')
-        )}
+        getComponent={() =>
+          injectReducerAndRender(
+            { survey: System.import('./redux/modules/survey') },
+            System.import('./containers/Survey/Survey')
+          )}
       />
       <Route
         path="widgets"
-        getComponent={() => injectReducerAndRender(
-          { widgets: System.import('./redux/modules/widgets') },
-          System.import('./containers/Widgets/Widgets')
-        )}
+        getComponent={() =>
+          injectReducerAndRender(
+            { widgets: System.import('./redux/modules/widgets') },
+            System.import('./containers/Widgets/Widgets')
+          )}
       />
       <Route path="chat" getComponent={() => System.import('./containers/Chat/Chat')} />
 

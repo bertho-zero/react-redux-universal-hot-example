@@ -99,46 +99,53 @@ app.use((req, res) => {
     return hydrateOnClient();
   }
 
-  match({
-    history,
-    routes: getRoutes(store),
-    location: req.originalUrl
-  }, (error, redirectLocation, renderProps) => {
-    if (redirectLocation) {
-      res.redirect(redirectLocation.pathname + redirectLocation.search);
-    } else if (error) {
-      console.error('ROUTER ERROR:', pretty.render(error));
-      res.status(500);
-      hydrateOnClient();
-    } else if (renderProps) {
-      const redirect = to => { throw new VError({ name: 'RedirectError', info: { to } }); };
-      loadOnServer({ ...renderProps, store, helpers: { ...providers, redirect } }).then(() => {
-        const component = (
-          <Provider store={store} app={providers.app} restApp={providers.restApp} key="provider">
-            <ReduxAsyncConnect {...renderProps} />
-          </Provider>
-        );
+  match(
+    {
+      history,
+      routes: getRoutes(store),
+      location: req.originalUrl
+    },
+    (error, redirectLocation, renderProps) => {
+      if (redirectLocation) {
+        res.redirect(redirectLocation.pathname + redirectLocation.search);
+      } else if (error) {
+        console.error('ROUTER ERROR:', pretty.render(error));
+        res.status(500);
+        hydrateOnClient();
+      } else if (renderProps) {
+        const redirect = to => {
+          throw new VError({ name: 'RedirectError', info: { to } });
+        };
+        loadOnServer({ ...renderProps, store, helpers: { ...providers, redirect } })
+          .then(() => {
+            const component = (
+              <Provider store={store} app={providers.app} restApp={providers.restApp} key="provider">
+                <ReduxAsyncConnect {...renderProps} />
+              </Provider>
+            );
 
-        res.status(200);
+            res.status(200);
 
-        global.navigator = { userAgent: req.headers['user-agent'] };
+            global.navigator = { userAgent: req.headers['user-agent'] };
 
-        res.send(`<!doctype html>
+            res.send(`<!doctype html>
         ${ReactDOM.renderToString(
           <Html assets={webpackIsomorphicTools.assets()} component={component} store={store} />
         )}`);
-      }).catch(mountError => {
-        if (mountError.name === 'RedirectError') {
-          return res.redirect(VError.info(mountError).to);
-        }
-        console.error('MOUNT ERROR:', pretty.render(mountError));
-        res.status(500);
-        hydrateOnClient();
-      });
-    } else {
-      res.status(404).send('Not found');
+          })
+          .catch(mountError => {
+            if (mountError.name === 'RedirectError') {
+              return res.redirect(VError.info(mountError).to);
+            }
+            console.error('MOUNT ERROR:', pretty.render(mountError));
+            res.status(500);
+            hydrateOnClient();
+          });
+      } else {
+        res.status(404).send('Not found');
+      }
     }
-  });
+  );
 });
 
 if (config.port) {

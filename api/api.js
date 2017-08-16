@@ -12,7 +12,7 @@ import config from './config';
 import middleware from './middleware';
 import services from './services';
 import * as actions from './actions';
-import { mapUrl } from './utils/url.js';
+import mapUrl from './utils/url.js';
 import auth, { socketAuth } from './services/authentication';
 
 process.on('unhandledRejection', error => console.error(error));
@@ -20,15 +20,18 @@ process.on('unhandledRejection', error => console.error(error));
 const pretty = new PrettyError();
 const app = feathers();
 
-app.set('config', config)
+app
+  .set('config', config)
   .use(morgan('dev'))
   .use(cookieParser())
-  .use(session({
-    secret: 'react and redux rule!!!!',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 60000 }
-  }))
+  .use(
+    session({
+      secret: 'react and redux rule!!!!',
+      resave: false,
+      saveUninitialized: false,
+      cookie: { maxAge: 60000 }
+    })
+  )
   .use(bodyParser.urlencoded({ extended: true }))
   .use(bodyParser.json());
 
@@ -69,7 +72,8 @@ const actionsHandler = (req, res, next) => {
   }
 };
 
-app.configure(hooks())
+app
+  .configure(hooks())
   .configure(rest())
   .configure(socketio({ path: '/ws' }))
   .configure(auth)
@@ -97,10 +101,10 @@ app.io.use(socketAuth(app));
 
 app.io.on('connection', socket => {
   const user = socket.feathers.user ? { ...socket.feathers.user, password: undefined } : undefined;
-  socket.emit('news', { msg: '\'Hello World!\' from server', user });
+  socket.emit('news', { msg: "'Hello World!' from server", user });
 
   socket.on('history', () => {
-    for (let index = 0; index < bufferSize; index++) {
+    for (let index = 0; index < bufferSize; index += 1) {
       const msgNo = (messageIndex + index) % bufferSize;
       const msg = messageBuffer[msgNo];
       if (msg) {
@@ -112,7 +116,7 @@ app.io.on('connection', socket => {
   socket.on('msg', data => {
     const message = { ...data, id: messageIndex };
     messageBuffer[messageIndex % bufferSize] = message;
-    messageIndex++;
+    messageIndex += 1;
     app.io.emit('msg', message);
   });
 });

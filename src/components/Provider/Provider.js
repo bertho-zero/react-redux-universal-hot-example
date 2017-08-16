@@ -27,17 +27,21 @@ function warnAboutReceivingStore() {
 
   warning(
     '<Provider> does not support changing `store` on the fly. ' +
-    'It is most likely that you see this error because you updated to ' +
-    'Redux 2.x and React Redux 2.x which no longer hot reload reducers ' +
-    'automatically. See https://github.com/reactjs/react-redux/releases/' +
-    'tag/v2.0.0 for the migration instructions.'
+      'It is most likely that you see this error because you updated to ' +
+      'Redux 2.x and React Redux 2.x which no longer hot reload reducers ' +
+      'automatically. See https://github.com/reactjs/react-redux/releases/' +
+      'tag/v2.0.0 for the migration instructions.'
   );
 }
 
 export default class Provider extends Component {
   static propTypes = {
-    app: PropTypes.object.isRequired,
-    restApp: PropTypes.object.isRequired,
+    app: PropTypes.shape({
+      service: PropTypes.func
+    }).isRequired,
+    restApp: PropTypes.shape({
+      service: PropTypes.func
+    }).isRequired,
     store: PropTypes.shape({
       subscribe: PropTypes.func.isRequired,
       dispatch: PropTypes.func.isRequired,
@@ -47,7 +51,9 @@ export default class Provider extends Component {
   };
 
   static childContextTypes = {
-    app: PropTypes.object.isRequired,
+    app: PropTypes.PropTypes.shape({
+      service: PropTypes.func
+    }).isRequired,
     restApp: PropTypes.object.isRequired,
     store: PropTypes.shape({
       subscribe: PropTypes.func.isRequired,
@@ -58,7 +64,7 @@ export default class Provider extends Component {
       trySubscribe: PropTypes.func.isRequired,
       tryUnsubscribe: PropTypes.func.isRequired,
       notifyNestedSubs: PropTypes.func.isRequired,
-      isSubscribed: PropTypes.func.isRequired,
+      isSubscribed: PropTypes.func.isRequired
     })
   };
 
@@ -74,7 +80,7 @@ export default class Provider extends Component {
       store: this.store,
       storeSubscription: null,
       app: this.app,
-      restApp: this.restApp,
+      restApp: this.restApp
     };
   }
 
@@ -87,7 +93,7 @@ export default class Provider extends Component {
         warnAboutReceivingStore();
       }
     }
-  }
+  };
 
   render() {
     return Children.only(this.props.children);

@@ -43,85 +43,92 @@ function initSocket() {
 
 global.socket = initSocket();
 
-Promise.all([window.__data ? true : isOnline(), getStoredState(offlinePersistConfig)])
-  .then(([online, storedData]) => {
-    if (online) socket.open();
+Promise.all([window.__data ? true : isOnline(), getStoredState(offlinePersistConfig)]).then(([online, storedData]) => {
+  if (online) socket.open();
 
-    // if your server doesn't authenticate socket connexion by cookie
-    // if (online) app.authenticate().catch(() => null);
+  // if your server doesn't authenticate socket connexion by cookie
+  // if (online) app.authenticate().catch(() => null);
 
-    const data = !online ? { ...storedData, ...window.__data, online } : { ...window.__data, online };
-    const store = createStore(browserHistory, { client, app, restApp }, data, offlinePersistConfig);
-    const history = syncHistoryWithStore(browserHistory, store);
+  const data = !online ? { ...storedData, ...window.__data, online } : { ...window.__data, online };
+  const store = createStore(browserHistory, { client, app, restApp }, data, offlinePersistConfig);
+  const history = syncHistoryWithStore(browserHistory, store);
 
-    const redirect = bindActionCreators(replace, store.dispatch);
+  const redirect = bindActionCreators(replace, store.dispatch);
 
-    const renderRouter = props => (
-      <ReduxAsyncConnect
-        {...props}
-        helpers={{ client, app, restApp, redirect }}
-        filter={item => !item.deferred}
-        render={applyRouterMiddleware(useScroll())}
-      />
-    );
+  const renderRouter = props =>
+    (<ReduxAsyncConnect
+      {...props}
+      helpers={{ client, app, restApp, redirect }}
+      filter={item => !item.deferred}
+      render={applyRouterMiddleware(useScroll())}
+    />);
 
-    const render = routes => {
-      match({ history, routes }, (error, redirectLocation, renderProps) => {
-        ReactDOM.render(
-          <HotEnabler>
-            <Provider store={store} app={app} restApp={restApp} key="provider">
-              <Router {...renderProps} render={renderRouter} history={history}>
-                {routes}
-              </Router>
-            </Provider>
-          </HotEnabler>,
-          dest
-        );
-      });
-    };
-
-    render(getRoutes(store));
-
-    if (module.hot) {
-      module.hot.accept('./routes', () => {
-        const nextRoutes = require('./routes')(store);
-        render(nextRoutes);
-      });
-    }
-
-    if (process.env.NODE_ENV !== 'production') {
-      window.React = React; // enable debugger
-
-      if (!dest || !dest.firstChild || !dest.firstChild.attributes
-        || !dest.firstChild.attributes['data-react-checksum']) {
-        console.error('Server-side React render was discarded.' +
-          'Make sure that your initial render does not contain any client-side code.');
-      }
-    }
-
-    if (__DEVTOOLS__ && !window.devToolsExtension) {
-      const devToolsDest = document.createElement('div');
-      window.document.body.insertBefore(devToolsDest, null);
-      const DevTools = require('./containers/DevTools/DevTools');
+  const render = routes => {
+    match({ history, routes }, (error, redirectLocation, renderProps) => {
       ReactDOM.render(
-        <Provider store={store} key="provider">
-          <DevTools />
-        </Provider>,
-        devToolsDest
+        <HotEnabler>
+          <Provider store={store} app={app} restApp={restApp} key="provider">
+            <Router {...renderProps} render={renderRouter} history={history}>
+              {routes}
+            </Router>
+          </Provider>
+        </HotEnabler>,
+        dest
+      );
+    });
+  };
+
+  render(getRoutes(store));
+
+  if (module.hot) {
+    module.hot.accept('./routes', () => {
+      const nextRoutes = require('./routes')(store);
+      render(nextRoutes);
+    });
+  }
+
+  if (process.env.NODE_ENV !== 'production') {
+    window.React = React; // enable debugger
+
+    if (
+      !dest ||
+      !dest.firstChild ||
+      !dest.firstChild.attributes ||
+      !dest.firstChild.attributes['data-react-checksum']
+    ) {
+      console.error(
+        'Server-side React render was discarded.' +
+          'Make sure that your initial render does not contain any client-side code.'
       );
     }
+  }
 
-    if (online && !__DEVELOPMENT__ && 'serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/dist/service-worker.js', { scope: '/' })
-        .then(() => {
-          console.log('Service worker registered!');
-        })
-        .catch(error => {
-          console.log('Error registering service worker: ', error);
-        });
+  if (__DEVTOOLS__ && !window.devToolsExtension) {
+    const devToolsDest = document.createElement('div');
+    window.document.body.insertBefore(devToolsDest, null);
+    const DevTools = require('./containers/DevTools/DevTools');
+    ReactDOM.render(
+      <Provider store={store} key="provider">
+        <DevTools />
+      </Provider>,
+      devToolsDest
+    );
+  }
 
-      navigator.serviceWorker.ready.then((/* registration */) => {
-        console.log('Service Worker Ready');
+  if (online && !__DEVELOPMENT__ && 'serviceWorker' in navigator) {
+    navigator.serviceWorker
+      .register('/dist/service-worker.js', { scope: '/' })
+      .then(() => {
+        console.log('Service worker registered!');
+      })
+      .catch(error => {
+        console.log('Error registering service worker: ', error);
       });
-    }
-  });
+
+    navigator.serviceWorker.ready.then(
+      (/* registration */) => {
+        console.log('Service Worker Ready');
+      }
+    );
+  }
+});

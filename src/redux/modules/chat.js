@@ -46,12 +46,16 @@ export function isLoaded(globalState) {
 export function load() {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: ({ app }) => app.service('messages').find({
-      query: {
-        $sort: { createdAt: -1 },
-        $limit: 25
-      }
-    }).then(page => ({ ...page, data: page.data.reverse() }))
+    promise: ({ app }) =>
+      app
+        .service('messages')
+        .find({
+          query: {
+            $sort: { createdAt: -1 },
+            $limit: 25
+          }
+        })
+        .then(page => ({ ...page, data: page.data.reverse() }))
   };
 }
 

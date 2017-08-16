@@ -13,11 +13,11 @@ export default class CounterButton extends Component {
     count: PropTypes.number.isRequired,
     increment: PropTypes.func.isRequired,
     className: PropTypes.string
-  }
+  };
 
   static defaultProps = {
     className: ''
-  }
+  };
 
   render() {
     const { count, increment } = this.props; // eslint-disable-line no-shadow

@@ -15,9 +15,14 @@ import Helmet from 'react-helmet';
  */
 export default class Html extends Component {
   static propTypes = {
-    assets: PropTypes.object,
+    assets: PropTypes.shape({
+      styles: PropTypes.object,
+      javascript: PropTypes.object
+    }),
     component: PropTypes.node.isRequired,
-    store: PropTypes.object.isRequired
+    store: PropTypes.shape({
+      getState: PropTypes.func
+    }).isRequired
   };
 
   static defaultProps = {
@@ -29,6 +34,7 @@ export default class Html extends Component {
     const content = component ? ReactDOM.renderToString(component) : '';
     const head = Helmet.renderStatic();
 
+    /* eslint-disable react/no-danger */
     return (
       <html lang="en-US">
         <head>
@@ -48,34 +54,42 @@ export default class Html extends Component {
           <meta name="apple-mobile-web-app-title" content="React Hot" />
           <meta name="theme-color" content="#3677dd" />
           {/* styles (will be present only in production with webpack extract text plugin) */}
-          {assets.styles && Object.keys(assets.styles).map(style => (
-            <link
-              href={assets.styles[style]}
-              key={style}
-              media="screen, projection"
-              rel="stylesheet"
-              type="text/css"
-              charSet="UTF-8" />
-          ))}
+          {assets.styles &&
+            Object.keys(assets.styles).map(style =>
+              (<link
+                href={assets.styles[style]}
+                key={style}
+                media="screen, projection"
+                rel="stylesheet"
+                type="text/css"
+                charSet="UTF-8"
+              />)
+            )}
 
           {/* (will be present only in development mode) */}
-          {assets.styles && Object.keys(assets.styles).length === 0 ?
-            <style dangerouslySetInnerHTML={{ __html: '#content{display:none}' }} /> : null}
+          {assets.styles && Object.keys(assets.styles).length === 0
+            ? <style dangerouslySetInnerHTML={{ __html: '#content{display:none}' }} />
+            : null}
         </head>
         <body>
           <div id="content" dangerouslySetInnerHTML={{ __html: content }} />
-          {store && <script
-            dangerouslySetInnerHTML={{ __html: `window.__data=${serialize(store.getState())};` }}
-            charSet="UTF-8"
-          />}
+          {store &&
+            <script
+              dangerouslySetInnerHTML={{ __html: `window.__data=${serialize(store.getState())};` }}
+              charSet="UTF-8"
+            />}
           {__DLLS__ && <script key="dlls__vendor" src="/dist/dlls/dll__vendor.js" charSet="UTF-8" />}
           {assets.javascript && <script src={assets.javascript.main} charSet="UTF-8" />}
 
           {/* (will be present only in development mode) */}
-          {assets.styles && Object.keys(assets.styles).length === 0 ? <script
-            dangerouslySetInnerHTML={{ __html: 'document.getElementById("content").style.display="block";' }} /> : null}
+          {assets.styles && Object.keys(assets.styles).length === 0
+            ? <script
+              dangerouslySetInnerHTML={{ __html: 'document.getElementById("content").style.display="block";' }}
+            />
+            : null}
         </body>
       </html>
     );
+    /* eslint-enable react/no-danger */
   }
 }

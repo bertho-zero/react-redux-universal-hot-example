@@ -16,39 +16,40 @@ function formatUrl(path) {
 export default class ApiClient {
   constructor(req) {
     methods.forEach(method => {
-      this[method] = (path, { params, data, headers, files, fields } = {}) => new Promise((resolve, reject) => {
-        const request = superagent[method](formatUrl(path));
+      this[method] = (path, { params, data, headers, files, fields } = {}) =>
+        new Promise((resolve, reject) => {
+          const request = superagent[method](formatUrl(path));
 
-        if (params) {
-          request.query(params);
-        }
+          if (params) {
+            request.query(params);
+          }
 
-        if (__SERVER__ && req.get('cookie')) {
-          request.set('cookie', req.get('cookie'));
-        }
+          if (__SERVER__ && req.get('cookie')) {
+            request.set('cookie', req.get('cookie'));
+          }
 
-        if (headers) {
-          request.set(headers);
-        }
+          if (headers) {
+            request.set(headers);
+          }
 
-        if (this.token) {
-          request.set('Authorization', `Bearer ${this.token}`);
-        }
+          if (this.token) {
+            request.set('Authorization', `Bearer ${this.token}`);
+          }
 
-        if (files) {
-          files.forEach(file => request.attach(file.key, file.value));
-        }
+          if (files) {
+            files.forEach(file => request.attach(file.key, file.value));
+          }
 
-        if (fields) {
-          fields.forEach(item => request.field(item.key, item.value));
-        }
+          if (fields) {
+            fields.forEach(item => request.field(item.key, item.value));
+          }
 
-        if (data) {
-          request.send(data);
-        }
+          if (data) {
+            request.send(data);
+          }
 
-        request.end((err, { body } = {}) => (err ? reject(body || err) : resolve(body)));
-      });
+          request.end((err, { body } = {}) => (err ? reject(body || err) : resolve(body)));
+        });
     });
   }
 

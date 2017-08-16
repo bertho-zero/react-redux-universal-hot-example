@@ -15,31 +15,40 @@ import { push } from 'react-router-redux';
 import config from 'config';
 import { asyncConnect } from 'redux-connect';
 
-@asyncConnect([{
-  promise: ({ store: { dispatch, getState } }) => {
-    const promises = [];
+@asyncConnect([
+  {
+    promise: ({ store: { dispatch, getState } }) => {
+      const promises = [];
 
-    if (!isAuthLoaded(getState())) {
-      promises.push(dispatch(loadAuth()));
+      if (!isAuthLoaded(getState())) {
+        promises.push(dispatch(loadAuth()));
+      }
+      if (!isInfoLoaded(getState())) {
+        promises.push(dispatch(loadInfo()));
+      }
+      return Promise.all(promises);
     }
-    if (!isInfoLoaded(getState())) {
-      promises.push(dispatch(loadInfo()));
-    }
-    return Promise.all(promises);
   }
-}])
+])
 @connect(
   state => ({
     notifs: state.notifs,
     user: state.auth.user
   }),
-  { logout, pushState: push })
+  { logout, pushState: push }
+)
 export default class App extends Component {
   static propTypes = {
-    children: PropTypes.object.isRequired,
-    router: PropTypes.object.isRequired,
-    user: PropTypes.object,
-    notifs: PropTypes.object.isRequired,
+    children: PropTypes.element.isRequired,
+    router: PropTypes.shape({
+      location: PropTypes.object
+    }).isRequired,
+    user: PropTypes.shape({
+      email: PropTypes.string
+    }),
+    notifs: PropTypes.shape({
+      global: PropTypes.array
+    }).isRequired,
     logout: PropTypes.func.isRequired,
     pushState: PropTypes.func.isRequired
   };
@@ -80,7 +89,9 @@ export default class App extends Component {
             <Navbar.Brand>
               <IndexLink to="/" activeStyle={{ color: '#33e0ff' }}>
                 <div className={styles.brand} />
-                <span>{config.app.title}</span>
+                <span>
+                  {config.app.title}
+                </span>
               </IndexLink>
             </Navbar.Brand>
             <Navbar.Toggle />
@@ -88,9 +99,10 @@ export default class App extends Component {
 
           <Navbar.Collapse>
             <Nav navbar>
-              {user && <LinkContainer to="/chatFeathers">
-                <NavItem>Chat with Feathers</NavItem>
-              </LinkContainer>}
+              {user &&
+                <LinkContainer to="/chatFeathers">
+                  <NavItem>Chat with Feathers</NavItem>
+                </LinkContainer>}
 
               <LinkContainer to="/chat">
                 <NavItem>Chat</NavItem>
@@ -105,21 +117,25 @@ export default class App extends Component {
                 <NavItem>About Us</NavItem>
               </LinkContainer>
 
-              {!user && <LinkContainer to="/login">
-                <NavItem>Login</NavItem>
-              </LinkContainer>}
-              {!user && <LinkContainer to="/register">
-                <NavItem>Register</NavItem>
-              </LinkContainer>}
-              {user && <LinkContainer to="/logout">
-                <NavItem className="logout-link" onClick={this.handleLogout}>
-                  Logout
-                </NavItem>
-              </LinkContainer>}
+              {!user &&
+                <LinkContainer to="/login">
+                  <NavItem>Login</NavItem>
+                </LinkContainer>}
+              {!user &&
+                <LinkContainer to="/register">
+                  <NavItem>Register</NavItem>
+                </LinkContainer>}
+              {user &&
+                <LinkContainer to="/logout">
+                  <NavItem className="logout-link" onClick={this.handleLogout}>
+                    Logout
+                  </NavItem>
+                </LinkContainer>}
             </Nav>
-            {user && <p className="navbar-text">
-              Logged in as <strong>{user.email}</strong>.
-            </p>}
+            {user &&
+              <p className="navbar-text">
+                Logged in as <strong>{user.email}</strong>.
+              </p>}
             <Nav navbar pullRight>
               <NavItem
                 target="_blank"
@@ -133,13 +149,17 @@ export default class App extends Component {
         </Navbar>
 
         <div className={styles.appContent}>
-          {notifs.global && <div className="container">
-            <Notifs
-              className={styles.notifs}
-              namespace="global"
-              NotifComponent={props => <Alert bsStyle={props.kind}>{props.message}</Alert>}
-            />
-          </div>}
+          {notifs.global &&
+            <div className="container">
+              <Notifs
+                className={styles.notifs}
+                namespace="global"
+                NotifComponent={props =>
+                  (<Alert bsStyle={props.kind}>
+                    {props.message}
+                  </Alert>)}
+              />
+            </div>}
 
           {children}
         </div>
@@ -153,16 +173,12 @@ export default class App extends Component {
             rel="noopener noreferrer"
           >
             on Github
-          </a>
-          {' '}or in the{' '}
-          <a
-            href="https://discord.gg/0ZcbPKXt5bZZb1Ko"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          </a>{' '}
+          or in the{' '}
+          <a href="https://discord.gg/0ZcbPKXt5bZZb1Ko" target="_blank" rel="noopener noreferrer">
             #react-redux-universal
-          </a>
-          {' '}Discord channel.
+          </a>{' '}
+          Discord channel.
         </div>
       </div>
     );

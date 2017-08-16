@@ -13,13 +13,12 @@ export default function clientMiddleware({ client, app, restApp }) {
     next({ ...rest, type: REQUEST });
 
     const actionPromise = promise({ client, app, restApp }, dispatch);
-    actionPromise.then(
-      result => next({ ...rest, result, type: SUCCESS }),
-      error => next({ ...rest, error, type: FAILURE })
-    ).catch(error => {
-      console.error('MIDDLEWARE ERROR:', error);
-      next({ ...rest, error, type: FAILURE });
-    });
+    actionPromise
+      .then(result => next({ ...rest, result, type: SUCCESS }), error => next({ ...rest, error, type: FAILURE }))
+      .catch(error => {
+        console.error('MIDDLEWARE ERROR:', error);
+        next({ ...rest, error, type: FAILURE });
+      });
 
     return actionPromise;
   };
