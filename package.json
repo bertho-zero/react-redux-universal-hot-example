@@ -49,6 +49,7 @@
   "lint-staged": {
     "+(src|api)/**/*.js": [
       "npm run precommit-prettier",
+      "eslint -c .eslintrc",
       "git add"
     ]
   },
