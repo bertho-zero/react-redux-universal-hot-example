@@ -18,5 +18,5 @@ export default function mapUrl(availableActions = {}, url = []) {
 
   const actionAndParams = url.reduce(reducer, { action: availableActions, params: [] });
 
-  return (typeof actionAndParams.action === 'function') ? actionAndParams : notFound;
+  return typeof actionAndParams.action === 'function' ? actionAndParams : notFound;
 }

@@ -25,23 +25,10 @@ const userHooks = {
   before: {
     find: auth.hooks.authenticate('jwt'),
     get: auth.hooks.authenticate('jwt'),
-    create: [
-      validate(),
-      discard('password_confirmation'),
-      local.hooks.hashPassword()
-    ],
-    update: [
-      auth.hooks.authenticate('jwt'),
-      restrictToOwner({ ownerField: '_id' })
-    ],
-    patch: [
-      auth.hooks.authenticate('jwt'),
-      restrictToOwner({ ownerField: '_id' })
-    ],
-    remove: [
-      auth.hooks.authenticate('jwt'),
-      restrictToOwner({ ownerField: '_id' })
-    ]
+    create: [validate(), discard('password_confirmation'), local.hooks.hashPassword()],
+    update: [auth.hooks.authenticate('jwt'), restrictToOwner({ ownerField: '_id' })],
+    patch: [auth.hooks.authenticate('jwt'), restrictToOwner({ ownerField: '_id' })],
+    remove: [auth.hooks.authenticate('jwt'), restrictToOwner({ ownerField: '_id' })]
   },
   after: {
     all: iff(isProvider('external'), discard('password')),

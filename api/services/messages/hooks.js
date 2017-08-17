@@ -10,12 +10,14 @@ const schemaValidator = {
 function populateUser() {
   return populate({
     schema: {
-      include: [{
-        nameAs: 'sentBy',
-        service: 'users',
-        parentField: 'sentBy',
-        childField: '_id'
-      }]
+      include: [
+        {
+          nameAs: 'sentBy',
+          service: 'users',
+          parentField: 'sentBy',
+          childField: '_id'
+        }
+      ]
     }
   });
 }
@@ -41,18 +43,9 @@ const messagesHooks = {
   },
   after: {
     all: [],
-    find: [
-      populateUser(),
-      discard('sentBy.password')
-    ],
-    get: [
-      populateUser(),
-      discard('sentBy.password')
-    ],
-    create: [
-      populateUser(),
-      discard('sentBy.password')
-    ],
+    find: [populateUser(), discard('sentBy.password')],
+    get: [populateUser(), discard('sentBy.password')],
+    create: [populateUser(), discard('sentBy.password')],
     update: [],
     patch: [],
     remove: []

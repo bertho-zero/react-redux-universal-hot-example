@@ -105,7 +105,7 @@ export default class Widgets extends Component {
                       <td className={styles.buttonCol}>
                         <button className="btn btn-primary" onClick={handleEdit(widget)}>
                           <i className="fa fa-pencil" /> Edit
-                          </button>
+                        </button>
                       </td>
                     </tr>
               )}

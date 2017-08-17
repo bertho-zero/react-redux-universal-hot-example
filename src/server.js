@@ -91,8 +91,9 @@ app.use((req, res) => {
   const history = syncHistoryWithStore(memoryHistory, store);
 
   function hydrateOnClient() {
-    res.send(`<!doctype html>
-      ${ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} store={store} />)}`);
+    res.send(
+      `<!doctype html>${ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} store={store} />)}`
+    );
   }
 
   if (__DISABLE_SSR__) {
@@ -123,15 +124,13 @@ app.use((req, res) => {
                 <ReduxAsyncConnect {...renderProps} />
               </Provider>
             );
+            const html = <Html assets={webpackIsomorphicTools.assets()} component={component} store={store} />;
 
             res.status(200);
 
             global.navigator = { userAgent: req.headers['user-agent'] };
 
-            res.send(`<!doctype html>
-        ${ReactDOM.renderToString(
-          <Html assets={webpackIsomorphicTools.assets()} component={component} store={store} />
-        )}`);
+            res.send(`<!doctype html>${ReactDOM.renderToString(html)}`);
           })
           .catch(mountError => {
             if (mountError.name === 'RedirectError') {
