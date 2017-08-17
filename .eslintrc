@@ -39,7 +39,8 @@
     "import/resolve": {
       "moduleDirectory": [
         "node_modules",
-        "src"
+        "src",
+        "api"
       ]
     }
   },
