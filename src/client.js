@@ -116,7 +116,8 @@ Promise.all([window.__data ? true : isOnline(), getStoredState(offlinePersistCon
   }
 
   if (online && !__DEVELOPMENT__ && 'serviceWorker' in navigator) {
-    navigator.serviceWorker
+    window.addEventListener('load', () => {
+      navigator.serviceWorker
       .register('/dist/service-worker.js', { scope: '/' })
       .then(() => {
         console.log('Service worker registered!');
@@ -125,10 +126,11 @@ Promise.all([window.__data ? true : isOnline(), getStoredState(offlinePersistCon
         console.log('Error registering service worker: ', error);
       });
 
-    navigator.serviceWorker.ready.then(
-      (/* registration */) => {
-        console.log('Service Worker Ready');
-      }
-    );
+      navigator.serviceWorker.ready.then(
+        (/* registration */) => {
+          console.log('Service Worker Ready');
+        }
+      );
+    });
   }
 });
