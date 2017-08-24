@@ -116,19 +116,21 @@ Promise.all([window.__data ? true : isOnline(), getStoredState(offlinePersistCon
   }
 
   if (online && !__DEVELOPMENT__ && 'serviceWorker' in navigator) {
-    navigator.serviceWorker
-      .register('/dist/service-worker.js', { scope: '/' })
-      .then(() => {
-        console.log('Service worker registered!');
-      })
-      .catch(error => {
-        console.log('Error registering service worker: ', error);
-      });
+    window.addEventListener('load', () => {
+      navigator.serviceWorker
+        .register('/dist/service-worker.js', { scope: '/' })
+        .then(() => {
+          console.log('Service worker registered!');
+        })
+        .catch(error => {
+          console.log('Error registering service worker: ', error);
+        });
 
-    navigator.serviceWorker.ready.then(
-      (/* registration */) => {
-        console.log('Service Worker Ready');
-      }
-    );
+      navigator.serviceWorker.ready.then(
+        (/* registration */) => {
+          console.log('Service Worker Ready');
+        }
+      );
+    });
   }
 });
