@@ -232,7 +232,7 @@
     "sinon": "^3.2.1",
     "style-loader": "^0.18.2",
     "sw-precache-webpack-plugin": "^0.11.3",
-    "timekeeper": "^1.0.0",
+    "timekeeper": "^2.0.0",
     "url-loader": "^0.5.7",
     "webpack": "^3.5.5",
     "webpack-dev-middleware": "^1.12.0",
