@@ -190,7 +190,6 @@
     "extract-text-webpack-plugin": "3.0.0",
     "file-loader": "^0.11.2",
     "font-awesome": "^4.7.0",
-    "font-awesome-webpack": "^0.0.5-beta.2",
     "happypack": "^3.0.2",
     "html-webpack-plugin": "^2.30.1",
     "husky": "^0.14.3",

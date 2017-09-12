@@ -29,13 +29,9 @@ export default class Home extends Component {
                 <img src={logoImage} alt="presentation" />
               </p>
             </div>
-            <h1>
-              {config.app.title}
-            </h1>
+            <h1>{config.app.title}</h1>
 
-            <h2>
-              {config.app.description}
-            </h2>
+            <h2>{config.app.description}</h2>
 
             <p>
               <a
@@ -47,7 +43,7 @@ export default class Home extends Component {
                 <i className="fa fa-github" /> View on Github
               </a>
             </p>
-            {online &&
+            {online && (
               <GithubButton
                 user="erikras"
                 repo="react-redux-universal-hot-example"
@@ -56,8 +52,9 @@ export default class Home extends Component {
                 height={30}
                 count
                 large
-              />}
-            {online &&
+              />
+            )}
+            {online && (
               <GithubButton
                 user="erikras"
                 repo="react-redux-universal-hot-example"
@@ -66,7 +63,8 @@ export default class Home extends Component {
                 height={30}
                 count
                 large
-              />}
+              />
+            )}
 
             <p className={styles.humility}>
               Created and maintained by{' '}
@@ -194,11 +192,12 @@ export default class Home extends Component {
               <a href="https://github.com/shakacode/bootstrap-sass-loader" target="_blank" rel="noopener noreferrer">
                 bootstrap-sass-loader
               </a>{' '}
-              and{' '}
-              <a href="https://github.com/gowravshekar/font-awesome-webpack" target="_blank" rel="noopener noreferrer">
-                font-awesome-webpack
-              </a>{' '}
-              to customize Bootstrap and FontAwesome
+              to customize Bootstrap
+            </li>
+            <li>
+              <a href="https://github.com/FortAwesome/Font-Awesome" target="_blank" rel="noopener noreferrer">
+                font-awesome
+              </a>
             </li>
             <li>
               <a href="http://socket.io/">socket.io</a> for real-time communication
