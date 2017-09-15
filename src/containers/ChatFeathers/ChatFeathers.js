@@ -49,16 +49,17 @@ export default class ChatFeathers extends Component {
     this.props.app.service('messages').removeListener('created', this.props.addMessage);
   }
 
-  handleSubmit = event => {
+  handleSubmit = async event => {
     event.preventDefault();
-    this.props.app
-      .service('messages')
-      .create({ text: this.state.message })
-      .then(() => this.setState({ message: '', error: false }))
-      .catch(error => {
-        console.log(error);
-        this.setState({ error: error.message || false });
-      });
+
+    try {
+      await this.props.app.service('messages').create({ text: this.state.message });
+
+      this.setState({ message: '', error: false });
+    } catch (error) {
+      console.log(error);
+      this.setState({ error: error.message || false });
+    }
   };
 
   render() {
@@ -69,14 +70,14 @@ export default class ChatFeathers extends Component {
       <div className="container">
         <h1>Chat</h1>
 
-        {user &&
+        {user && (
           <div>
             <ul>
-              {messages.map(msg =>
-                (<li key={`chat.msg.${msg._id}`}>
+              {messages.map(msg => (
+                <li key={`chat.msg.${msg._id}`}>
                   {msg.sentBy.email}: {msg.text}
-                </li>)
-              )}
+                </li>
+              ))}
             </ul>
             <form onSubmit={this.handleSubmit}>
               <input
@@ -91,12 +92,10 @@ export default class ChatFeathers extends Component {
               <button className="btn" onClick={this.handleSubmit}>
                 Send
               </button>
-              {error &&
-                <div className="text-danger">
-                  {error}
-                </div>}
+              {error && <div className="text-danger">{error}</div>}
             </form>
-          </div>}
+          </div>
+        )}
       </div>
     );
   }

@@ -1,29 +1,19 @@
-import isPromise from 'is-promise';
 import * as validation from '../../src/utils/validation';
 
 function createAsyncValidator(rules, params) {
-  return (data = {}) => {
+  return async (data = {}) => {
     const errors = validation.createValidator(rules, params)(data);
 
-    const promises = Object.keys(errors).map(name => {
-      const error = errors[name];
-      const myResolve = () => ({ status: 'resolved', name });
-      const myReject = err => ({ status: 'rejected', name, error: err });
-
-      if (isPromise(error)) {
-        return error.then(myResolve).catch(myReject);
+    const finalErrors = await Object.keys(errors).reduce(async (result, name) => {
+      try {
+        const error = await errors[name];
+        return error ? Object.assign(result, { [name]: error }) : result;
+      } catch (error) {
+        return Object.assign(result, { [name]: error });
       }
+    }, {});
 
-      return error ? myReject() : myResolve();
-    });
-
-    return Promise.all(promises).then(results => {
-      const finalErrors = results
-        .filter(x => x.status === 'rejected')
-        .reduce((prev, next) => ({ ...prev, [next.name]: next.error }), {});
-
-      return Object.keys(finalErrors).length ? Promise.reject(finalErrors) : Promise.resolve(data);
-    });
+    return (await Object.keys(finalErrors).length) ? Promise.reject(finalErrors) : data;
   };
 }
 

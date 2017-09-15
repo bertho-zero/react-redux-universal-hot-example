@@ -20,7 +20,7 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         loading: false,
         loaded: true,
-        messages: action.result.data
+        messages: action.result.data.reverse()
       };
     case LOAD_FAIL:
       return {
@@ -47,15 +47,12 @@ export function load() {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
     promise: ({ app }) =>
-      app
-        .service('messages')
-        .find({
-          query: {
-            $sort: { createdAt: -1 },
-            $limit: 25
-          }
-        })
-        .then(page => ({ ...page, data: page.data.reverse() }))
+      app.service('messages').find({
+        query: {
+          $sort: { createdAt: -1 },
+          $limit: 25
+        }
+      })
   };
 }
 

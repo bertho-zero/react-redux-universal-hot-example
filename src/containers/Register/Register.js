@@ -21,7 +21,10 @@ export default class Register extends Component {
     return location.state && location.state.oauth;
   };
 
-  register = data => this.props.register(data).then(this.successRegister);
+  register = async data => {
+    const result = await this.props.register(data);
+    return this.successRegister(result);
+  };
 
   successRegister = result => {
     this.props.notifSend({
