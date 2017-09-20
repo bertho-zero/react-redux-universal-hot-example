@@ -160,11 +160,15 @@ export function load() {
 export function register(data) {
   return {
     types: [REGISTER, REGISTER_SUCCESS, REGISTER_FAIL],
-    promise: ({ app }) => app.service('users').create(data).catch(catchValidation)
+    promise: ({ app }) =>
+      app
+        .service('users')
+        .create(data)
+        .catch(catchValidation)
   };
 }
 
-export function login(strategy, data, validation = true) {
+export function login(strategy, data) {
   const socketId = socket.io.engine.id;
   return {
     types: [LOGIN, LOGIN_SUCCESS, LOGIN_FAIL],
@@ -178,7 +182,7 @@ export function login(strategy, data, validation = true) {
         .then(setToken({ client, app, restApp }))
         .then(setCookie({ app }))
         .then(setUser({ app, restApp }))
-        .catch(validation ? catchValidation : error => Promise.reject(error))
+        .catch(strategy === 'local' ? catchValidation : error => Promise.reject(error))
   };
 }
 

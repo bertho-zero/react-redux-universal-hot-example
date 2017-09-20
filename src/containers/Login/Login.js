@@ -28,14 +28,17 @@ export default class Login extends Component {
 
   onFacebookLogin = (err, data) => {
     if (err) return;
-    this.props.login('facebook', data, false).then(this.successLogin).catch(error => {
-      if (error.message === 'Incomplete oauth registration') {
-        this.context.router.push({
-          pathname: '/register',
-          state: { oauth: error.data }
-        });
-      }
-    });
+    this.props
+      .login('facebook', data)
+      .then(this.successLogin)
+      .catch(error => {
+        if (error.message === 'Incomplete oauth registration') {
+          this.context.router.push({
+            pathname: '/register',
+            state: { oauth: error.data }
+          });
+        }
+      });
   };
 
   login = data => this.props.login('local', data).then(this.successLogin);
@@ -49,10 +52,11 @@ export default class Login extends Component {
     return data;
   };
 
-  FacebookLoginButton = ({ facebookLogin }) =>
-    (<button className="btn btn-primary" onClick={facebookLogin}>
+  FacebookLoginButton = ({ facebookLogin }) => (
+    <button className="btn btn-primary" onClick={facebookLogin}>
       Login with <i className="fa fa-facebook-f" />
-    </button>);
+    </button>
+  );
 
   render() {
     const { user, logout } = this.props;
@@ -60,7 +64,7 @@ export default class Login extends Component {
       <div className="container">
         <Helmet title="Login" />
         <h1>Login</h1>
-        {!user &&
+        {!user && (
           <div>
             <LoginForm onSubmit={this.login} />
             <p>This will "log you in" as this user, storing the username in the session of the API server.</p>
@@ -71,19 +75,19 @@ export default class Login extends Component {
               onLogin={this.onFacebookLogin}
               component={this.FacebookLoginButton}
             />
-          </div>}
-        {user &&
+          </div>
+        )}
+        {user && (
           <div>
-            <p>
-              You are currently logged in as {user.email}.
-            </p>
+            <p>You are currently logged in as {user.email}.</p>
 
             <div>
               <button className="btn btn-danger" onClick={logout}>
                 <i className="fa fa-sign-out" /> Log Out
               </button>
             </div>
-          </div>}
+          </div>
+        )}
       </div>
     );
   }
