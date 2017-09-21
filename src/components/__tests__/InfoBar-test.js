@@ -32,7 +32,10 @@ describe('InfoBar', () => {
     </Provider>
   );
 
-  it('should render correctly', () => expect(renderer).to.be.ok);
+  it('should render correctly', () => {
+    // eslint-disable-next-line no-unused-expressions
+    expect(renderer).to.be.ok;
+  });
 
   it('should render with correct value', () => {
     const text = findRenderedDOMComponentWithTag(renderer, 'strong').textContent;

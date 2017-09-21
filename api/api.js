@@ -36,7 +36,10 @@ app
   .use(bodyParser.json());
 
 const actionsHandler = (req, res, next) => {
-  const splittedUrlPath = req.url.split('?')[0].split('/').slice(1);
+  const splittedUrlPath = req.url
+    .split('?')[0]
+    .split('/')
+    .slice(1);
   const { action, params } = mapUrl(actions, splittedUrlPath);
 
   req.app = app;

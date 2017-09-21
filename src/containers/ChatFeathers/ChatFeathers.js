@@ -69,14 +69,14 @@ export default class ChatFeathers extends Component {
       <div className="container">
         <h1>Chat</h1>
 
-        {user &&
+        {user && (
           <div>
             <ul>
-              {messages.map(msg =>
-                (<li key={`chat.msg.${msg._id}`}>
+              {messages.map(msg => (
+                <li key={`chat.msg.${msg._id}`}>
                   {msg.sentBy.email}: {msg.text}
-                </li>)
-              )}
+                </li>
+              ))}
             </ul>
             <form onSubmit={this.handleSubmit}>
               <input
@@ -91,12 +91,10 @@ export default class ChatFeathers extends Component {
               <button className="btn" onClick={this.handleSubmit}>
                 Send
               </button>
-              {error &&
-                <div className="text-danger">
-                  {error}
-                </div>}
+              {error && <div className="text-danger">{error}</div>}
             </form>
-          </div>}
+          </div>
+        )}
       </div>
     );
   }

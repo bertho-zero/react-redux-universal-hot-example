@@ -14,7 +14,10 @@ const storage = __SERVER__ ? null : require('localforage');
 const host = clientUrl => (__SERVER__ ? `http://${config.apiHost}:${config.apiPort}` : clientUrl);
 
 const configureApp = transport =>
-  feathers().configure(transport).configure(hooks()).configure(authentication({ storage }));
+  feathers()
+    .configure(transport)
+    .configure(hooks())
+    .configure(authentication({ storage }));
 
 export const socket = io('', { path: host('/ws'), autoConnect: false });
 

@@ -6,31 +6,25 @@ import * as widgetActions from 'redux/modules/widgets';
 import widgetValidation, { colors } from './widgetValidation';
 
 /* eslint-disable react/prop-types */
-const Input = ({ input, className, meta: { touched, error } }) =>
-  (<div>
+const Input = ({ input, className, meta: { touched, error } }) => (
+  <div>
     <input type="text" className={className} {...input} />
-    {error &&
-      touched &&
-      <div className="text-danger">
-        {error}
-      </div>}
-  </div>);
+    {error && touched && <div className="text-danger">{error}</div>}
+  </div>
+);
 
-const Select = ({ options, input, className, meta: { touched, error } }) =>
-  (<div>
+const Select = ({ options, input, className, meta: { touched, error } }) => (
+  <div>
     <select className={className} {...input}>
-      {options.map(option =>
-        (<option value={option} key={option}>
+      {options.map(option => (
+        <option value={option} key={option}>
           {option}
-        </option>)
-      )}
+        </option>
+      ))}
     </select>
-    {error &&
-      touched &&
-      <div className="text-danger">
-        {error}
-      </div>}
-  </div>);
+    {error && touched && <div className="text-danger">{error}</div>}
+  </div>
+);
 /* eslint-enable react/prop-types */
 
 @reduxForm({
@@ -103,10 +97,7 @@ export default class WidgetForm extends Component {
           >
             <i className={`fa ${submitting ? 'fa-cog fa-spin' : 'fa-cloud'}`} /> Save
           </button>
-          {saveError &&
-            <div className="text-danger">
-              {saveError}
-            </div>}
+          {saveError && <div className="text-danger">{saveError}</div>}
         </td>
       </tr>
     );

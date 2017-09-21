@@ -55,13 +55,14 @@ Promise.all([window.__data ? true : isOnline(), getStoredState(offlinePersistCon
 
   const redirect = bindActionCreators(replace, store.dispatch);
 
-  const renderRouter = props =>
-    (<ReduxAsyncConnect
+  const renderRouter = props => (
+    <ReduxAsyncConnect
       {...props}
       helpers={{ client, app, restApp, redirect }}
       filter={item => !item.deferred}
       render={applyRouterMiddleware(useScroll())}
-    />);
+    />
+  );
 
   const render = routes => {
     match({ history, routes }, (error, redirectLocation, renderProps) => {
@@ -126,11 +127,9 @@ Promise.all([window.__data ? true : isOnline(), getStoredState(offlinePersistCon
           console.log('Error registering service worker: ', error);
         });
 
-      navigator.serviceWorker.ready.then(
-        (/* registration */) => {
-          console.log('Service Worker Ready');
-        }
-      );
+      navigator.serviceWorker.ready.then((/* registration */) => {
+        console.log('Service Worker Ready');
+      });
     });
   }
 });

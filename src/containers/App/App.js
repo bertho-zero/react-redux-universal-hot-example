@@ -89,9 +89,7 @@ export default class App extends Component {
             <Navbar.Brand>
               <IndexLink to="/" activeStyle={{ color: '#33e0ff' }}>
                 <div className={styles.brand} />
-                <span>
-                  {config.app.title}
-                </span>
+                <span>{config.app.title}</span>
               </IndexLink>
             </Navbar.Brand>
             <Navbar.Toggle />
@@ -99,10 +97,11 @@ export default class App extends Component {
 
           <Navbar.Collapse>
             <Nav navbar>
-              {user &&
+              {user && (
                 <LinkContainer to="/chatFeathers">
                   <NavItem>Chat with Feathers</NavItem>
-                </LinkContainer>}
+                </LinkContainer>
+              )}
 
               <LinkContainer to="/chat">
                 <NavItem>Chat</NavItem>
@@ -117,25 +116,29 @@ export default class App extends Component {
                 <NavItem>About Us</NavItem>
               </LinkContainer>
 
-              {!user &&
+              {!user && (
                 <LinkContainer to="/login">
                   <NavItem>Login</NavItem>
-                </LinkContainer>}
-              {!user &&
+                </LinkContainer>
+              )}
+              {!user && (
                 <LinkContainer to="/register">
                   <NavItem>Register</NavItem>
-                </LinkContainer>}
-              {user &&
+                </LinkContainer>
+              )}
+              {user && (
                 <LinkContainer to="/logout">
                   <NavItem className="logout-link" onClick={this.handleLogout}>
                     Logout
                   </NavItem>
-                </LinkContainer>}
+                </LinkContainer>
+              )}
             </Nav>
-            {user &&
+            {user && (
               <p className="navbar-text">
                 Logged in as <strong>{user.email}</strong>.
-              </p>}
+              </p>
+            )}
             <Nav navbar pullRight>
               <NavItem
                 target="_blank"
@@ -149,17 +152,15 @@ export default class App extends Component {
         </Navbar>
 
         <div className={styles.appContent}>
-          {notifs.global &&
+          {notifs.global && (
             <div className="container">
               <Notifs
                 className={styles.notifs}
                 namespace="global"
-                NotifComponent={props =>
-                  (<Alert bsStyle={props.kind}>
-                    {props.message}
-                  </Alert>)}
+                NotifComponent={props => <Alert bsStyle={props.kind}>{props.message}</Alert>}
               />
-            </div>}
+            </div>
+          )}
 
           {children}
         </div>

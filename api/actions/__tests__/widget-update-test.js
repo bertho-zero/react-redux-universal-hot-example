@@ -24,11 +24,7 @@ describe('widget update', () => {
     });
 
     it('does not accept green widgets', () => {
-      sinon.stub(load, 'default').returns(
-        new Promise(resolve => {
-          resolve(widgets);
-        })
-      );
+      sinon.stub(load, 'default').resolves(widgets);
       return update({ session: {}, body: { color: 'Green' } }).then(
         () => {},
         err => {
@@ -38,25 +34,17 @@ describe('widget update', () => {
     });
 
     it('fails to load widgets', () => {
-      sinon.stub(load, 'default').returns(
-        new Promise((resolve, reject) => {
-          reject('Widget fail to load.');
-        })
-      );
+      sinon.stub(load, 'default').rejects(new Error('Widget fail to load.'));
       return update({ session: {}, body: { color: 'Blue' } }).then(
         () => {},
         err => {
-          expect(err).to.equal('Widget fail to load.');
+          expect(err.message).to.equal('Widget fail to load.');
         }
       );
     });
 
     it('updates a widget', () => {
-      sinon.stub(load, 'default').returns(
-        new Promise(resolve => {
-          resolve(widgets);
-        })
-      );
+      sinon.stub(load, 'default').resolves(widgets);
       const widget = { id: 2, color: 'Blue' };
       return update({ session: {}, body: widget }).then(res => {
         expect(res).to.deep.equal(widget);

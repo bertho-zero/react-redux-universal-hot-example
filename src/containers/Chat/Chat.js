@@ -52,19 +52,19 @@ export default class Chat extends Component {
   };
 
   render() {
-    const style = require('./Chat.scss');
+    const styles = require('./Chat.scss');
 
     return (
-      <div className={`${style.chat} container`}>
+      <div className={`${styles.chat} container`}>
         <h1>Chat</h1>
 
         <div>
           <ul>
-            {this.state.messages.map(msg =>
-              (<li key={`chat.msg.${msg.id}`}>
+            {this.state.messages.map(msg => (
+              <li key={`chat.msg.${msg.id}`}>
                 {msg.from}: {msg.text}
-              </li>)
-            )}
+              </li>
+            ))}
           </ul>
           <form onSubmit={this.handleSubmit}>
             <input

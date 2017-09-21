@@ -55,38 +55,37 @@ export default class Html extends Component {
           <meta name="theme-color" content="#3677dd" />
           {/* styles (will be present only in production with webpack extract text plugin) */}
           {assets.styles &&
-            Object.keys(assets.styles).map(style =>
-              (<link
+            Object.keys(assets.styles).map(style => (
+              <link
                 href={assets.styles[style]}
                 key={style}
                 media="screen, projection"
                 rel="stylesheet"
                 type="text/css"
                 charSet="UTF-8"
-              />)
-            )}
+              />
+            ))}
 
           {/* (will be present only in development mode) */}
-          {assets.styles && Object.keys(assets.styles).length === 0
-            ? <style dangerouslySetInnerHTML={{ __html: '#content{display:none}' }} />
-            : null}
+          {assets.styles && Object.keys(assets.styles).length === 0 ? (
+            <style dangerouslySetInnerHTML={{ __html: '#content{display:none}' }} />
+          ) : null}
         </head>
         <body>
           <div id="content" dangerouslySetInnerHTML={{ __html: content }} />
-          {store &&
+          {store && (
             <script
               dangerouslySetInnerHTML={{ __html: `window.__data=${serialize(store.getState())};` }}
               charSet="UTF-8"
-            />}
+            />
+          )}
           {__DLLS__ && <script key="dlls__vendor" src="/dist/dlls/dll__vendor.js" charSet="UTF-8" />}
           {assets.javascript && <script src={assets.javascript.main} charSet="UTF-8" />}
 
           {/* (will be present only in development mode) */}
-          {assets.styles && Object.keys(assets.styles).length === 0
-            ? <script
-              dangerouslySetInnerHTML={{ __html: 'document.getElementById("content").style.display="block";' }}
-            />
-            : null}
+          {assets.styles && Object.keys(assets.styles).length === 0 ? (
+            <script dangerouslySetInnerHTML={{ __html: 'document.getElementById("content").style.display="block";' }} />
+          ) : null}
         </body>
       </html>
     );

@@ -24,31 +24,29 @@
   ],
   "main": "bin/server.js",
   "scripts": {
-    "precommit": "lint-staged",
-    "precommit-prettier": "eslint --print-config .eslintrc.js | prettier-eslint --write",
     "start": "concurrently --kill-others \"npm run start-prod\" \"npm run start-prod-api\"",
-    "start-prod": "better-npm-run start-prod",
-    "start-prod-api": "better-npm-run start-prod-api",
+    "start-prod": "bnr start-prod",
+    "start-prod-api": "bnr start-prod-api",
     "dev": "concurrently --kill-others \"npm run watch-client\" \"npm run start-dev\" \"npm run start-dev-api\"",
-    "start-dev": "better-npm-run start-dev",
-    "start-dev-api": "better-npm-run start-dev-api",
-    "watch-client": "better-npm-run watch-client",
-    "build": "better-npm-run build",
+    "start-dev": "bnr start-dev",
+    "start-dev-api": "bnr start-dev-api",
+    "watch-client": "bnr watch-client",
+    "build": "bnr build",
     "build-dlls": "webpack --colors --display-error-details --config webpack/vendor.config.js",
     "postinstall": "concurrently \"npm run build\" \"npm run build-dlls\"",
-    "prettier": "npm run precommit-prettier -- \"./+(src|api)/**/*.js\"",
+    "precommit": "lint-staged",
+    "prettier": "prettier-eslint --write --eslint-config-path .eslintrc './+(src|api)/**/*.js'",
     "lint": "eslint -c .eslintrc api src",
-    "test": "karma start",
-    "test-node": "jest $(find api -name '*-test.js')",
-    "test-node-watch": "jest $(find api -name '*-test.js') --watch",
+    "test": "bnr test",
+    "test-node": "bnr test-node",
+    "lighthouse-report": "lighthouse http://localhost:8080 --view",
     "docker-build": ". ./docker/build.sh",
     "docker-dev": ". ./docker/run.dev.sh",
-    "docker-prod": ". ./docker/run.prod.sh",
-    "lighthouse-report": "LIGHTHOUSE_CHROMIUM_PATH=$(which google-chrome) lighthouse http://localhost:8080"
+    "docker-prod": ". ./docker/run.prod.sh"
   },
   "lint-staged": {
     "+(src|api)/**/*.js": [
-      "npm run precommit-prettier",
+      "prettier-eslint --write --eslint-config-path .eslintrc",
       "eslint -c .eslintrc",
       "git add"
     ]
@@ -104,6 +102,18 @@
       "command": "webpack --colors --display-error-details --config=webpack/prod.config.js",
       "env": {
         "NODE_ENV": "production"
+      }
+    },
+    "test": {
+      "command": "jest src",
+      "env": {
+        "NODE_PATH": "src"
+      }
+    },
+    "test-node": {
+      "command": "jest api",
+      "env": {
+        "NODE_PATH": "api"
       }
     }
   },
@@ -172,7 +182,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
-    "babel-jest": "^20.0.1",
+    "babel-jest": "^21.0.2",
     "babel-loader": "^7.0.0",
     "better-npm-run": "^0.1.0",
     "bootstrap-loader": "^2.1.0",
@@ -181,6 +191,7 @@
     "clean-webpack-plugin": "^0.1.15",
     "concurrently": "^3.3.0",
     "css-loader": "^0.28.5",
+    "enzyme": "^2.9.1",
     "eslint": "^4.4.1",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-loader": "^1.6.1",
@@ -193,23 +204,15 @@
     "happypack": "^3.0.2",
     "html-webpack-plugin": "^2.30.1",
     "husky": "^0.14.3",
-    "jest": "^20.0.1",
-    "jest-cli": "^20.0.1",
-    "karma": "^1.4.1",
-    "karma-cli": "^1.0.1",
-    "karma-mocha": "^1.3.0",
-    "karma-mocha-reporter": "^2.2.2",
-    "karma-phantomjs-launcher": "^1.0.2",
-    "karma-sourcemap-loader": "^0.3.7",
-    "karma-webpack": "^2.0.2",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^21.1.0",
+    "jest-cli": "^21.1.0",
     "less": "^2.7.2",
     "less-loader": "^4.0.3",
     "lighthouse": "^2.4.0",
     "lint-staged": "^4.0.3",
     "mocha": "^3.5.0",
     "node-sass": "^4.5.0",
-    "phantomjs-polyfill": "^0.0.2",
-    "phantomjs-prebuilt": "^2.1.15",
     "piping": "^1.0.0-rc.4",
     "postcss": "^6.0.9",
     "postcss-browser-reporter": "^0.5.0",
@@ -218,7 +221,7 @@
     "postcss-loader": "^2.0.5",
     "postcss-reporter": "^5.0.0",
     "postcss-url": "^7.1.2",
-    "prettier-eslint": "^6.4.2",
+    "prettier-eslint-cli": "^4.3.2",
     "react-a11y": "^0.3.3",
     "react-addons-test-utils": "^15.4.2",
     "react-hot-loader": "^3.0.0-beta.3",
