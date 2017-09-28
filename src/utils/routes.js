@@ -41,7 +41,9 @@ export default function getRoutesUtils(store) {
           }
         },
         err => {
-          if (err) onEnterCb(err);
+          if (err) {
+            return onEnterCb(err);
+          }
           onEnterCb();
         }
       );

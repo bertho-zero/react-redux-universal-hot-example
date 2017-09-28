@@ -108,27 +108,30 @@ const catchValidation = error => {
   return Promise.reject(error);
 };
 
-function setToken(response, { client, app, restApp }) {
-  const { accessToken } = response;
+function setCookie({ app }) {
+  return async response => {
+    const payload = await app.passport.verifyJWT(response.accessToken);
+    const options = payload.exp ? { expires: new Date(payload.exp * 1000) } : undefined;
 
-  app.set('accessToken', accessToken);
-  restApp.set('accessToken', accessToken);
-  client.setJwtToken(accessToken);
-
-  return response;
+    cookie.set('feathers-jwt', app.get('accessToken'), options);
+  };
 }
 
-async function setCookie(response, { app }) {
-  const payload = await app.passport.verifyJWT(response.accessToken);
-  const options = payload.exp ? { expires: new Date(payload.exp * 1000) } : undefined;
-  cookie.set('feathers-jwt', app.get('accessToken'), options);
-  return response;
+function setToken({ client, app, restApp }) {
+  return response => {
+    const { accessToken } = response;
+
+    app.set('accessToken', accessToken);
+    restApp.set('accessToken', accessToken);
+    client.setJwtToken(accessToken);
+  };
 }
 
-function setUser(response, { app, restApp }) {
-  app.set('user', response.user);
-  restApp.set('user', response.user);
-  return response;
+function setUser({ app, restApp }) {
+  return response => {
+    app.set('user', response.user);
+    restApp.set('user', response.user);
+  };
 }
 
 /*
@@ -144,9 +147,9 @@ export function load() {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
     promise: async ({ app, restApp, client }) => {
       const response = await restApp.authenticate();
-      await setToken(response, { client, app, restApp });
-      await setCookie(response, { app });
-      await setUser(response, { app, restApp });
+      await setCookie({ app })(response);
+      setToken({ client, app, restApp })(response);
+      setUser({ app, restApp })(response);
       return response;
     }
   };
@@ -163,7 +166,7 @@ export function register(data) {
   };
 }
 
-export function login(strategy, data, validation = true) {
+export function login(strategy, data) {
   const socketId = socket.io.engine.id;
   return {
     types: [LOGIN, LOGIN_SUCCESS, LOGIN_FAIL],
@@ -174,15 +177,15 @@ export function login(strategy, data, validation = true) {
           strategy,
           socketId
         });
-        await setToken(response, { client, app, restApp });
-        await setCookie(response, { app });
-        await setUser(response, { app, restApp });
+        await setCookie({ app })(response);
+        setToken({ client, app, restApp })(response);
+        setUser({ app, restApp })(response);
         return response;
       } catch (error) {
-        if (validation) {
+        if (strategy === 'local') {
           return catchValidation(error);
         }
-        return error;
+        throw error;
       }
     }
   };
@@ -193,7 +196,7 @@ export function logout() {
     types: [LOGOUT, LOGOUT_SUCCESS, LOGOUT_FAIL],
     promise: async ({ client, app, restApp }) => {
       await app.logout();
-      setToken({ accessToken: null }, { client, app, restApp });
+      setToken({ client, app, restApp })({ accessToken: null });
     }
   };
 }

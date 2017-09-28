@@ -118,7 +118,12 @@ app.use((req, res) => {
           throw new VError({ name: 'RedirectError', info: { to } });
         };
         try {
-          await loadOnServer({ ...renderProps, store, helpers: { ...providers, redirect } });
+          await loadOnServer({
+            ...renderProps,
+            store,
+            helpers: { ...providers, redirect },
+            filter: item => !item.deferred
+          });
           const component = (
             <Provider store={store} app={providers.app} restApp={providers.restApp} key="provider">
               <ReduxAsyncConnect {...renderProps} />

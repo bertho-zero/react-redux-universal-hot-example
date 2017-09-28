@@ -1,5 +1,5 @@
 export default function socketAuth(app) {
-  return (socket, next) => {
+  return async (socket, next) => {
     const { cookie } = socket.request.headers;
     const cookies =
       cookie &&
@@ -17,17 +17,17 @@ export default function socketAuth(app) {
 
     if (!accessToken) return next();
 
-    app.passport
-      .verifyJWT(accessToken, app.get('auth'))
-      .then(payload => app.service('users').get(payload.userId))
-      .then(user => {
-        Object.assign(socket.feathers, {
-          accessToken,
-          user,
-          authenticated: true
-        });
-        next();
-      })
-      .catch(() => next());
+    try {
+      const payload = await app.passport.verifyJWT(accessToken, app.get('auth'));
+      const user = await app.service('users').get(payload.userId);
+      Object.assign(socket.feathers, {
+        accessToken,
+        user,
+        authenticated: true
+      });
+      next();
+    } catch (e) {
+      next();
+    }
   };
 }

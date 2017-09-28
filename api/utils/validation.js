@@ -13,17 +13,21 @@ function createAsyncValidator(rules, params) {
       }
     }, {});
 
-    return (await Object.keys(finalErrors).length) ? Promise.reject(finalErrors) : data;
+    if (Object.keys(finalErrors).length) {
+      throw finalErrors;
+    }
+
+    return data;
   };
 }
 
 function unique(field) {
-  return (value, data, { hook }) =>
-    hook.service.find({ query: { [field]: value } }).then(result => {
-      if (result.total !== 0) {
-        return Promise.reject('Already exist');
-      }
-    });
+  return async (value, data, { hook }) => {
+    const result = await hook.service.find({ query: { [field]: value } });
+    if (result.total !== 0) {
+      return Promise.reject('Already exist');
+    }
+  };
 }
 
 module.exports = {

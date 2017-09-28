@@ -31,9 +31,9 @@ describe('widget load', () => {
       sinon.stub(Math, 'random').returns(0.2);
     });
 
-    it('rejects the call', () => {
+    it('rejects the call', async () => {
       try {
-        load({ session: { user: {} } }, undefined);
+        await load({ session: { user: {} } }, undefined);
       } catch (err) {
         expect(err).to.equal('Widget load fails 33% of the time. You were unlucky.');
       }

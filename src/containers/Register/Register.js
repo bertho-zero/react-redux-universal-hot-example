@@ -23,16 +23,16 @@ export default class Register extends Component {
 
   register = async data => {
     const result = await this.props.register(data);
-    return this.successRegister(result);
+    this.successRegister();
+    return result;
   };
 
-  successRegister = result => {
+  successRegister = () => {
     this.props.notifSend({
       message: "You'r now registered !",
       kind: 'success',
       dismissAfter: 2000
     });
-    return result;
   };
 
   render() {

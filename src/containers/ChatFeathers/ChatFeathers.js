@@ -54,7 +54,6 @@ export default class ChatFeathers extends Component {
 
     try {
       await this.props.app.service('messages').create({ text: this.state.message });
-
       this.setState({ message: '', error: false });
     } catch (error) {
       console.log(error);
