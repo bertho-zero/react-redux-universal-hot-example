@@ -21,15 +21,18 @@ export default class Register extends Component {
     return location.state && location.state.oauth;
   };
 
-  register = data => this.props.register(data).then(this.successRegister);
+  register = async data => {
+    const result = await this.props.register(data);
+    this.successRegister();
+    return result;
+  };
 
-  successRegister = result => {
+  successRegister = () => {
     this.props.notifSend({
       message: "You'r now registered !",
       kind: 'success',
       dismissAfter: 2000
     });
-    return result;
   };
 
   render() {

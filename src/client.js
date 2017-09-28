@@ -43,7 +43,10 @@ function initSocket() {
 
 global.socket = initSocket();
 
-Promise.all([window.__data ? true : isOnline(), getStoredState(offlinePersistConfig)]).then(([online, storedData]) => {
+(async () => {
+  const storedData = await getStoredState(offlinePersistConfig);
+  const online = await (window.__data ? true : isOnline());
+
   if (online) socket.open();
 
   // if your server doesn't authenticate socket connexion by cookie
@@ -117,19 +120,16 @@ Promise.all([window.__data ? true : isOnline(), getStoredState(offlinePersistCon
   }
 
   if (online && !__DEVELOPMENT__ && 'serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker
-        .register('/dist/service-worker.js', { scope: '/' })
-        .then(() => {
-          console.log('Service worker registered!');
-        })
-        .catch(error => {
-          console.log('Error registering service worker: ', error);
-        });
+    window.addEventListener('load', async () => {
+      try {
+        await navigator.serviceWorker.register('/dist/service-worker.js', { scope: '/' });
+        console.log('Service worker registered!');
+      } catch (error) {
+        console.log('Error registering service worker: ', error);
+      }
 
-      navigator.serviceWorker.ready.then((/* registration */) => {
-        console.log('Service Worker Ready');
-      });
+      await navigator.serviceWorker.ready;
+      console.log('Service Worker Ready');
     });
   }
-});
+})();

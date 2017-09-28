@@ -6,7 +6,6 @@ import cookieParser from 'cookie-parser';
 import hooks from 'feathers-hooks';
 import rest from 'feathers-rest';
 import socketio from 'feathers-socketio';
-import isPromise from 'is-promise';
 import PrettyError from 'pretty-error';
 import config from './config';
 import middleware from './middleware';
@@ -35,7 +34,7 @@ app
   .use(bodyParser.urlencoded({ extended: true }))
   .use(bodyParser.json());
 
-const actionsHandler = (req, res, next) => {
+const actionsHandler = async (req, res, next) => {
   const splittedUrlPath = req.url
     .split('?')[0]
     .split('/')
@@ -44,31 +43,28 @@ const actionsHandler = (req, res, next) => {
 
   req.app = app;
 
-  const catchError = error => {
+  const catchError = async error => {
     console.error('API ERROR:', pretty.render(error));
     res.status(error.status || 500).json(error);
   };
 
   if (action) {
     try {
-      const handle = action(req, params);
-      (isPromise(handle) ? handle : Promise.resolve(handle))
-        .then(result => {
-          if (result instanceof Function) {
-            result(res);
-          } else {
-            res.json(result);
-          }
-        })
-        .catch(reason => {
-          if (reason && reason.redirect) {
-            res.redirect(reason.redirect);
-          } else {
-            catchError(reason);
-          }
-        });
+      try {
+        const result = await action(req, params);
+        if (result instanceof Function) {
+          result(res);
+        } else {
+          res.json(result);
+        }
+      } catch (reason) {
+        if (reason && reason.redirect) {
+          return res.redirect(reason.redirect);
+        }
+        return catchError(reason);
+      }
     } catch (error) {
-      catchError(error);
+      return catchError(error);
     }
   } else {
     next();

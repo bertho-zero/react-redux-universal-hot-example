@@ -106,7 +106,7 @@ app.use((req, res) => {
       routes: getRoutes(store),
       location: req.originalUrl
     },
-    (error, redirectLocation, renderProps) => {
+    async (error, redirectLocation, renderProps) => {
       if (redirectLocation) {
         res.redirect(redirectLocation.pathname + redirectLocation.search);
       } else if (error) {
@@ -117,29 +117,33 @@ app.use((req, res) => {
         const redirect = to => {
           throw new VError({ name: 'RedirectError', info: { to } });
         };
-        loadOnServer({ ...renderProps, store, helpers: { ...providers, redirect } })
-          .then(() => {
-            const component = (
-              <Provider store={store} app={providers.app} restApp={providers.restApp} key="provider">
-                <ReduxAsyncConnect {...renderProps} />
-              </Provider>
-            );
-            const html = <Html assets={webpackIsomorphicTools.assets()} component={component} store={store} />;
-
-            res.status(200);
-
-            global.navigator = { userAgent: req.headers['user-agent'] };
-
-            res.send(`<!doctype html>${ReactDOM.renderToString(html)}`);
-          })
-          .catch(mountError => {
-            if (mountError.name === 'RedirectError') {
-              return res.redirect(VError.info(mountError).to);
-            }
-            console.error('MOUNT ERROR:', pretty.render(mountError));
-            res.status(500);
-            hydrateOnClient();
+        try {
+          await loadOnServer({
+            ...renderProps,
+            store,
+            helpers: { ...providers, redirect },
+            filter: item => !item.deferred
           });
+          const component = (
+            <Provider store={store} app={providers.app} restApp={providers.restApp} key="provider">
+              <ReduxAsyncConnect {...renderProps} />
+            </Provider>
+          );
+          const html = <Html assets={webpackIsomorphicTools.assets()} component={component} store={store} />;
+
+          res.status(200);
+
+          global.navigator = { userAgent: req.headers['user-agent'] };
+
+          res.send(`<!doctype html>${ReactDOM.renderToString(html)}`);
+        } catch (mountError) {
+          if (mountError.name === 'RedirectError') {
+            return res.redirect(VError.info(mountError).to);
+          }
+          console.error('MOUNT ERROR:', pretty.render(mountError));
+          res.status(500);
+          hydrateOnClient();
+        }
       } else {
         res.status(404).send('Not found');
       }

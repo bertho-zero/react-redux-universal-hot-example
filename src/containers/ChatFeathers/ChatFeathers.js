@@ -49,16 +49,16 @@ export default class ChatFeathers extends Component {
     this.props.app.service('messages').removeListener('created', this.props.addMessage);
   }
 
-  handleSubmit = event => {
+  handleSubmit = async event => {
     event.preventDefault();
-    this.props.app
-      .service('messages')
-      .create({ text: this.state.message })
-      .then(() => this.setState({ message: '', error: false }))
-      .catch(error => {
-        console.log(error);
-        this.setState({ error: error.message || false });
-      });
+
+    try {
+      await this.props.app.service('messages').create({ text: this.state.message });
+      this.setState({ message: '', error: false });
+    } catch (error) {
+      console.log(error);
+      this.setState({ error: error.message || false });
+    }
   };
 
   render() {

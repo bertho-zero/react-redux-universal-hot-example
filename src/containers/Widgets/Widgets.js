@@ -10,7 +10,7 @@ const { isLoaded, load: loadWidgets } = widgetActions;
 
 @asyncConnect([
   {
-    deferred: !!__SERVER__,
+    deferred: __SERVER__,
     promise: ({ store: { dispatch, getState } }) => {
       if (!isLoaded(getState())) {
         return dispatch(loadWidgets());
@@ -63,8 +63,8 @@ export default class Widgets extends Component {
           If you hit refresh on your browser, the data loading will take place on the server before the page is
           returned. If you navigated here from another page, the data was fetched from the client after the route
           transition. This uses the decorator method <code>@asyncConnect</code> with the{' '}
-          <code>deferred: !!__SERVER__</code> flag. To block a route transition until some data is loaded, remove the{' '}
-          <code>deferred:!!__SERVER__</code> flag. To always render before loading data, even on the server, use{' '}
+          <code>deferred: __SERVER__</code> flag. To block a route transition until some data is loaded, remove the{' '}
+          <code>deferred: __SERVER__</code> flag. To always render before loading data, even on the server, use{' '}
           <code>componentDidMount</code>.
         </p>
         <p>This widgets are stored in your session, so feel free to edit it and refresh.</p>

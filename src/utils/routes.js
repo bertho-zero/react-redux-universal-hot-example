@@ -3,24 +3,22 @@ import isPromise from 'is-promise';
 import { isLoaded as isAuthLoaded, load as loadAuth } from 'redux/modules/auth';
 
 export default function getRoutesUtils(store) {
-  function injectReducerAndRender(reducerPromises, containerPromise) {
+  async function injectReducerAndRender(reducerPromises, containerPromise) {
     const reducerNames = Object.keys(reducerPromises);
-    return Promise.all(Object.values(reducerPromises)).then(reducers => {
-      reducers.map((reducer, i) => store.inject(reducerNames[i], reducer.default || reducer));
-      if (!isPromise(containerPromise) && typeof containerPromise === 'object') {
-        const containerNames = Object.keys(containerPromise);
-        return Promise.all(Object.values(containerPromise)).then(containers =>
-          containers.reduce(
-            (prev, next, i) => ({
-              ...prev,
-              [containerNames[i]]: next.default || next
-            }),
-            {}
-          )
-        );
-      }
-      return containerPromise;
-    });
+    const reducers = await Promise.all(Object.values(reducerPromises));
+    reducers.map((reducer, i) => store.inject(reducerNames[i], reducer.default || reducer));
+    if (!isPromise(containerPromise) && typeof containerPromise === 'object') {
+      const containerNames = Object.keys(containerPromise);
+      const containers = await Promise.all(Object.values(containerPromise));
+      return containers.reduce(
+        (prev, next, i) => ({
+          ...prev,
+          [containerNames[i]]: next.default || next
+        }),
+        {}
+      );
+    }
+    return containerPromise;
   }
 
   function onEnterChain(...listOfOnEnters) {
@@ -32,15 +30,20 @@ export default function getRoutesUtils(store) {
       };
       async.eachSeries(
         listOfOnEnters,
-        (onEnter, callback) => {
-          if (!redirected) {
-            const result = onEnter(store, nextState, wrappedReplace);
-            if (isPromise(result)) return result.then(() => callback(), callback);
+        async (onEnter, callback) => {
+          try {
+            if (!redirected) {
+              await onEnter(store, nextState, wrappedReplace);
+            }
+            return callback();
+          } catch (error) {
+            return callback(error);
           }
-          callback();
         },
         err => {
-          if (err) onEnterCb(err);
+          if (err) {
+            return onEnterCb(err);
+          }
           onEnterCb();
         }
       );
@@ -54,8 +57,9 @@ export default function getRoutesUtils(store) {
     return Promise.resolve();
   }
 
-  function checkPermissions(chainedPermissions) {
-    return loadAuthIfNeeded().then(() => chainedPermissions);
+  async function checkPermissions(chainedPermissions) {
+    await loadAuthIfNeeded();
+    return chainedPermissions;
   }
 
   function enterPermissions(...listOfPermissions) {

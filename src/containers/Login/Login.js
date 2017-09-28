@@ -26,30 +26,36 @@ export default class Login extends Component {
     router: PropTypes.object
   };
 
-  onFacebookLogin = (err, data) => {
+  onFacebookLogin = async (err, data) => {
     if (err) return;
-    this.props
-      .login('facebook', data)
-      .then(this.successLogin)
-      .catch(error => {
-        if (error.message === 'Incomplete oauth registration') {
-          this.context.router.push({
-            pathname: '/register',
-            state: { oauth: error.data }
-          });
-        }
-      });
+
+    try {
+      await this.props.login('facebook', data);
+      this.successLogin();
+    } catch (error) {
+      if (error.message === 'Incomplete oauth registration') {
+        this.context.router.push({
+          pathname: '/register',
+          state: { oauth: error.data }
+        });
+      } else {
+        throw error;
+      }
+    }
   };
 
-  login = data => this.props.login('local', data).then(this.successLogin);
+  login = async data => {
+    const result = await this.props.login('local', data);
+    this.successLogin();
+    return result;
+  };
 
-  successLogin = data => {
+  successLogin = () => {
     this.props.notifSend({
       message: "You'r logged !",
       kind: 'success',
       dismissAfter: 2000
     });
-    return data;
   };
 
   FacebookLoginButton = ({ facebookLogin }) => (
