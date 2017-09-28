@@ -30,7 +30,7 @@ export default class Login extends Component {
     if (err) return;
 
     try {
-      await this.props.login('facebook', data, false);
+      await this.props.login('facebook', data);
       this.successLogin();
     } catch (error) {
       if (error.message === 'Incomplete oauth registration') {

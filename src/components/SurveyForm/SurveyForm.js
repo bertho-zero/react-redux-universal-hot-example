@@ -19,39 +19,40 @@ const Input = ({
   className,
   styles,
   meta: { touched, error, dirty, active, visited, asyncValidating }
-}) =>
-  (<div className={`form-group ${error && touched ? 'has-error' : ''}`}>
+}) => (
+  <div className={`form-group ${error && touched ? 'has-error' : ''}`}>
     <label htmlFor={input.name} className="col-sm-2">
       {label}
     </label>
     <div className={`col-sm-8 ${styles.inputGroup}`}>
       {showAsyncValidating && asyncValidating && <i className={`fa fa-cog fa-spin ${styles.cog}`} />}
       <input {...input} type={type} className={className} id={input.name} />
-      {error &&
-        touched &&
-        <div className="text-danger">
-          {error}
-        </div>}
+      {error && touched && <div className="text-danger">{error}</div>}
       <div className={styles.flags}>
-        {dirty &&
+        {dirty && (
           <span className={styles.dirty} title="Dirty">
             D
-          </span>}
-        {active &&
+          </span>
+        )}
+        {active && (
           <span className={styles.active} title="Active">
             A
-          </span>}
-        {visited &&
+          </span>
+        )}
+        {visited && (
           <span className={styles.visited} title="Visited">
             V
-          </span>}
-        {touched &&
+          </span>
+        )}
+        {touched && (
           <span className={styles.touched} title="Touched">
             T
-          </span>}
+          </span>
+        )}
       </div>
     </div>
-  </div>);
+  </div>
+);
 /* eslint-enable react/prop-types */
 
 @reduxForm({
@@ -147,33 +148,23 @@ export default class SurveyForm extends Component {
           <tbody>
             <tr>
               <th>Active Field</th>
-              <td>
-                {active}
-              </td>
+              <td>{active}</td>
             </tr>
             <tr>
               <th>Dirty</th>
-              <td className={dirty ? 'success' : 'danger'}>
-                {dirty ? 'true' : 'false'}
-              </td>
+              <td className={dirty ? 'success' : 'danger'}>{dirty ? 'true' : 'false'}</td>
             </tr>
             <tr>
               <th>Pristine</th>
-              <td className={pristine ? 'success' : 'danger'}>
-                {pristine ? 'true' : 'false'}
-              </td>
+              <td className={pristine ? 'success' : 'danger'}>{pristine ? 'true' : 'false'}</td>
             </tr>
             <tr>
               <th>Valid</th>
-              <td className={valid ? 'success' : 'danger'}>
-                {valid ? 'true' : 'false'}
-              </td>
+              <td className={valid ? 'success' : 'danger'}>{valid ? 'true' : 'false'}</td>
             </tr>
             <tr>
               <th>Invalid</th>
-              <td className={invalid ? 'success' : 'danger'}>
-                {invalid ? 'true' : 'false'}
-              </td>
+              <td className={invalid ? 'success' : 'danger'}>{invalid ? 'true' : 'false'}</td>
             </tr>
           </tbody>
         </table>

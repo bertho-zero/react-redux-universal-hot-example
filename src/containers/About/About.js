@@ -66,10 +66,11 @@ export default class About extends Component {
           </button>
         </p>
 
-        {showKitten &&
+        {showKitten && (
           <div>
             <img src={kitten} alt="kitchen" />
-          </div>}
+          </div>
+        )}
       </div>
     );
   }
