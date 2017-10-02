@@ -6,14 +6,21 @@ export default function apiClient(req) {
     baseURL: __SERVER__ ? `http://${config.apiHost}:${config.apiPort}` : '/api'
   });
 
-  instance.setJwtToken = token => {
-    instance.defaults.headers.common.Authorization = token;
+  let token;
+
+  instance.setJwtToken = newToken => {
+    token = newToken;
   };
 
   instance.interceptors.request.use(
     conf => {
-      if (__SERVER__ && req.get('cookie')) {
-        conf.headers.Cookie = req.get('cookie');
+      if (__SERVER__) {
+        if (req.header('cookie')) {
+          conf.headers.Cookie = req.header('cookie');
+        }
+        if (req.header('authorization')) {
+          conf.headers.authorization = token || req.header('authorization') || '';
+        }
       }
       return conf;
     },

@@ -178,7 +178,6 @@
     "serve-favicon": "^2.3.2",
     "socket.io": "^2.0.1",
     "socket.io-client": "^2.0.1",
-    "superagent": "^3.4.4",
     "verror": "^1.10.0"
   },
   "devDependencies": {
