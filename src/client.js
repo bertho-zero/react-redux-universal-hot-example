@@ -15,7 +15,7 @@ import localForage from 'localforage';
 import { socket, createApp } from 'app';
 import { Provider } from 'components';
 import createStore from './redux/create';
-import ApiClient from './helpers/ApiClient';
+import apiClient from './helpers/apiClient';
 import getRoutes from './routes';
 import isOnline from './utils/isOnline';
 
@@ -24,7 +24,7 @@ const offlinePersistConfig = {
   whitelist: ['auth', 'info', 'chat']
 };
 
-const client = new ApiClient();
+const client = apiClient();
 const app = createApp();
 const restApp = createApp('rest');
 const dest = document.getElementById('content');
