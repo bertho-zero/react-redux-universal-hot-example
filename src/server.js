@@ -16,7 +16,7 @@ import createHistory from 'react-router/lib/createMemoryHistory';
 import { Provider } from 'components';
 import config from 'config';
 import createStore from 'redux/create';
-import ApiClient from 'helpers/ApiClient';
+import apiClient from 'helpers/apiClient';
 import Html from 'helpers/Html';
 import getRoutes from 'routes';
 import { createApp } from 'app';
@@ -82,7 +82,7 @@ app.use((req, res) => {
     webpackIsomorphicTools.refresh();
   }
   const providers = {
-    client: new ApiClient(req),
+    client: apiClient(req),
     app: createApp(req),
     restApp: createApp(req)
   };

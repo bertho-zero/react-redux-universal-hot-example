@@ -100,10 +100,7 @@ export function save(widget) {
   return {
     types: [SAVE, SAVE_SUCCESS, SAVE_FAIL],
     id: widget.id,
-    promise: ({ client }) =>
-      client.post('/widget/update', {
-        data: widget
-      })
+    promise: ({ client }) => client.post('/widget/update', widget)
   };
 }
 

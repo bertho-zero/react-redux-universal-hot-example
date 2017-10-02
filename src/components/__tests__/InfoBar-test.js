@@ -9,9 +9,9 @@ import { InfoBar } from 'components';
 import { Provider } from 'react-redux';
 import { browserHistory } from 'react-router';
 import createStore from 'redux/create';
-import ApiClient from 'helpers/ApiClient';
+import apiClient from 'helpers/apiClient';
 
-const client = new ApiClient();
+const client = apiClient();
 
 describe('InfoBar', () => {
   const mockStore = {

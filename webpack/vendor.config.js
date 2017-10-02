@@ -62,6 +62,7 @@ module.exports = {
 
       // </babel-runtime>
 
+      'axios',
       'multireducer',
       'react',
       'react-bootstrap',
@@ -77,8 +78,7 @@ module.exports = {
       'redux-connect',
       'redux-form',
       'serialize-javascript',
-      'socket.io-client',
-      'superagent'
+      'socket.io-client'
     ]
   },
 
