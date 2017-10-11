@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'multireducer';
-import { increment } from 'redux/modules/counter';
+import * as counterActions from 'redux/modules/counter';
 
 @connect(
   (state, { multireducerKey: key }) => ({ count: state.counter[key].count }),
-  (dispatch, { multireducerKey: key }) => bindActionCreators({ increment }, dispatch, key)
+  (dispatch, { multireducerKey: key }) => bindActionCreators(counterActions, dispatch, key)
 )
 export default class CounterButton extends Component {
   static propTypes = {
@@ -20,7 +20,7 @@ export default class CounterButton extends Component {
   };
 
   render() {
-    const { count, increment } = this.props; // eslint-disable-line no-shadow
+    const { count, increment } = this.props;
     let { className } = this.props;
     className += ' btn btn-default';
     return (

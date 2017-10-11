@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { reduxForm, Field, getFormValues, SubmissionError } from 'redux-form';
+import { reduxForm, Field, getFormValues, SubmissionError, fieldPropTypes } from 'redux-form';
 import * as widgetActions from 'redux/modules/widgets';
 import widgetValidation, { colors } from './widgetValidation';
 
-/* eslint-disable react/prop-types */
 const Input = ({ input, className, meta: { touched, error } }) => (
   <div>
     <input type="text" className={className} {...input} />
@@ -13,7 +12,11 @@ const Input = ({ input, className, meta: { touched, error } }) => (
   </div>
 );
 
-const Select = ({ options, input, className, meta: { touched, error } }) => (
+Input.propTypes = fieldPropTypes;
+
+const Select = ({
+  options, input, className, meta: { touched, error }
+}) => (
   <div>
     <select className={className} {...input}>
       {options.map(option => (
@@ -25,7 +28,8 @@ const Select = ({ options, input, className, meta: { touched, error } }) => (
     {error && touched && <div className="text-danger">{error}</div>}
   </div>
 );
-/* eslint-enable react/prop-types */
+
+Select.propTypes = fieldPropTypes;
 
 @reduxForm({
   form: 'widget',
@@ -91,8 +95,7 @@ export default class WidgetForm extends Component {
                   throw new SubmissionError(err);
                 }
                 return Promise.reject(err);
-              })
-            )}
+              }))}
             disabled={pristine || invalid || submitting}
           >
             <i className={`fa ${submitting ? 'fa-cog fa-spin' : 'fa-cloud'}`} /> Save

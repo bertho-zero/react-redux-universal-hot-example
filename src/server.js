@@ -90,14 +90,13 @@ app.use((req, res) => {
   const store = createStore(memoryHistory, providers);
   const history = syncHistoryWithStore(memoryHistory, store);
 
-  function hydrateOnClient() {
-    res.send(
-      `<!doctype html>${ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} store={store} />)}`
-    );
+  function hydrate() {
+    res.write('<!doctype html>');
+    ReactDOM.renderToNodeStream(<Html assets={webpackIsomorphicTools.assets()} store={store} />).pipe(res);
   }
 
   if (__DISABLE_SSR__) {
-    return hydrateOnClient();
+    return hydrate();
   }
 
   match(
@@ -112,7 +111,7 @@ app.use((req, res) => {
       } else if (error) {
         console.error('ROUTER ERROR:', pretty.render(error));
         res.status(500);
-        hydrateOnClient();
+        hydrate();
       } else if (renderProps) {
         const redirect = to => {
           throw new VError({ name: 'RedirectError', info: { to } });
@@ -142,7 +141,7 @@ app.use((req, res) => {
           }
           console.error('MOUNT ERROR:', pretty.render(mountError));
           res.status(500);
-          hydrateOnClient();
+          hydrate();
         }
       } else {
         res.status(404).send('Not found');

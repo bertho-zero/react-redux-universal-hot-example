@@ -32,7 +32,7 @@ export default class Chat extends Component {
   }
 
   onMessageReceived = data => {
-    const messages = this.state.messages;
+    const { messages } = this.state;
     messages.push(data);
     this.setState({ messages });
   };

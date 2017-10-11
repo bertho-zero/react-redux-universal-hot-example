@@ -18,13 +18,24 @@
     "no-console": "off",
     "no-param-reassign": "off",
     "no-underscore-dangle": "off",
+    "prefer-promise-reject-errors": "warn",
     "prefer-template": "warn",
     "react/forbid-prop-types": "warn",
+    "react/jsx-closing-tag-location": ["warn", "line-aligned"],
     "react/jsx-filename-extension": "off",
     "react/jsx-no-target-blank": "warn",
     "react/no-multi-comp": ["error", {"ignoreStateless": true}],
     "react/no-unescaped-entities": "off",
     "react/prefer-stateless-function": "warn",
+    "jsx-a11y/label-has-for": ["error", {"allowChildren": true}],
+    "jsx-a11y/anchor-is-valid": [
+      "error",
+      {
+        "components": ["Link"],
+        "specialLink": ["to"],
+        "aspects": ["noHref", "invalidHref", "preferButton"]
+      }
+    ],
     "import/default": "off",
     "import/extensions": "off",
     "import/no-extraneous-dependencies": "off",

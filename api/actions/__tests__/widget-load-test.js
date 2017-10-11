@@ -15,12 +15,22 @@ describe('widget load', () => {
     });
 
     it('uses the widgets from the session', async () => {
-      const widgets = await load({ session: { user: {}, widgets: ['a', 'b', 'c'] } }, undefined);
+      const clock = sinon.useFakeTimers();
+      const [widgets] = await Promise.all([
+        load({ session: { user: {}, widgets: ['a', 'b', 'c'] } }, undefined),
+        clock.tick(1000),
+        clock.restore()
+      ]);
       expect(widgets.length).to.equal(3);
     });
 
     it('initializes the widgets ', async () => {
-      const widgets = await load({ session: { user: {} } }, undefined);
+      const clock = sinon.useFakeTimers();
+      const [widgets] = await Promise.all([
+        load({ session: { user: {} } }, undefined),
+        clock.tick(1000),
+        clock.restore()
+      ]);
       expect(widgets.length).to.equal(4);
       expect(widgets[0].color).to.equal('Red');
     });
@@ -32,8 +42,9 @@ describe('widget load', () => {
     });
 
     it('rejects the call', async () => {
+      const clock = sinon.useFakeTimers();
       try {
-        await load({ session: { user: {} } }, undefined);
+        await Promise.all([load({ session: { user: {} } }, undefined), clock.tick(1000), clock.restore()]);
       } catch (err) {
         expect(err).to.equal('Widget load fails 33% of the time. You were unlucky.');
       }

@@ -1,7 +1,15 @@
 {
   "presets": [
     "react",
-    "es2015",
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": ["last 2 versions", "IE >= 8"],
+          "node": "current"
+        }
+      }
+    ],
     "stage-0"
   ],
   "plugins": [
@@ -11,7 +19,9 @@
   ],
   "env": {
     "development": {
-      "plugins": []
+      "plugins": [
+        "transform-react-jsx-source"
+      ]
     }
   }
 }

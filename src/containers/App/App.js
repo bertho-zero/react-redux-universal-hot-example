@@ -17,16 +17,13 @@ import { asyncConnect } from 'redux-connect';
 
 @asyncConnect([
   {
-    promise: ({ store: { dispatch, getState } }) => {
-      const promises = [];
-
+    promise: async ({ store: { dispatch, getState } }) => {
       if (!isAuthLoaded(getState())) {
-        promises.push(dispatch(loadAuth()));
+        await dispatch(loadAuth());
       }
       if (!isInfoLoaded(getState())) {
-        promises.push(dispatch(loadInfo()));
+        await dispatch(loadInfo());
       }
-      return Promise.all(promises);
     }
   }
 ])

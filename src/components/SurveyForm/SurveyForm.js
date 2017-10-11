@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { reduxForm, Field } from 'redux-form';
+import { reduxForm, Field, fieldPropTypes } from 'redux-form';
 import { connect } from 'react-redux';
 import { isValidEmail } from 'redux/modules/survey';
 import surveyValidation from './surveyValidation';
@@ -10,7 +10,6 @@ function asyncValidate(data, dispatch) {
   return dispatch(isValidEmail(data));
 }
 
-/* eslint-disable react/prop-types */
 const Input = ({
   input,
   label,
@@ -18,7 +17,9 @@ const Input = ({
   showAsyncValidating,
   className,
   styles,
-  meta: { touched, error, dirty, active, visited, asyncValidating }
+  meta: {
+    touched, error, dirty, active, visited, asyncValidating
+  }
 }) => (
   <div className={`form-group ${error && touched ? 'has-error' : ''}`}>
     <label htmlFor={input.name} className="col-sm-2">
@@ -53,7 +54,8 @@ const Input = ({
     </div>
   </div>
 );
-/* eslint-enable react/prop-types */
+
+Input.propTypes = fieldPropTypes;
 
 @reduxForm({
   form: 'survey',
@@ -81,7 +83,9 @@ export default class SurveyForm extends Component {
   };
 
   render() {
-    const { asyncValidating, dirty, active, handleSubmit, invalid, reset, pristine, valid } = this.props;
+    const {
+      asyncValidating, dirty, active, handleSubmit, invalid, reset, pristine, valid
+    } = this.props;
     const styles = require('./SurveyForm.scss');
 
     return (
@@ -117,7 +121,7 @@ export default class SurveyForm extends Component {
           />
 
           <div className="form-group">
-            <label className="col-sm-2" htmlFor="sex">
+            <label htmlFor="sex" className="col-sm-2">
               Sex
             </label>
             <div className="col-sm-8">

@@ -25,8 +25,9 @@ describe('widget update', () => {
 
     it('does not accept green widgets', async () => {
       sinon.stub(load, 'default').resolves(widgets);
+      const clock = sinon.useFakeTimers();
       try {
-        await update({ session: {}, body: { color: 'Green' } });
+        await Promise.all([update({ session: {}, body: { color: 'Green' } }), clock.tick(1500), clock.restore()]);
       } catch (err) {
         expect(err.color).to.equal('We do not accept green widgets');
       }
@@ -34,8 +35,9 @@ describe('widget update', () => {
 
     it('fails to load widgets', async () => {
       sinon.stub(load, 'default').rejects(new Error('Widget fail to load.'));
+      const clock = sinon.useFakeTimers();
       try {
-        await update({ session: {}, body: { color: 'Blue' } });
+        await Promise.all([update({ session: {}, body: { color: 'Blue' } }), clock.tick(1500), clock.restore()]);
       } catch (err) {
         expect(err.message).to.equal('Widget fail to load.');
       }
@@ -43,8 +45,9 @@ describe('widget update', () => {
 
     it('updates a widget', async () => {
       sinon.stub(load, 'default').resolves(widgets);
+      const clock = sinon.useFakeTimers();
       const widget = { id: 2, color: 'Blue' };
-      const res = await update({ session: {}, body: widget });
+      const [res] = await Promise.all([update({ session: {}, body: widget }), clock.tick(1500), clock.restore()]);
       expect(res).to.deep.equal(widget);
       expect(widgets[1]).to.deep.equal(widget);
     });

@@ -6,8 +6,6 @@ import oauth2 from 'feathers-authentication-oauth2';
 import FacebookTokenStrategy from 'passport-facebook-token';
 import { discard } from 'feathers-hooks-common';
 
-export socketAuth from './socketAuth';
-
 function populateUser(authConfig) {
   return async hook => {
     const payload = await hook.app.passport.verifyJWT(hook.result.accessToken, authConfig);
@@ -44,12 +42,10 @@ export default function authenticationService() {
     .configure(auth(config))
     .configure(jwt())
     .configure(local()) // .configure(oauth1()) // TODO twitter example
-    .configure(
-      oauth2({
-        name: 'facebook', // if the name differs from your config key you need to pass your config options explicitly
-        Strategy: FacebookTokenStrategy
-      })
-    );
+    .configure(oauth2({
+      name: 'facebook', // if the name differs from your config key you need to pass your config options explicitly
+      Strategy: FacebookTokenStrategy
+    }));
 
   app.service('authentication').hooks({
     before: {

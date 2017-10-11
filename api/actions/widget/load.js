@@ -1,12 +1,32 @@
 const initialWidgets = [
-  { id: 1, color: 'Red', sprocketCount: 7, owner: 'John' },
-  { id: 2, color: 'Taupe', sprocketCount: 1, owner: 'George' },
-  { id: 3, color: 'Green', sprocketCount: 8, owner: 'Ringo' },
-  { id: 4, color: 'Blue', sprocketCount: 2, owner: 'Paul' }
+  {
+    id: 1,
+    color: 'Red',
+    sprocketCount: 7,
+    owner: 'John'
+  },
+  {
+    id: 2,
+    color: 'Taupe',
+    sprocketCount: 1,
+    owner: 'George'
+  },
+  {
+    id: 3,
+    color: 'Green',
+    sprocketCount: 8,
+    owner: 'Ringo'
+  },
+  {
+    id: 4,
+    color: 'Blue',
+    sprocketCount: 2,
+    owner: 'Paul'
+  }
 ];
 
 export function getWidgets(req) {
-  let widgets = req.session.widgets;
+  let { widgets } = req.session;
   if (!widgets) {
     widgets = initialWidgets;
     req.session.widgets = widgets;

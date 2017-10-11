@@ -48,7 +48,9 @@ export default class Widgets extends Component {
       const { editStart } = this.props;
       return () => editStart(String(widget.id));
     };
-    const { widgets, error, editing, loading, load } = this.props;
+    const {
+      widgets, error, editing, loading, load
+    } = this.props;
     const styles = require('./Widgets.scss');
     return (
       <div className={`${styles.widgets} container`}>
@@ -86,24 +88,22 @@ export default class Widgets extends Component {
                 </tr>
               </thead>
               <tbody>
-                {widgets.map(
-                  widget =>
-                    editing[widget.id] ? (
-                      <WidgetForm form={String(widget.id)} key={String(widget.id)} initialValues={widget} />
-                    ) : (
-                      <tr key={widget.id}>
-                        <td className={styles.idCol}>{widget.id}</td>
-                        <td className={styles.colorCol}>{widget.color}</td>
-                        <td className={styles.sprocketsCol}>{widget.sprocketCount}</td>
-                        <td className={styles.ownerCol}>{widget.owner}</td>
-                        <td className={styles.buttonCol}>
-                          <button className="btn btn-primary" onClick={handleEdit(widget)}>
-                            <i className="fa fa-pencil" /> Edit
-                          </button>
-                        </td>
-                      </tr>
-                    )
-                )}
+                {widgets.map(widget =>
+                  editing[widget.id] ? (
+                    <WidgetForm form={String(widget.id)} key={String(widget.id)} initialValues={widget} />
+                  ) : (
+                    <tr key={widget.id}>
+                      <td className={styles.idCol}>{widget.id}</td>
+                      <td className={styles.colorCol}>{widget.color}</td>
+                      <td className={styles.sprocketsCol}>{widget.sprocketCount}</td>
+                      <td className={styles.ownerCol}>{widget.owner}</td>
+                      <td className={styles.buttonCol}>
+                        <button className="btn btn-primary" onClick={handleEdit(widget)}>
+                          <i className="fa fa-pencil" /> Edit
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           )}

@@ -47,10 +47,10 @@ global.socket = initSocket();
   const storedData = await getStoredState(offlinePersistConfig);
   const online = await (window.__data ? true : isOnline());
 
-  if (online) socket.open();
-
-  // if your server doesn't authenticate socket connexion by cookie
-  // if (online) app.authenticate().catch(() => null);
+  if (online) {
+    socket.open();
+    await app.authenticate().catch(() => null);
+  }
 
   const data = !online ? { ...storedData, ...window.__data, online } : { ...window.__data, online };
   const store = createStore(browserHistory, { client, app, restApp }, data, offlinePersistConfig);
@@ -61,7 +61,12 @@ global.socket = initSocket();
   const renderRouter = props => (
     <ReduxAsyncConnect
       {...props}
-      helpers={{ client, app, restApp, redirect }}
+      helpers={{
+        client,
+        app,
+        restApp,
+        redirect
+      }}
       filter={item => !item.deferred}
       render={applyRouterMiddleware(useScroll())}
     />
@@ -69,7 +74,7 @@ global.socket = initSocket();
 
   const render = routes => {
     match({ history, routes }, (error, redirectLocation, renderProps) => {
-      ReactDOM.render(
+      ReactDOM.hydrate(
         <HotEnabler>
           <Provider store={store} app={app} restApp={restApp} key="provider">
             <Router {...renderProps} render={renderRouter} history={history}>
@@ -94,16 +99,9 @@ global.socket = initSocket();
   if (process.env.NODE_ENV !== 'production') {
     window.React = React; // enable debugger
 
-    if (
-      !dest ||
-      !dest.firstChild ||
-      !dest.firstChild.attributes ||
-      !dest.firstChild.attributes['data-react-checksum']
-    ) {
-      console.error(
-        'Server-side React render was discarded.' +
-          'Make sure that your initial render does not contain any client-side code.'
-      );
+    if (!dest || !dest.firstChild || !dest.firstChild.attributes || !dest.firstChild.attributes['data-reactroot']) {
+      console.error('Server-side React render was discarded.' +
+          'Make sure that your initial render does not contain any client-side code.');
     }
   }
 
@@ -111,7 +109,7 @@ global.socket = initSocket();
     const devToolsDest = document.createElement('div');
     window.document.body.insertBefore(devToolsDest, null);
     const DevTools = require('./containers/DevTools/DevTools');
-    ReactDOM.render(
+    ReactDOM.hydrate(
       <Provider store={store} key="provider">
         <DevTools />
       </Provider>,

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { reduxForm, Field, propTypes } from 'redux-form';
+import { reduxForm, Field, propTypes, fieldPropTypes } from 'redux-form';
 import registerValidation from './registerValidation';
 
-// eslint-disable-next-line react/prop-types
-const Input = ({ input, label, type, meta: { touched, error } }) => (
+const Input = ({
+  input, label, type, meta: { touched, error }
+}) => (
   <div className={`form-group ${error && touched ? 'has-error' : ''}`}>
     <label htmlFor={input.name} className="col-sm-2">
       {label}
@@ -20,6 +21,8 @@ const Input = ({ input, label, type, meta: { touched, error } }) => (
     </div>
   </div>
 );
+
+Input.propTypes = fieldPropTypes;
 
 @reduxForm({
   form: 'register',

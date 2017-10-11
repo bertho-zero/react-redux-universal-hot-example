@@ -113,7 +113,7 @@ function setCookie({ app }) {
     const payload = await app.passport.verifyJWT(response.accessToken);
     const options = payload.exp ? { expires: new Date(payload.exp * 1000) } : undefined;
 
-    cookie.set('feathers-jwt', app.get('accessToken'), options);
+    cookie.set('feathers-jwt', response.accessToken, options);
   };
 }
 

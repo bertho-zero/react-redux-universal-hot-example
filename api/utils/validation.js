@@ -9,7 +9,7 @@ function createAsyncValidator(rules, params) {
         const error = await errors[name];
         return error ? Object.assign(result, { [name]: error }) : result;
       } catch (error) {
-        return Object.assign(result, { [name]: error });
+        return Object.assign(result, { [name]: error.message || error });
       }
     }, {});
 
@@ -25,7 +25,7 @@ function unique(field) {
   return async (value, data, { hook }) => {
     const result = await hook.service.find({ query: { [field]: value } });
     if (result.total !== 0) {
-      return Promise.reject('Already exist');
+      throw new Error('Already exist');
     }
   };
 }

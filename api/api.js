@@ -12,7 +12,7 @@ import middleware from './middleware';
 import services from './services';
 import * as actions from './actions';
 import mapUrl from './utils/url.js';
-import auth, { socketAuth } from './services/authentication';
+import auth from './services/authentication';
 
 process.on('unhandledRejection', error => console.error(error));
 
@@ -23,14 +23,12 @@ app
   .set('config', config)
   .use(morgan('dev'))
   .use(cookieParser())
-  .use(
-    session({
-      secret: 'react and redux rule!!!!',
-      resave: false,
-      saveUninitialized: false,
-      cookie: { maxAge: 60000 }
-    })
-  )
+  .use(session({
+    secret: 'react and redux rule!!!!',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 60000 }
+  }))
   .use(bodyParser.urlencoded({ extended: true }))
   .use(bodyParser.json());
 
@@ -95,8 +93,6 @@ if (process.env.APIPORT) {
 const bufferSize = 100;
 const messageBuffer = new Array(bufferSize);
 let messageIndex = 0;
-
-app.io.use(socketAuth(app));
 
 app.io.on('connection', socket => {
   const user = socket.feathers.user ? { ...socket.feathers.user, password: undefined } : undefined;

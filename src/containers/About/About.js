@@ -26,11 +26,8 @@ export default class About extends Component {
         <Helmet title="About Us" />
 
         <p>
-          This project was originally created by Erik Rasmussen (<a
-            href="https://twitter.com/erikras"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          This project was originally created by Erik Rasmussen (
+          <a href="https://twitter.com/erikras" target="_blank" rel="noopener noreferrer">
             @erikras
           </a>), but has since seen many contributions from the open source community. Thank you to{' '}
           <a

@@ -30,7 +30,9 @@ class FacebookLogin extends Component {
   };
 
   componentDidMount() {
-    const { appId, xfbml, cookie, version, autoLoad, language } = this.props;
+    const {
+      appId, xfbml, cookie, version, autoLoad, language
+    } = this.props;
     let fbRoot = document.getElementById('fb-root');
 
     if (!fbRoot) {
@@ -83,7 +85,9 @@ class FacebookLogin extends Component {
   };
 
   render() {
-    const { className, textButton, typeButton, component: WrappedComponent } = this.props;
+    const {
+      className, textButton, typeButton, component: WrappedComponent
+    } = this.props;
 
     if (WrappedComponent) return <WrappedComponent facebookLogin={this.click} />;
 
