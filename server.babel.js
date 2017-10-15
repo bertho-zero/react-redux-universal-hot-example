@@ -7,6 +7,9 @@ var config;
 
 try {
   config = JSON.parse(babelrc);
+  if (Array.isArray(config.plugins)) {
+    config.plugins.push('dynamic-import-node');
+  }
 } catch (err) {
   console.error('==>     ERROR: Error parsing your .babelrc.');
   console.error(err);

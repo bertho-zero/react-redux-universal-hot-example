@@ -13,20 +13,20 @@ import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/module
 import { Notifs, InfoBar } from 'components';
 import { push } from 'react-router-redux';
 import config from 'config';
-import { asyncConnect } from 'redux-connect';
+// import { asyncConnect } from 'redux-connect';
 
-@asyncConnect([
-  {
-    promise: async ({ store: { dispatch, getState } }) => {
-      if (!isAuthLoaded(getState())) {
-        await dispatch(loadAuth());
-      }
-      if (!isInfoLoaded(getState())) {
-        await dispatch(loadInfo());
-      }
-    }
-  }
-])
+// @asyncConnect([
+//   {
+//     promise: async ({ store: { dispatch, getState } }) => {
+//       if (!isAuthLoaded(getState())) {
+//         await dispatch(loadAuth());
+//       }
+//       if (!isInfoLoaded(getState())) {
+//         await dispatch(loadInfo());
+//       }
+//     }
+//   }
+// ])
 @connect(
   state => ({
     notifs: state.notifs,
@@ -37,9 +37,9 @@ import { asyncConnect } from 'redux-connect';
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.element.isRequired,
-    router: PropTypes.shape({
-      location: PropTypes.object
-    }).isRequired,
+    // router: PropTypes.shape({
+    //   location: PropTypes.object
+    // }).isRequired,
     user: PropTypes.shape({
       email: PropTypes.string
     }),
@@ -84,10 +84,10 @@ export default class App extends Component {
         <Navbar fixedTop>
           <Navbar.Header>
             <Navbar.Brand>
-              <IndexLink to="/" activeStyle={{ color: '#33e0ff' }}>
+              {/* <IndexLink to="/" activeStyle={{ color: '#33e0ff' }}>
                 <div className={styles.brand} />
                 <span>{config.app.title}</span>
-              </IndexLink>
+              </IndexLink> */}
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>

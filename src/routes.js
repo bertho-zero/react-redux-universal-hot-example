@@ -1,22 +1,40 @@
 import React from 'react';
-import { IndexRoute, Route } from 'react-router';
-import { routerActions } from 'react-router-redux';
-import { UserAuthWrapper } from 'redux-auth-wrapper';
+import { Route, Switch } from 'react-router';
+// import { routerActions } from 'react-router-redux';
+import Loadable from 'react-loadable';
 import { App, Home, NotFound } from 'containers';
-import getRoutesUtils from 'utils/routes';
 
 // eslint-disable-next-line import/no-dynamic-require
 if (typeof System.import === 'undefined') System.import = module => Promise.resolve(require(module));
 
-export default store => {
-  const { injectReducerAndRender, permissionsComponent } = getRoutesUtils(store);
+const Chat = Loadable({
+  loader: () => import('./containers/Chat/Chat'),
+  loading: () => <div>Loading =========</div>
+});
 
-  /* Permissions */
+const routes = (
+  <div>
+    <Route
+      component={() => (
+        <App>
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/chat" component={Chat} />
+            <Route component={NotFound} />
+          </Switch>
+        </App>
+      )}
+    />
+  </div>
+);
 
+export default routes;
+
+/*
   const isAuthenticated = UserAuthWrapper({
     authSelector: state => state.auth.user,
     redirectAction: routerActions.replace,
-    wrapperDisplayName: 'UserIsAuthenticated'
+    wrapperDisplayName: 'UserIsAuthenticated',
   });
 
   const isNotAuthenticated = UserAuthWrapper({
@@ -25,22 +43,19 @@ export default store => {
     wrapperDisplayName: 'UserIsNotAuthenticated',
     predicate: user => !user,
     failureRedirectPath: '/',
-    allowRedirectBack: false
+    allowRedirectBack: false,
   });
 
-  /**
-   * Please keep routes in alphabetical order
-   */
-  return (
-    <Route path="/" component={App}>
-      {/* Home (main) route */}
+
+  <Route path="/" component={App}>
+       Home (main) route
       <IndexRoute component={Home} />
 
-      {/* Routes requiring login */}
-      {/*
+       Routes requiring login
+
         You can also protect a route like this:
         <Route path="protected-route" {...permissionsComponent(isAuthenticated)(Component)}>
-      */}
+
       <Route {...permissionsComponent(isAuthenticated)()}>
         <Route path="loginSuccess" getComponent={() => System.import('./containers/LoginSuccess/LoginSuccess')} />
         <Route
@@ -53,12 +68,12 @@ export default store => {
         />
       </Route>
 
-      {/* Routes disallow login */}
+       Routes disallow login
       <Route {...permissionsComponent(isNotAuthenticated)()}>
         <Route path="register" getComponent={() => System.import('./containers/Register/Register')} />
       </Route>
 
-      {/* Routes */}
+       Routes
       <Route path="login" getComponent={() => System.import('./containers/Login/Login')} />
       <Route path="about" getComponent={() => System.import('./containers/About/About')} />
       <Route
@@ -79,8 +94,7 @@ export default store => {
       />
       <Route path="chat" getComponent={() => System.import('./containers/Chat/Chat')} />
 
-      {/* Catch all route */}
+       Catch all route
       <Route path="*" component={NotFound} status={404} />
     </Route>
-  );
-};
+* */

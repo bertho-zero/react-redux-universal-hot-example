@@ -6,17 +6,13 @@ import cookieParser from 'cookie-parser';
 import hooks from 'feathers-hooks';
 import rest from 'feathers-rest';
 import socketio from 'feathers-socketio';
-import PrettyError from 'pretty-error';
 import config from './config';
-import middleware from './middleware';
 import services from './services';
-import * as actions from './actions';
-import mapUrl from './utils/url.js';
+import { actionHandler, logger, notFound, errorHandler } from './middleware';
 import auth from './services/authentication';
 
 process.on('unhandledRejection', error => console.error(error));
 
-const pretty = new PrettyError();
 const app = feathers();
 
 app
@@ -30,53 +26,25 @@ app
     cookie: { maxAge: 60000 }
   }))
   .use(bodyParser.urlencoded({ extended: true }))
-  .use(bodyParser.json());
-
-const actionsHandler = async (req, res, next) => {
-  const splittedUrlPath = req.url
-    .split('?')[0]
-    .split('/')
-    .slice(1);
-  const { action, params } = mapUrl(actions, splittedUrlPath);
-
-  req.app = app;
-
-  const catchError = async error => {
-    console.error('API ERROR:', pretty.render(error));
-    res.status(error.status || 500).json(error);
-  };
-
-  if (action) {
-    try {
-      try {
-        const result = await action(req, params);
-        if (result instanceof Function) {
-          result(res);
-        } else {
-          res.json(result);
-        }
-      } catch (reason) {
-        if (reason && reason.redirect) {
-          return res.redirect(reason.redirect);
-        }
-        return catchError(reason);
-      }
-    } catch (error) {
-      return catchError(error);
-    }
-  } else {
-    next();
-  }
-};
-
-app
+  .use(bodyParser.json())
   .configure(hooks())
   .configure(rest())
   .configure(socketio({ path: '/ws' }))
   .configure(auth)
-  .use(actionsHandler)
+  .use(actionHandler(app))
   .configure(services)
-  .configure(middleware);
+  .use(notFound())
+  .use(logger(app))
+  .use(errorHandler({
+    json: (error, req, res) => {
+      res.json(error);
+    },
+    html: (error, req, res) => {
+      res.json(error);
+      // render your error view with the error object
+      // res.render('error', error); // set view engine of express if you want to use res.render
+    }
+  }));
 
 if (process.env.APIPORT) {
   app.listen(process.env.APIPORT, err => {

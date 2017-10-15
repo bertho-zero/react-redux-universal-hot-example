@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { asyncConnect } from 'redux-connect';
+// import { asyncConnect } from 'redux-connect';
 import { connect } from 'react-redux';
 import { withApp } from 'app';
 import * as chatActions from 'redux/modules/chat';
 
-@asyncConnect([
-  {
-    promise: ({ store: { dispatch, getState } }) => {
-      const state = getState();
-
-      if (state.online) {
-        return dispatch(chatActions.load());
-      }
-    }
-  }
-])
+// @asyncConnect([
+//   {
+//     promise: ({ store: { dispatch, getState } }) => {
+//       const state = getState();
+//
+//       if (state.online) {
+//         return dispatch(chatActions.load());
+//       }
+//     }
+//   }
+// ])
 @connect(
   state => ({
     user: state.auth.user,

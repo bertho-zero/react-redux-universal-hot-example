@@ -15,7 +15,8 @@
   "plugins": [
     "transform-runtime",
     "add-module-exports",
-    "transform-decorators-legacy"
+    "transform-decorators-legacy",
+    "react-loadable/babel"
   ],
   "env": {
     "development": {

@@ -214,7 +214,7 @@ export default class Home extends Component {
               <code>About.js</code> contains a <code>MiniInfoBar</code> that displays the same data.
             </dd>
             <dt>Server-side data loading</dt>
-            <dd>
+            {/* <dd>
               The <Link to="/widgets">Widgets page</Link> demonstrates how to fetch data asynchronously from some source
               that is needed to complete the server-side rendering. <code>Widgets.js</code>'s
               <code>asyncConnect()</code> function is called before the widgets page is loaded, on either the server or
@@ -258,7 +258,7 @@ export default class Home extends Component {
             <dd>
               The <Link to="/chat">Chat</Link> uses the socket.io technology for real-time communication between
               clients.
-            </dd>
+            </dd> */}
           </dl>
 
           <h3>From the author</h3>

@@ -4,20 +4,20 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import * as widgetActions from 'redux/modules/widgets';
 import WidgetForm from 'components/WidgetForm/WidgetForm';
-import { asyncConnect } from 'redux-connect';
+// import { asyncConnect } from 'redux-connect';
 
-const { isLoaded, load: loadWidgets } = widgetActions;
+// const { isLoaded, load: loadWidgets } = widgetActions;
 
-@asyncConnect([
-  {
-    deferred: __SERVER__,
-    promise: ({ store: { dispatch, getState } }) => {
-      if (!isLoaded(getState())) {
-        return dispatch(loadWidgets());
-      }
-    }
-  }
-])
+// @asyncConnect([
+//   {
+//     deferred: __SERVER__,
+//     promise: ({ store: { dispatch, getState } }) => {
+//       if (!isLoaded(getState())) {
+//         return dispatch(loadWidgets());
+//       }
+//     }
+//   }
+// ])
 @connect(
   state => ({
     widgets: state.widgets.data,

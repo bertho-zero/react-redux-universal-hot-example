@@ -4,24 +4,26 @@
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { applyRouterMiddleware, Router, browserHistory, match } from 'react-router';
-import { bindActionCreators } from 'redux';
-import { syncHistoryWithStore, replace } from 'react-router-redux';
-import { ReduxAsyncConnect } from 'redux-connect';
+import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'react-router-redux';
+import createBrowserHistory from 'history/createBrowserHistory';
+import Loadable from 'react-loadable';
+// import { bindActionCreators } from 'redux';
+// import { ReduxAsyncConnect } from 'redux-connect';
 import { AppContainer as HotEnabler } from 'react-hot-loader';
-import { useScroll } from 'react-router-scroll';
+// import { useScroll } from 'react-router-scroll';
 import { getStoredState } from 'redux-persist';
 import localForage from 'localforage';
 import { socket, createApp } from 'app';
-import { Provider } from 'components';
+// import { Provider } from 'components';
 import createStore from './redux/create';
 import apiClient from './helpers/apiClient';
-import getRoutes from './routes';
+import routes from './routes';
 import isOnline from './utils/isOnline';
 
 const offlinePersistConfig = {
   storage: localForage,
-  whitelist: ['auth', 'info', 'chat']
+  whitelist: ['auth', 'info', 'chat'],
 };
 
 const client = apiClient();
@@ -52,47 +54,46 @@ global.socket = initSocket();
     await app.authenticate().catch(() => null);
   }
 
+  const history = createBrowserHistory();
   const data = !online ? { ...storedData, ...window.__data, online } : { ...window.__data, online };
-  const store = createStore(browserHistory, { client, app, restApp }, data, offlinePersistConfig);
-  const history = syncHistoryWithStore(browserHistory, store);
+  const store = createStore(history, { client, app, restApp }, data, offlinePersistConfig);
+  // const history = syncHistoryWithStore(browserHistory, store);
 
-  const redirect = bindActionCreators(replace, store.dispatch);
+  // const redirect = bindActionCreators(replace, store.dispatch);
+  //
+  // const renderRouter = props => (
+  //   <ReduxAsyncConnect
+  //     {...props}
+  //     helpers={{
+  //       client,
+  //       app,
+  //       restApp,
+  //       redirect
+  //     }}
+  //     filter={item => !item.deferred}
+  //     render={applyRouterMiddleware(useScroll())}
+  //   />
+  // );
 
-  const renderRouter = props => (
-    <ReduxAsyncConnect
-      {...props}
-      helpers={{
-        client,
-        app,
-        restApp,
-        redirect
-      }}
-      filter={item => !item.deferred}
-      render={applyRouterMiddleware(useScroll())}
-    />
-  );
-
-  const render = routes => {
-    match({ history, routes }, (error, redirectLocation, renderProps) => {
-      ReactDOM.hydrate(
-        <HotEnabler>
-          <Provider store={store} app={app} restApp={restApp} key="provider">
-            <Router {...renderProps} render={renderRouter} history={history}>
-              {routes}
-            </Router>
-          </Provider>
-        </HotEnabler>,
-        dest
-      );
-    });
+  const hydrate = _routes => {
+    ReactDOM.hydrate(
+      <HotEnabler>
+        <Provider store={store}>
+          <ConnectedRouter history={history}>{_routes}</ConnectedRouter>
+        </Provider>
+      </HotEnabler>,
+      dest,
+    );
   };
 
-  render(getRoutes(store));
+  await Loadable.preloadReady().then(hydrated => console.log('HYDRATED', hydrated));
+
+  hydrate(routes);
 
   if (module.hot) {
     module.hot.accept('./routes', () => {
-      const nextRoutes = require('./routes')(store);
-      render(nextRoutes);
+      const nextRoutes = require('./routes');
+      hydrate(nextRoutes);
     });
   }
 
@@ -100,8 +101,8 @@ global.socket = initSocket();
     window.React = React; // enable debugger
 
     if (!dest || !dest.firstChild || !dest.firstChild.attributes || !dest.firstChild.attributes['data-reactroot']) {
-      console.error('Server-side React render was discarded.' +
-          'Make sure that your initial render does not contain any client-side code.');
+      console.error('Server-side React render was discarded.\n' +
+        'Make sure that your initial render does not contain any client-side code.');
     }
   }
 
@@ -110,10 +111,10 @@ global.socket = initSocket();
     window.document.body.insertBefore(devToolsDest, null);
     const DevTools = require('./containers/DevTools/DevTools');
     ReactDOM.hydrate(
-      <Provider store={store} key="provider">
+      <Provider store={store}>
         <DevTools />
       </Provider>,
-      devToolsDest
+      devToolsDest,
     );
   }
 
