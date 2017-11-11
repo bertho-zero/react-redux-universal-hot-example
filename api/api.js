@@ -65,6 +65,10 @@ const messageBuffer = new Array(bufferSize);
 let messageIndex = 0;
 
 app.io.on('connection', socket => {
+  if (!socket._feathers) {
+    // https://github.com/feathersjs/authentication/pull/604
+    socket._feathers = {};
+  }
   const user = socket.feathers.user ? { ...socket.feathers.user, password: undefined } : undefined;
   socket.emit('news', { msg: "'Hello World!' from server", user });
 
