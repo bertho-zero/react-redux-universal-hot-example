@@ -4,6 +4,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var CleanPlugin = require('clean-webpack-plugin');
+var ReactLoadablePlugin = require('react-loadable/webpack').ReactLoadablePlugin;
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var projectRootPath = path.resolve(__dirname, '../');
@@ -184,6 +185,10 @@ module.exports = {
     }),
 
     webpackIsomorphicToolsPlugin,
+
+    new ReactLoadablePlugin({
+      filename: path.join(assetsPath, 'loadable-chunks.json')
+    }),
 
     new HtmlWebpackPlugin({
       filename: 'index.html',

@@ -8,22 +8,25 @@ import favicon from 'serve-favicon';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import httpProxy from 'http-proxy';
-import VError from 'verror';
 import PrettyError from 'pretty-error';
 import http from 'http';
-import { Provider } from 'react-redux';
-import { StaticRouter } from 'react-router';
 import { ConnectedRouter } from 'react-router-redux';
-// import { ReduxAsyncConnect, loadOnServer } from 'redux-connect';
+import { renderRoutes } from 'react-router-config';
 import createMemoryHistory from 'history/createMemoryHistory';
 import Loadable from 'react-loadable';
-// import { Provider } from 'components';
+import { getBundles } from 'react-loadable/webpack';
+import { trigger } from 'redial';
 import config from 'config';
 import createStore from 'redux/create';
 import apiClient from 'helpers/apiClient';
 import Html from 'helpers/Html';
 import routes from 'routes';
 import { createApp } from 'app';
+import getChunks, { waitChunks } from 'utils/getChunks';
+import asyncMatchRoutes from 'utils/asyncMatchRoutes';
+import { ReduxAsyncConnect, Provider } from 'components';
+
+const chunksPath = path.join(__dirname, '../static/dist/loadable-chunks.json');
 
 process.on('unhandledRejection', error => console.error(error));
 
@@ -39,7 +42,9 @@ const proxy = httpProxy.createProxyServer({
 app
   .use(morgan('dev', { skip: req => req.originalUrl.indexOf('/ws') !== -1 }))
   .use(cookieParser())
-  .use(compression());
+  .use(compression())
+  .use(favicon(path.join(__dirname, '..', 'static', 'favicon.ico')))
+  .use('/manifest.json', (req, res) => res.sendFile(path.join(__dirname, '..', 'static', 'manifest.json')));
 
 app.use('/dist/service-worker.js', (req, res, next) => {
   res.setHeader('Service-Worker-Allowed', '/');
@@ -54,10 +59,7 @@ app.use('/dist/dlls/:dllName.js', (req, res, next) => {
   );
 });
 
-app
-  .use(favicon(path.join(__dirname, '..', 'static', 'favicon.ico')))
-  .get('/manifest.json', (req, res) => res.sendFile(path.join(__dirname, '..', 'static', 'manifest.json')))
-  .use(express.static(path.join(__dirname, '..', 'static')));
+app.use(express.static(path.join(__dirname, '..', 'static')));
 
 app.use((req, res, next) => {
   res.setHeader('X-Forwarded-For', req.ip);
@@ -90,7 +92,7 @@ proxy.on('error', (error, req, res) => {
   res.end(JSON.stringify(json));
 });
 
-app.use((req, res) => {
+app.use(async (req, res) => {
   if (__DEVELOPMENT__) {
     // Do not cache webpack stats: the script file would change since
     // hot module replacement is enabled in the development env
@@ -101,10 +103,8 @@ app.use((req, res) => {
     app: createApp(req),
     restApp: createApp(req)
   };
-  const history = createMemoryHistory(req.originalUrl);
-  const store = createStore(history, providers);
-
-  // const history = syncHistoryWithStore(memoryHistory, store);
+  const history = createMemoryHistory({ initialEntries: [req.originalUrl] });
+  const store = createStore({ history, helpers: providers });
 
   function hydrate() {
     res.write('<!doctype html>');
@@ -115,36 +115,49 @@ app.use((req, res) => {
     return hydrate();
   }
 
-  const context = {};
-
   try {
-    // TODO load data on server
+    const components = await asyncMatchRoutes(routes, req.originalUrl);
+    await trigger('fetch', components, { store, ...providers });
+
+    const modules = [];
     const component = (
-      <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <StaticRouter location={req.originalUrl} context={context}>
-            {routes}
-          </StaticRouter>
-        </ConnectedRouter>
-      </Provider>
+      <Loadable.Capture report={moduleName => modules.push(moduleName)}>
+        <Provider store={store} {...providers}>
+          <ConnectedRouter history={history}>
+            <ReduxAsyncConnect routes={routes} store={store} helpers={providers}>
+              {renderRoutes(routes)}
+            </ReduxAsyncConnect>
+          </ConnectedRouter>
+        </Provider>
+      </Loadable.Capture>
     );
-    const html = <Html assets={webpackIsomorphicTools.assets()} component={component} store={store} />;
+    const content = ReactDOM.renderToString(component);
 
-    res.status(200);
-
-    res.send(`<!doctype html>${ReactDOM.renderToString(html)}`);
-  } catch (mountError) {
-    if (mountError.name === 'RedirectError') {
-      return res.redirect(VError.info(mountError).to);
+    const locationState = store.getState().router.location;
+    if (locationState.pathname !== req.originalUrl) {
+      return res.redirect(301, locationState.pathname);
     }
+
+    const bundles = getBundles(getChunks(), modules);
+    const html = <Html assets={webpackIsomorphicTools.assets()} bundles={bundles} content={content} store={store} />;
+
+    res.status(200).send(`<!doctype html>${ReactDOM.renderToString(html)}`);
+  } catch (mountError) {
     console.error('MOUNT ERROR:', pretty.render(mountError));
     res.status(500);
     hydrate();
   }
 });
 
-if (config.port) {
-  Loadable.preloadAll().then(() => {
+(async () => {
+  if (config.port) {
+    try {
+      await Loadable.preloadAll();
+      await waitChunks(chunksPath);
+    } catch (error) {
+      console.log('Server preload error:', error);
+    }
+
     server.listen(config.port, err => {
       if (err) {
         console.error(err);
@@ -152,7 +165,7 @@ if (config.port) {
       console.info('----\n==> ✅  %s is running, talking to API server on %s.', config.app.title, config.apiPort);
       console.info('==> 💻  Open http://%s:%s in a browser to view the app.', config.host, config.port);
     });
-  });
-} else {
-  console.error('==>     ERROR: No PORT environment variable has been specified');
-}
+  } else {
+    console.error('==>     ERROR: No PORT environment variable has been specified');
+  }
+})();

@@ -1,23 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
+import { provideHooks } from 'redial';
 import { connect } from 'react-redux';
 import * as widgetActions from 'redux/modules/widgets';
 import WidgetForm from 'components/WidgetForm/WidgetForm';
-// import { asyncConnect } from 'redux-connect';
 
-// const { isLoaded, load: loadWidgets } = widgetActions;
+const { isLoaded, load: loadWidgets } = widgetActions;
 
-// @asyncConnect([
-//   {
-//     deferred: __SERVER__,
-//     promise: ({ store: { dispatch, getState } }) => {
-//       if (!isLoaded(getState())) {
-//         return dispatch(loadWidgets());
-//       }
-//     }
-//   }
-// ])
+@provideHooks({
+  defer: ({ store: { dispatch, getState } }) => {
+    if (!isLoaded(getState())) {
+      return dispatch(loadWidgets()).catch(() => null);
+    }
+  }
+})
 @connect(
   state => ({
     widgets: state.widgets.data,
@@ -25,7 +22,7 @@ import WidgetForm from 'components/WidgetForm/WidgetForm';
     error: state.widgets.error,
     loading: state.widgets.loading
   }),
-  { ...widgetActions }
+  widgetActions
 )
 export default class Widgets extends Component {
   static propTypes = {
@@ -62,12 +59,11 @@ export default class Widgets extends Component {
         </h1>
         <Helmet title="Widgets" />
         <p>
-          If you hit refresh on your browser, the data loading will take place on the server before the page is
+          If you hit 'Reload Widgets' on your browser, the data loading will take place on the server before the page is
           returned. If you navigated here from another page, the data was fetched from the client after the route
-          transition. This uses the decorator method <code>@asyncConnect</code> with the{' '}
-          <code>deferred: __SERVER__</code> flag. To block a route transition until some data is loaded, remove the{' '}
-          <code>deferred: __SERVER__</code> flag. To always render before loading data, even on the server, use{' '}
-          <code>componentDidMount</code>.
+          transition. This uses the decorator method <code>@provideHooks</code> with the <code>defer</code> key. To
+          block a route transition until some data is loaded, use the <code>defer</code> key. To always render before
+          loading data, even on the server, use <code>componentWillMount</code>.
         </p>
         <p>This widgets are stored in your session, so feel free to edit it and refresh.</p>
         {error && (

@@ -10,7 +10,6 @@ var assetsPath = path.resolve(__dirname, '../static/dist');
 var host = (process.env.HOST || 'localhost');
 var port = (+process.env.PORT + 1) || 3001;
 
-
 var ReactLoadablePlugin = require('react-loadable/webpack').ReactLoadablePlugin;
 
 // https://github.com/halt-hammerzeit/webpack-isomorphic-tools
@@ -147,10 +146,6 @@ var webpackConfig = module.exports = {
     // hot reload
     new webpack.HotModuleReplacementPlugin(),
 
-    new ReactLoadablePlugin({
-      filename: path.join(assetsPath, 'react-loadable.json'),
-    }),
-
     new webpack.IgnorePlugin(/webpack-stats\.json$/),
 
     new webpack.DefinePlugin({
@@ -161,6 +156,10 @@ var webpackConfig = module.exports = {
     }),
 
     webpackIsomorphicToolsPlugin.development(),
+
+    new ReactLoadablePlugin({
+      filename: path.join(assetsPath, 'loadable-chunks.json')
+    }),
 
     helpers.createHappyPlugin('jsx', [
       {
@@ -192,7 +191,7 @@ var webpackConfig = module.exports = {
         }
       }, {
         loader: 'less-loader',
-        query: {
+        options: {
           outputStyle: 'expanded',
           sourceMap: true
         }

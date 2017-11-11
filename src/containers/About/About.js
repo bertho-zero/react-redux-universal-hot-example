@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import Helmet from 'react-helmet';
+import { provideHooks } from 'redial';
 import MiniInfoBar from 'components/MiniInfoBar/MiniInfoBar';
-// import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
-// import { asyncConnect } from 'redux-connect';
+import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
 
-// @asyncConnect([
-//   {
-//     promise: ({ store: { dispatch, getState } }) =>
-//       !isInfoLoaded(getState()) ? dispatch(loadInfo()) : Promise.resolve()
-//   }
-// ])
+@provideHooks({
+  fetch: ({ store: { dispatch, getState } }) =>
+    !isInfoLoaded(getState()) ? dispatch(loadInfo()).catch(() => null) : Promise.resolve()
+})
 export default class About extends Component {
   state = {
     showKitten: false

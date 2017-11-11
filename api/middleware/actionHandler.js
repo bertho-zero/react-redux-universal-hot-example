@@ -14,29 +14,20 @@ export default function actionHandler(app) {
 
     req.app = app;
 
-    // TODO use next(error) instead of catchError ?
-    const catchError = async error => {
-      console.error('API ERROR:', pretty.render(error));
-      res.status(error.status || 500).json(error);
-    };
-
     if (action) {
       try {
-        try {
-          const result = await action(req, params);
-          if (result instanceof Function) {
-            result(res);
-          } else {
-            res.json(result);
-          }
-        } catch (reason) {
-          if (reason && reason.redirect) {
-            return res.redirect(reason.redirect);
-          }
-          return catchError(reason);
+        const result = await action(req, params);
+        if (result instanceof Function) {
+          result(res);
+        } else {
+          res.json(result);
         }
       } catch (error) {
-        return catchError(error);
+        if (error && error.redirect) {
+          return res.redirect(error.redirect);
+        }
+        console.error('API ERROR:', pretty.render(error));
+        res.status(error.status || 500).json(error);
       }
     } else {
       next();

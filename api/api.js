@@ -27,12 +27,14 @@ app
   }))
   .use(bodyParser.urlencoded({ extended: true }))
   .use(bodyParser.json())
+  // Core
   .configure(hooks())
   .configure(rest())
   .configure(socketio({ path: '/ws' }))
   .configure(auth)
   .use(actionHandler(app))
   .configure(services)
+  // Final handlers
   .use(notFound())
   .use(logger(app))
   .use(errorHandler({

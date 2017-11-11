@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { CounterButton, GithubButton } from 'components';
 import config from 'config';
 import Helmet from 'react-helmet';
@@ -214,10 +214,10 @@ export default class Home extends Component {
               <code>About.js</code> contains a <code>MiniInfoBar</code> that displays the same data.
             </dd>
             <dt>Server-side data loading</dt>
-            {/* <dd>
+            <dd>
               The <Link to="/widgets">Widgets page</Link> demonstrates how to fetch data asynchronously from some source
               that is needed to complete the server-side rendering. <code>Widgets.js</code>'s
-              <code>asyncConnect()</code> function is called before the widgets page is loaded, on either the server or
+              <code>provideHooks()</code> function is called before the widgets page is loaded, on either the server or
               the client, allowing all the widget data to be loaded and ready for the page to render.
             </dd>
             <dt>Data loading errors</dt>
@@ -242,7 +242,7 @@ export default class Home extends Component {
             <dt>Auth-required views</dt>
             <dd>
               The aforementioned Login Success page is only visible to you if you are logged in. If you try to{' '}
-              <Link to="/loginSuccess">go there</Link> when you are not logged in, you will be forwarded back to this
+              <Link to="/login-success">go there</Link> when you are not logged in, you will be forwarded back to this
               home page. This <strike>magic</strike> logic is performed by the
               <code>onEnter</code> hook within <code>routes.js</code>.
             </dd>
@@ -258,7 +258,7 @@ export default class Home extends Component {
             <dd>
               The <Link to="/chat">Chat</Link> uses the socket.io technology for real-time communication between
               clients.
-            </dd> */}
+            </dd>
           </dl>
 
           <h3>From the author</h3>
