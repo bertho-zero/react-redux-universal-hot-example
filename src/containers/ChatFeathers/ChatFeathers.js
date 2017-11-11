@@ -1,21 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { asyncConnect } from 'redux-connect';
+import { provideHooks } from 'redial';
 import { connect } from 'react-redux';
-import { withApp } from 'app';
 import * as chatActions from 'redux/modules/chat';
+import { withApp } from 'hoc';
 
-@asyncConnect([
-  {
-    promise: ({ store: { dispatch, getState } }) => {
-      const state = getState();
+@provideHooks({
+  fetch: ({ store: { dispatch, getState } }) => {
+    const state = getState();
 
-      if (state.online) {
-        return dispatch(chatActions.load());
-      }
+    if (state.online) {
+      return dispatch(chatActions.load()).catch(() => null);
     }
   }
-])
+})
 @connect(
   state => ({
     user: state.auth.user,

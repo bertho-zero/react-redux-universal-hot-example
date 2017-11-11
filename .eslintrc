@@ -21,7 +21,7 @@
     "prefer-promise-reject-errors": "warn",
     "prefer-template": "warn",
     "react/forbid-prop-types": "warn",
-    "react/jsx-closing-tag-location": ["warn", "line-aligned"],
+    "react/jsx-closing-tag-location": "off",
     "react/jsx-filename-extension": "off",
     "react/jsx-no-target-blank": "warn",
     "react/no-multi-comp": ["error", {"ignoreStateless": true}],

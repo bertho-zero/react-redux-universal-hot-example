@@ -1,5 +1,3 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import feathers from 'feathers/client';
 import hooks from 'feathers-hooks';
 import rest from 'feathers-rest/client';
@@ -41,21 +39,4 @@ export function createApp(req) {
   }
 
   return configureApp(socketio(socket));
-}
-
-export function withApp(WrappedComponent) {
-  // eslint-disable-next-line react/prefer-stateless-function
-  class WithAppComponent extends Component {
-    static contextTypes = {
-      app: PropTypes.object.isRequired,
-      restApp: PropTypes.object.isRequired
-    };
-
-    render() {
-      const { app, restApp } = this.context;
-      return <WrappedComponent {...this.props} app={app} restApp={restApp} />;
-    }
-  }
-
-  return WithAppComponent;
 }

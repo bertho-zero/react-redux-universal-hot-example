@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom/server';
 import serialize from 'serialize-javascript';
 import Helmet from 'react-helmet';
+import config from 'config';
 
 /**
  * Wrapper component containing HTML metadata and boilerplate tags.
@@ -19,19 +19,23 @@ export default class Html extends Component {
       styles: PropTypes.object,
       javascript: PropTypes.object
     }),
-    component: PropTypes.node.isRequired,
+    bundles: PropTypes.arrayOf(PropTypes.any),
+    content: PropTypes.string,
     store: PropTypes.shape({
       getState: PropTypes.func
     }).isRequired
   };
 
   static defaultProps = {
-    assets: {}
+    assets: {},
+    bundles: [],
+    content: ''
   };
 
   render() {
-    const { assets, component, store } = this.props;
-    const content = component ? ReactDOM.renderToString(component) : '';
+    const {
+      assets, store, content, bundles
+    } = this.props;
     const head = Helmet.renderStatic();
 
     /* eslint-disable react/no-danger */
@@ -81,6 +85,7 @@ export default class Html extends Component {
           )}
           {__DLLS__ && <script key="dlls__vendor" src="/dist/dlls/dll__vendor.js" charSet="UTF-8" />}
           {assets.javascript && <script src={assets.javascript.main} charSet="UTF-8" />}
+          {bundles.map(bundle => bundle && <script src={config.assetsPath + bundle.file} key={bundle.id} />)}
 
           {/* (will be present only in development mode) */}
           {assets.styles && Object.keys(assets.styles).length === 0 ? (

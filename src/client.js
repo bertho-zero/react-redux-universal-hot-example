@@ -4,30 +4,33 @@
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { applyRouterMiddleware, Router, browserHistory, match } from 'react-router';
-import { bindActionCreators } from 'redux';
-import { syncHistoryWithStore, replace } from 'react-router-redux';
-import { ReduxAsyncConnect } from 'redux-connect';
+import { ConnectedRouter } from 'react-router-redux';
+import { renderRoutes } from 'react-router-config';
+import { trigger } from 'redial';
+import createBrowserHistory from 'history/createBrowserHistory';
+import Loadable from 'react-loadable';
 import { AppContainer as HotEnabler } from 'react-hot-loader';
-import { useScroll } from 'react-router-scroll';
 import { getStoredState } from 'redux-persist';
 import localForage from 'localforage';
 import { socket, createApp } from 'app';
-import { Provider } from 'components';
-import createStore from './redux/create';
-import apiClient from './helpers/apiClient';
-import getRoutes from './routes';
-import isOnline from './utils/isOnline';
+import createStore from 'redux/create';
+import apiClient from 'helpers/apiClient';
+import routes from 'routes';
+import isOnline from 'utils/isOnline';
+import asyncMatchRoutes from 'utils/asyncMatchRoutes';
+import { ReduxAsyncConnect, Provider } from 'components';
 
-const offlinePersistConfig = {
+const persistConfig = {
   storage: localForage,
   whitelist: ['auth', 'info', 'chat']
 };
 
-const client = apiClient();
+const dest = document.getElementById('content');
+
 const app = createApp();
 const restApp = createApp('rest');
-const dest = document.getElementById('content');
+const client = apiClient();
+const providers = { app, restApp, client };
 
 function initSocket() {
   socket.on('news', data => {
@@ -44,7 +47,7 @@ function initSocket() {
 global.socket = initSocket();
 
 (async () => {
-  const storedData = await getStoredState(offlinePersistConfig);
+  const storedData = await getStoredState(persistConfig);
   const online = await (window.__data ? true : isOnline());
 
   if (online) {
@@ -52,47 +55,43 @@ global.socket = initSocket();
     await app.authenticate().catch(() => null);
   }
 
+  const history = createBrowserHistory();
   const data = !online ? { ...storedData, ...window.__data, online } : { ...window.__data, online };
-  const store = createStore(browserHistory, { client, app, restApp }, data, offlinePersistConfig);
-  const history = syncHistoryWithStore(browserHistory, store);
+  const store = createStore({
+    history,
+    data,
+    helpers: providers,
+    persistConfig
+  });
 
-  const redirect = bindActionCreators(replace, store.dispatch);
-
-  const renderRouter = props => (
-    <ReduxAsyncConnect
-      {...props}
-      helpers={{
-        client,
-        app,
-        restApp,
-        redirect
-      }}
-      filter={item => !item.deferred}
-      render={applyRouterMiddleware(useScroll())}
-    />
-  );
-
-  const render = routes => {
-    match({ history, routes }, (error, redirectLocation, renderProps) => {
-      ReactDOM.hydrate(
-        <HotEnabler>
-          <Provider store={store} app={app} restApp={restApp} key="provider">
-            <Router {...renderProps} render={renderRouter} history={history}>
-              {routes}
-            </Router>
-          </Provider>
-        </HotEnabler>,
-        dest
-      );
-    });
+  const hydrate = async _routes => {
+    const components = await asyncMatchRoutes(_routes, history.location.pathname);
+    await trigger('fetch', components, { store, ...providers });
+    await trigger('defer', components, { store, ...providers });
+    ReactDOM.hydrate(
+      <HotEnabler>
+        <Provider store={store} {...providers}>
+          <ConnectedRouter history={history}>
+            <ReduxAsyncConnect routes={_routes} store={store} helpers={providers}>
+              {renderRoutes(_routes)}
+            </ReduxAsyncConnect>
+          </ConnectedRouter>
+        </Provider>
+      </HotEnabler>,
+      dest
+    );
   };
 
-  render(getRoutes(store));
+  await Loadable.preloadReady();
+
+  await hydrate(routes);
 
   if (module.hot) {
     module.hot.accept('./routes', () => {
-      const nextRoutes = require('./routes')(store);
-      render(nextRoutes);
+      const nextRoutes = require('./routes');
+      hydrate(nextRoutes).catch(err => {
+        console.error('Error on routes reload:', err);
+      });
     });
   }
 
@@ -100,7 +99,7 @@ global.socket = initSocket();
     window.React = React; // enable debugger
 
     if (!dest || !dest.firstChild || !dest.firstChild.attributes || !dest.firstChild.attributes['data-reactroot']) {
-      console.error('Server-side React render was discarded.' +
+      console.error('Server-side React render was discarded.\n' +
           'Make sure that your initial render does not contain any client-side code.');
     }
   }
@@ -110,7 +109,7 @@ global.socket = initSocket();
     window.document.body.insertBefore(devToolsDest, null);
     const DevTools = require('./containers/DevTools/DevTools');
     ReactDOM.hydrate(
-      <Provider store={store} key="provider">
+      <Provider store={store}>
         <DevTools />
       </Provider>,
       devToolsDest
