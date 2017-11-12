@@ -1,4 +1,4 @@
-require('babel-polyfill');
+require('@babel/polyfill');
 
 // Webpack config for development
 var fs = require('fs');

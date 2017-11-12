@@ -1,8 +1,8 @@
 {
   "presets": [
-    "react",
+    "@babel/react",
     [
-      "env",
+      "@babel/env",
       {
         "targets": {
           "browsers": ["last 2 versions", "IE >= 8"],
@@ -11,18 +11,18 @@
         "useBuiltIns": "entry"
       }
     ],
-    "stage-0"
+    "@babel/stage-0"
   ],
   "plugins": [
-    "transform-runtime",
+    "@babel/plugin-transform-runtime",
+    "@babel/syntax-dynamic-import",
     "add-module-exports",
-    "transform-decorators-legacy",
     "react-loadable/babel"
   ],
   "env": {
     "development": {
       "plugins": [
-        "transform-react-jsx-source"
+        "@babel/transform-react-jsx-source"
       ]
     }
   }
