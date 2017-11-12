@@ -1,9 +1,9 @@
 import React from 'react';
 import Loadable from 'react-loadable';
 
-const ChatLoadable = Loadable({
-  loader: () => import('./Chat'),
+const LoginLoadable = Loadable({
+  loader: () => import('./Login'),
   loading: () => <div>Loading</div>
 });
 
-export default ChatLoadable;
+export default LoginLoadable;

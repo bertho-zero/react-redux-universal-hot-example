@@ -1,48 +1,14 @@
-import React from 'react';
-import Loadable from 'react-loadable';
 import { routerActions } from 'react-router-redux';
 import { connectedReduxRedirect } from 'redux-auth-wrapper/history4/redirect';
 import { App, Home, NotFound } from 'containers';
-
-const About = Loadable({
-  loader: () => import('./containers/About/About'),
-  loading: () => <div>Loading</div>
-});
-
-const Chat = Loadable({
-  loader: () => import('./containers/Chat/Chat'),
-  loading: () => <div>Loading</div>
-});
-
-const ChatFeathers = Loadable({
-  loader: () => import('./containers/ChatFeathers/ChatFeathers'),
-  loading: () => <div>Loading</div>
-});
-
-const Login = Loadable({
-  loader: () => import('./containers/Login/Login'),
-  loading: () => <div>Loading</div>
-});
-
-const LoginSuccess = Loadable({
-  loader: () => import('./containers/LoginSuccess/LoginSuccess'),
-  loading: () => <div>Loading</div>
-});
-
-const Register = Loadable({
-  loader: () => import('./containers/Register/Register'),
-  loading: () => <div>Loading</div>
-});
-
-const Survey = Loadable({
-  loader: () => import('./containers/Survey/Survey'),
-  loading: () => <div>Loading</div>
-});
-
-const Widgets = Loadable({
-  loader: () => import('./containers/Widgets/Widgets'),
-  loading: () => <div>Loading</div>
-});
+import About from 'containers/About/Loadable';
+import Chat from 'containers/Chat/Loadable';
+import ChatFeathers from 'containers/ChatFeathers/Loadable';
+import Login from 'containers/Login/Loadable';
+import LoginSuccess from 'containers/LoginSuccess/Loadable';
+import Register from 'containers/Register/Loadable';
+import Survey from 'containers/Survey/Loadable';
+import Widgets from 'containers/Widgets/Loadable';
 
 const isAuthenticated = connectedReduxRedirect({
   redirectPath: '/login',
