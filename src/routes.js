@@ -4,8 +4,6 @@ import { routerActions } from 'react-router-redux';
 import { connectedReduxRedirect } from 'redux-auth-wrapper/history4/redirect';
 import { App, Home, NotFound } from 'containers';
 
-/* eslint-disable react/prop-types */
-
 const About = Loadable({
   loader: () => import('./containers/About/About'),
   loading: () => <div>Loading</div>
@@ -45,8 +43,6 @@ const Widgets = Loadable({
   loader: () => import('./containers/Widgets/Widgets'),
   loading: () => <div>Loading</div>
 });
-
-/* eslint-enable react/prop-types */
 
 const isAuthenticated = connectedReduxRedirect({
   redirectPath: '/login',

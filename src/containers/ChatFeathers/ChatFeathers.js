@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { provideHooks } from 'redial';
 import { connect } from 'react-redux';
-import * as chatActions from 'redux/modules/chat';
+import reducer, * as chatActions from 'redux/modules/chat';
 import { withApp } from 'hoc';
 
 @provideHooks({
-  fetch: ({ store: { dispatch, getState } }) => {
+  fetch: async ({ store: { dispatch, getState, inject } }) => {
+    inject({ chat: reducer });
+
     const state = getState();
 
     if (state.online) {

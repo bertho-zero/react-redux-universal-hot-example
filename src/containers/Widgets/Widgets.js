@@ -3,13 +3,15 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { provideHooks } from 'redial';
 import { connect } from 'react-redux';
-import * as widgetActions from 'redux/modules/widgets';
+import reducer, * as widgetActions from 'redux/modules/widgets';
 import WidgetForm from 'components/WidgetForm/WidgetForm';
 
 const { isLoaded, load: loadWidgets } = widgetActions;
 
 @provideHooks({
-  defer: ({ store: { dispatch, getState } }) => {
+  defer: ({ store: { dispatch, getState, inject } }) => {
+    inject({ widgets: reducer });
+
     if (!isLoaded(getState())) {
       return dispatch(loadWidgets()).catch(() => null);
     }

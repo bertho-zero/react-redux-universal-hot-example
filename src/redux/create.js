@@ -7,7 +7,7 @@ import createReducers from './reducer';
 export function inject(store, reducers) {
   Object.entries(reducers).forEach(([name, reducer]) => {
     if (store.asyncReducers[name]) return;
-    store.asyncReducers[name] = reducer;
+    store.asyncReducers[name] = reducer.__esModule ? reducer.default : reducer;
   });
 
   store.replaceReducer(combineReducers(createReducers(store.asyncReducers)));
