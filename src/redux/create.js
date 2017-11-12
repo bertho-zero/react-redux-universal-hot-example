@@ -1,16 +1,24 @@
+import _ from 'lodash';
 import { createStore as _createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
-import { createPersistor } from 'redux-persist';
+import { createPersistoid, persistCombineReducers, REGISTER } from 'redux-persist';
 import clientMiddleware from './middleware/clientMiddleware';
 import createReducers from './reducer';
 
-export function inject(store, reducers) {
+function combine(reducers, persistConfig) {
+  if (persistConfig) {
+    return persistCombineReducers(persistConfig, reducers);
+  }
+  return combineReducers(reducers);
+}
+
+export function inject(store, reducers, persistConfig) {
   Object.entries(reducers).forEach(([name, reducer]) => {
     if (store.asyncReducers[name]) return;
     store.asyncReducers[name] = reducer.__esModule ? reducer.default : reducer;
   });
 
-  store.replaceReducer(combineReducers(createReducers(store.asyncReducers)));
+  store.replaceReducer(combine(createReducers(store.asyncReducers), persistConfig));
 }
 
 function getNoopReducers(reducers, data) {
@@ -48,20 +56,24 @@ export default function createStore({
   const finalCreateStore = compose(...enhancers)(_createStore);
   const reducers = createReducers();
   const noopReducers = getNoopReducers(reducers, data);
-  const store = finalCreateStore(combineReducers({ ...noopReducers, ...reducers }), data);
+  const store = finalCreateStore(combine({ ...noopReducers, ...reducers }, persistConfig), data);
 
   store.asyncReducers = {};
-  store.inject = inject.bind(null, store);
+  store.inject = _.partial(inject, store, _, persistConfig);
 
   if (persistConfig) {
-    createPersistor(store, persistConfig);
-    store.dispatch({ type: 'PERSIST' });
+    const persistoid = createPersistoid(persistConfig);
+    store.subscribe(() => {
+      persistoid.update(store.getState());
+    });
+    store.dispatch({ type: REGISTER });
   }
 
   if (__DEVELOPMENT__ && module.hot) {
     module.hot.accept('./reducer', () => {
-      const reducer = require('./reducer');
-      store.replaceReducer(combineReducers((reducer.__esModule ? reducer.default : reducer)(store.asyncReducers)));
+      let reducer = require('./reducer');
+      reducer = combine((reducer.__esModule ? reducer.default : reducer)(store.asyncReducers), persistConfig);
+      store.replaceReducer(reducer);
     });
   }
 

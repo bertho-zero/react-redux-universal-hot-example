@@ -21,6 +21,7 @@ import asyncMatchRoutes from 'utils/asyncMatchRoutes';
 import { ReduxAsyncConnect, Provider } from 'components';
 
 const persistConfig = {
+  key: 'primary',
   storage: localForage,
   whitelist: ['auth', 'info', 'chat']
 };
