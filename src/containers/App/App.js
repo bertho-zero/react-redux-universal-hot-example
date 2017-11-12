@@ -145,7 +145,7 @@ export default class App extends Component {
               <NavItem
                 target="_blank"
                 title="View on Github"
-                href="https://github.com/erikras/react-redux-universal-hot-example"
+                href="https://github.com/bertho-zero/react-redux-universal-hot-example"
               >
                 <i className="fa fa-github" />
               </NavItem>
@@ -171,17 +171,12 @@ export default class App extends Component {
         <div className="well text-center">
           Have questions? Ask for help{' '}
           <a
-            href="https://github.com/erikras/react-redux-universal-hot-example/issues"
+            href="https://github.com/bertho-zero/react-redux-universal-hot-example/issues"
             target="_blank"
             rel="noopener noreferrer"
           >
             on Github
-          </a>{' '}
-          or in the{' '}
-          <a href="https://discord.gg/0ZcbPKXt5bZZb1Ko" target="_blank" rel="noopener noreferrer">
-            #react-redux-universal
-          </a>{' '}
-          Discord channel.
+          </a>.
         </div>
       </div>
     );

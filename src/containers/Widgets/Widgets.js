@@ -59,10 +59,10 @@ export default class Widgets extends Component {
         </h1>
         <Helmet title="Widgets" />
         <p>
-          If you hit 'Reload Widgets' on your browser, the data loading will take place on the server before the page is
+          If you hit 'Refresh' on your browser, the data loading will take place on the browser after the page is
           returned. If you navigated here from another page, the data was fetched from the client after the route
           transition. This uses the decorator method <code>@provideHooks</code> with the <code>defer</code> key. To
-          block a route transition until some data is loaded, use the <code>defer</code> key. To always render before
+          block a route transition until some data is loaded, use the <code>fetch</code> key. To always render before
           loading data, even on the server, use <code>componentWillMount</code>.
         </p>
         <p>This widgets are stored in your session, so feel free to edit it and refresh.</p>

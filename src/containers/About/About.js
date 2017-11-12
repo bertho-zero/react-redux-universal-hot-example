@@ -24,12 +24,16 @@ export default class About extends Component {
         <Helmet title="About Us" />
 
         <p>
-          This project was originally created by Erik Rasmussen (
+          This project is maintained by Kévin Berthommier (
+          <a href="https://github.com/bertho-zero" target="_blank" rel="noopener noreferrer">
+            @bertho-zero
+          </a>) and was originally created by Erik Rasmussen (
           <a href="https://twitter.com/erikras" target="_blank" rel="noopener noreferrer">
             @erikras
-          </a>), but has since seen many contributions from the open source community. Thank you to{' '}
+          </a>),<br />
+          but has since seen many contributions from the open source community. Thank you to{' '}
           <a
-            href="https://github.com/erikras/react-redux-universal-hot-example/graphs/contributors"
+            href="https://github.com/bertho-zero/react-redux-universal-hot-example/graphs/contributors"
             target="_blank"
             rel="noopener noreferrer"
           >

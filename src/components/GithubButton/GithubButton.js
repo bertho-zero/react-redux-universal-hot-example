@@ -14,7 +14,6 @@ const GithubButton = props => {
       title={`github-button-${user}-${repo}-${type}`}
       src={src}
       frameBorder="0"
-      allowTransparency="true"
       scrolling="0"
       width={width}
       height={height}
