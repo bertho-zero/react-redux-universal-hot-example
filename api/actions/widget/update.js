@@ -3,11 +3,12 @@ import load from './load';
 export default function update(req) {
   return new Promise((resolve, reject) => {
     // write to database
-    setTimeout(() => {
+    setTimeout(async () => {
       if (Math.random() < 0.2) {
         reject('Oh no! Widget save fails 20% of the time. Try again.');
       } else {
-        load(req).then(data => {
+        try {
+          const data = await load(req);
           const widgets = data;
           const widget = req.body;
           if (widget.color === 'Green') {
@@ -16,13 +17,13 @@ export default function update(req) {
             });
           }
           if (widget.id) {
-            widgets[widget.id - 1] = widget;  // id is 1-based. please don't code like this in production! :-)
+            widgets[widget.id - 1] = widget; // id is 1-based. please don't code like this in production! :-)
             req.session.widgets = widgets;
           }
           resolve(widget);
-        }, err => {
+        } catch (err) {
           reject(err);
-        });
+        }
       }
     }, 1500); // simulate async db write
   });

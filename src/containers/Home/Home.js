@@ -1,19 +1,17 @@
-import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { CounterButton, GithubButton } from 'components';
 import config from 'config';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 
-@connect(
-  state => ({
-    online: state.online
-  })
-)
+@connect(state => ({
+  online: state.online
+}))
 export default class Home extends Component {
-
   static propTypes = {
-    online: PropTypes.bool
+    online: PropTypes.bool.isRequired
   };
 
   render() {
@@ -28,7 +26,7 @@ export default class Home extends Component {
           <div className="container">
             <div className={styles.logo}>
               <p>
-                <img src={logoImage} role="presentation" />
+                <img src={logoImage} alt="presentation" />
               </p>
             </div>
             <h1>{config.app.title}</h1>
@@ -38,28 +36,45 @@ export default class Home extends Component {
             <p>
               <a
                 className={styles.github}
-                href="https://github.com/erikras/react-redux-universal-hot-example"
-                target="_blank">
+                href="https://github.com/bertho-zero/react-redux-universal-hot-example"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <i className="fa fa-github" /> View on Github
               </a>
             </p>
-            {online && <GithubButton
-              user="erikras"
-              repo="react-redux-universal-hot-example"
-              type="star"
-              width={160}
-              height={30}
-              count large />}
-            {online && <GithubButton
-              user="erikras"
-              repo="react-redux-universal-hot-example"
-              type="fork"
-              width={160}
-              height={30}
-              count large />}
+            {online && (
+              <GithubButton
+                user="bertho-zero"
+                repo="react-redux-universal-hot-example"
+                type="star"
+                width={160}
+                height={30}
+                count
+                large
+              />
+            )}
+            {online && (
+              <GithubButton
+                user="bertho-zero"
+                repo="react-redux-universal-hot-example"
+                type="fork"
+                width={160}
+                height={30}
+                count
+                large
+              />
+            )}
 
             <p className={styles.humility}>
-              Created and maintained by <a href="https://twitter.com/erikras" target="_blank">@erikras</a>.
+              Created by{' '}
+              <a href="https://twitter.com/erikras" target="_blank" rel="noopener noreferrer">
+                @erikras
+              </a>{' '}
+              and maintained by{' '}
+              <a href="https://github.com/bertho-zero" target="_blank" rel="noopener noreferrer">
+                @bertho-zero
+              </a>.
             </p>
           </div>
         </div>
@@ -79,45 +94,118 @@ export default class Home extends Component {
               <a href="https://medium.com/@mjackson/universal-javascript-4761051b7ae9">Universal</a> rendering
             </li>
             <li>Both client and server make calls to load data from separate API server</li>
-            <li><a href="https://github.com/facebook/react" target="_blank">React</a></li>
-            <li><a href="https://github.com/rackt/react-router" target="_blank">React Router</a></li>
-            <li><a href="http://expressjs.com" target="_blank">Express</a></li>
-            <li><a href="http://babeljs.io" target="_blank">Babel</a> for ES6 and ES7 magic</li>
-            <li><a href="http://webpack.github.io" target="_blank">Webpack</a> for bundling</li>
             <li>
-              <a href="http://webpack.github.io/docs/webpack-dev-middleware.html" target="_blank">
+              <a href="https://github.com/facebook/react" target="_blank" rel="noopener noreferrer">
+                React
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/rackt/react-router" target="_blank" rel="noopener noreferrer">
+                React Router
+              </a>
+            </li>
+            <li>
+              <a href="http://expressjs.com" target="_blank" rel="noopener noreferrer">
+                Express
+              </a>
+            </li>
+            <li>
+              <a href="http://babeljs.io" target="_blank" rel="noopener noreferrer">
+                Babel
+              </a>{' '}
+              for ES6 and ES7 magic
+            </li>
+            <li>
+              <a href="http://webpack.github.io" target="_blank" rel="noopener noreferrer">
+                Webpack
+              </a>{' '}
+              for bundling
+            </li>
+            <li>
+              <a
+                href="http://webpack.github.io/docs/webpack-dev-middleware.html"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Webpack Dev Middleware
               </a>
             </li>
-            <li><a href="https://github.com/glenjamin/webpack-hot-middleware" target="_blank">Webpack Hot Middleware</a>
+            <li>
+              <a href="https://github.com/glenjamin/webpack-hot-middleware" target="_blank" rel="noopener noreferrer">
+                Webpack Hot Middleware
+              </a>
             </li>
-            <li><a href="https://github.com/rackt/redux" target="_blank">Redux</a>'s futuristic <a
-              href="https://facebook.github.io/react/blog/2014/05/06/flux.html" target="_blank">Flux</a> implementation
+            <li>
+              <a href="https://github.com/rackt/redux" target="_blank" rel="noopener noreferrer">
+                Redux
+              </a>
+              's futuristic{' '}
+              <a
+                href="https://facebook.github.io/react/blog/2014/05/06/flux.html"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Flux
+              </a>{' '}
+              implementation
             </li>
-            <li><a href="https://github.com/gaearon/redux-devtools" target="_blank">Redux Dev Tools</a> for next
-              generation DX (developer experience).
-              Watch <a href="https://www.youtube.com/watch?v=xsSnOQynTHs" target="_blank">Dan Abramov's talk</a>.
+            <li>
+              <a href="https://github.com/gaearon/redux-devtools" target="_blank" rel="noopener noreferrer">
+                Redux Dev Tools
+              </a>{' '}
+              for next generation DX (developer experience). Watch{' '}
+              <a href="https://www.youtube.com/watch?v=xsSnOQynTHs" target="_blank" rel="noopener noreferrer">
+                Dan Abramov's talk
+              </a>.
             </li>
-            <li><a href="https://github.com/rackt/redux-router" target="_blank">Redux Router</a> Keep
-              your router state in your Redux store
+            <li>
+              <a href="https://github.com/rackt/redux-router" target="_blank" rel="noopener noreferrer">
+                Redux Router
+              </a>{' '}
+              Keep your router state in your Redux store
             </li>
-            <li><a href="http://eslint.org" target="_blank">ESLint</a> to maintain a consistent code style</li>
-            <li><a href="https://github.com/erikras/redux-form" target="_blank">redux-form</a> to manage form state
-              in Redux
+            <li>
+              <a href="http://eslint.org" target="_blank" rel="noopener noreferrer">
+                ESLint
+              </a>{' '}
+              to maintain a consistent code style
             </li>
-            <li><a href="https://github.com/erikras/multireducer" target="_blank">multireducer</a> combine several
-              identical reducer states into one key-based reducer
+            <li>
+              <a href="https://github.com/erikras/redux-form" target="_blank" rel="noopener noreferrer">
+                redux-form
+              </a>{' '}
+              to manage form state in Redux
             </li>
-            <li><a href="https://github.com/webpack/style-loader" target="_blank">style-loader</a> and <a
-              href="https://github.com/jtangelder/sass-loader" target="_blank">sass-loader</a> to allow import of
-              stylesheets
+            <li>
+              <a href="https://github.com/erikras/multireducer" target="_blank" rel="noopener noreferrer">
+                multireducer
+              </a>{' '}
+              combine several identical reducer states into one key-based reducer
             </li>
-            <li><a href="https://github.com/shakacode/bootstrap-sass-loader" target="_blank">bootstrap-sass-loader</a>
-              and <a
-                href="https://github.com/gowravshekar/font-awesome-webpack" target="_blank">font-awesome-webpack</a> to
-              customize Bootstrap and FontAwesome
+            <li>
+              <a href="https://github.com/webpack/style-loader" target="_blank" rel="noopener noreferrer">
+                style-loader
+              </a>{' '}
+              and{' '}
+              <a href="https://github.com/jtangelder/sass-loader" target="_blank" rel="noopener noreferrer">
+                sass-loader
+              </a>{' '}
+              to allow import of stylesheets
             </li>
-            <li><a href="http://socket.io/">socket.io</a> for real-time communication</li>
+            <li>
+              <a href="https://github.com/shakacode/bootstrap-sass-loader" target="_blank" rel="noopener noreferrer">
+                bootstrap-sass-loader
+              </a>{' '}
+              to customize Bootstrap
+            </li>
+            <li>
+              <a href="https://github.com/FortAwesome/Font-Awesome" target="_blank" rel="noopener noreferrer">
+                font-awesome
+              </a>
+            </li>
+            <li>
+              <a href="http://socket.io/">socket.io</a> for real-time communication
+            </li>
           </ul>
 
           <h3>Features demonstrated in this project</h3>
@@ -125,54 +213,55 @@ export default class Home extends Component {
           <dl>
             <dt>Multiple components subscribing to same redux store slice</dt>
             <dd>
-              The <code>App.js</code> that wraps all the pages contains an <code>InfoBar</code> component
-              that fetches data from the server initially, but allows for the user to refresh the data from
-              the client. <code>About.js</code> contains a <code>MiniInfoBar</code> that displays the same
-              data.
+              The <code>App.js</code> that wraps all the pages contains an <code>InfoBar</code> component that fetches
+              data from the server initially, but allows for the user to refresh the data from the client.{' '}
+              <code>About.js</code> contains a <code>MiniInfoBar</code> that displays the same data.
             </dd>
             <dt>Server-side data loading</dt>
             <dd>
-              The <Link to="/widgets">Widgets page</Link> demonstrates how to fetch data asynchronously from
-              some source that is needed to complete the server-side rendering. <code>Widgets.js</code>'s
-              <code>asyncConnect()</code> function is called before the widgets page is loaded, on either the server
-              or the client, allowing all the widget data to be loaded and ready for the page to render.
+              The <Link to="/widgets">Widgets page</Link> demonstrates how to fetch data asynchronously from some source
+              that is needed to complete the server-side rendering. <code>Widgets.js</code>'s
+              <code>provideHooks()</code> function is called before the widgets page is loaded, on either the server or
+              the client, allowing all the widget data to be loaded and ready for the page to render.
             </dd>
             <dt>Data loading errors</dt>
             <dd>
-              The <Link to="/widgets">Widgets page</Link> also demonstrates how to deal with data loading
-              errors in Redux. The API endpoint that delivers the widget data intentionally fails 33% of
-              the time to highlight this. The <code>clientMiddleware</code> sends an error action which
-              the <code>widgets</code> reducer picks up and saves to the Redux state for presenting to the user.
+              The <Link to="/widgets">Widgets page</Link> also demonstrates how to deal with data loading errors in
+              Redux. The API endpoint that delivers the widget data intentionally fails 33% of the time to highlight
+              this. The <code>clientMiddleware</code> sends an error action which the <code>widgets</code> reducer picks
+              up and saves to the Redux state for presenting to the user.
             </dd>
             <dt>Session based login</dt>
             <dd>
-              On the <Link to="/login">Login page</Link> you can submit a username which will be sent to the server
-              and stored in the session. Subsequent refreshes will show that you are still logged in.
+              On the <Link to="/login">Login page</Link> you can submit a username which will be sent to the server and
+              stored in the session. Subsequent refreshes will show that you are still logged in.
             </dd>
             <dt>Redirect after state change</dt>
             <dd>
-              After you log in, you will be redirected to a Login Success page. This <strike>magic</strike> logic
-              is performed in <code>componentWillReceiveProps()</code> in <code>App.js</code>, but it could
-              be done in any component that listens to the appropriate store slice, via Redux's <code>@connect</code>,
-              and pulls the router from the context.
+              After you log in, you will be redirected to a Login Success page. This <strike>magic</strike> logic is
+              performed in <code>componentWillReceiveProps()</code> in <code>App.js</code>, but it could be done in any
+              component that listens to the appropriate store slice, via Redux's <code>@connect</code>, and pulls the
+              router from the context.
             </dd>
             <dt>Auth-required views</dt>
             <dd>
-              The aforementioned Login Success page is only visible to you if you are logged in. If you try
-              to <Link to="/loginSuccess">go there</Link> when you are not logged in, you will be forwarded back
-              to this home page. This <strike>magic</strike> logic is performed by the
+              The aforementioned Login Success page is only visible to you if you are logged in. If you try to{' '}
+              <Link to="/login-success">go there</Link> when you are not logged in, you will be forwarded back to this
+              home page. This <strike>magic</strike> logic is performed by the
               <code>onEnter</code> hook within <code>routes.js</code>.
             </dd>
             <dt>Forms</dt>
             <dd>
-              The <Link to="/survey">Survey page</Link> uses the
-              still-experimental <a href="https://github.com/erikras/redux-form" target="_blank">redux-form</a> to
-              manage form state inside the Redux store. This includes immediate client-side validation.
+              The <Link to="/survey">Survey page</Link> uses the still-experimental{' '}
+              <a href="https://github.com/erikras/redux-form" target="_blank" rel="noopener noreferrer">
+                redux-form
+              </a>{' '}
+              to manage form state inside the Redux store. This includes immediate client-side validation.
             </dd>
             <dt>WebSockets / socket.io</dt>
             <dd>
-              The <Link to="/chat">Chat</Link> uses the socket.io technology for real-time
-              communication between clients.
+              The <Link to="/chat">Chat</Link> uses the socket.io technology for real-time communication between
+              clients.
             </dd>
           </dl>
 

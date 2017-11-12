@@ -1,14 +1,13 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-@connect(
-  (state, props) => ({ notifs: state.notifs[props.namespace] || [] })
-)
+@connect((state, props) => ({ notifs: state.notifs[props.namespace] || [] }))
 export default class Notifs extends Component {
   static propTypes = {
-    notifs: PropTypes.array.isRequired,
+    notifs: PropTypes.arrayOf(PropTypes.object).isRequired,
     NotifComponent: PropTypes.func.isRequired,
-    className: PropTypes.string
+    className: PropTypes.string.isRequired
   };
 
   render() {

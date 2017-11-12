@@ -1,18 +1,28 @@
 {
   "presets": [
     "react",
-    "es2015",
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": ["last 2 versions", "IE >= 8"],
+          "node": "current"
+        },
+        "useBuiltIns": "entry"
+      }
+    ],
     "stage-0"
   ],
   "plugins": [
     "transform-runtime",
     "add-module-exports",
-    "transform-decorators-legacy"
+    "transform-decorators-legacy",
+    "react-loadable/babel"
   ],
   "env": {
     "development": {
       "plugins": [
-        "typecheck"
+        "transform-react-jsx-source"
       ]
     }
   }

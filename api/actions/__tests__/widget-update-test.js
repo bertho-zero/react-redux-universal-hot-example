@@ -23,38 +23,33 @@ describe('widget update', () => {
       }
     });
 
-    it('does not accept green widgets', () => {
-      sinon.stub(load, 'default').returns(new Promise(resolve => {
-        resolve(widgets);
-      }));
-      return update({ session: {}, body: { color: 'Green' } }).then(
-        () => {},
-        err => {
-          expect(err.color).to.equal('We do not accept green widgets');
-        });
+    it('does not accept green widgets', async () => {
+      sinon.stub(load, 'default').resolves(widgets);
+      const clock = sinon.useFakeTimers();
+      try {
+        await Promise.all([update({ session: {}, body: { color: 'Green' } }), clock.tick(1500), clock.restore()]);
+      } catch (err) {
+        expect(err.color).to.equal('We do not accept green widgets');
+      }
     });
 
-    it('fails to load widgets', () => {
-      sinon.stub(load, 'default').returns(new Promise((resolve, reject) => {
-        reject('Widget fail to load.');
-      }));
-      return update({ session: {}, body: { color: 'Blue' } }).then(
-        () => {},
-        err => {
-          expect(err).to.equal('Widget fail to load.');
-        });
+    it('fails to load widgets', async () => {
+      sinon.stub(load, 'default').rejects(new Error('Widget fail to load.'));
+      const clock = sinon.useFakeTimers();
+      try {
+        await Promise.all([update({ session: {}, body: { color: 'Blue' } }), clock.tick(1500), clock.restore()]);
+      } catch (err) {
+        expect(err.message).to.equal('Widget fail to load.');
+      }
     });
 
-    it('updates a widget', () => {
-      sinon.stub(load, 'default').returns(new Promise(resolve => {
-        resolve(widgets);
-      }));
+    it('updates a widget', async () => {
+      sinon.stub(load, 'default').resolves(widgets);
+      const clock = sinon.useFakeTimers();
       const widget = { id: 2, color: 'Blue' };
-      return update({ session: {}, body: widget }).then(
-        res => {
-          expect(res).to.deep.equal(widget);
-          expect(widgets[1]).to.deep.equal(widget);
-        });
+      const [res] = await Promise.all([update({ session: {}, body: widget }), clock.tick(1500), clock.restore()]);
+      expect(res).to.deep.equal(widget);
+      expect(widgets[1]).to.deep.equal(widget);
     });
   });
 
@@ -63,12 +58,12 @@ describe('widget update', () => {
       sinon.stub(Math, 'random').returns(0.1);
     });
 
-    it('rejects the call in 20% of the time', () => {
-      update().then(
-        () => {},
-        err => {
-          expect(err).to.equal('Oh no! Widget save fails 20% of the time. Try again.');
-        });
+    it('rejects the call in 20% of the time', async () => {
+      try {
+        update();
+      } catch (err) {
+        expect(err).to.equal('Oh no! Widget save fails 20% of the time. Try again.');
+      }
     });
   });
 });

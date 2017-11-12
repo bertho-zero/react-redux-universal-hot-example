@@ -8,13 +8,11 @@ const initialState = {};
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case NOTIF_SEND:
-      return { ...state, [action.namespace]: [action.payload, ...state[action.namespace] || []] };
+      return { ...state, [action.namespace]: [action.payload, ...(state[action.namespace] || [])] };
     case NOTIF_DISMISS:
       return {
         ...state,
-        [action.namespace]: (state[action.namespace] || []).filter(notif =>
-          notif.id !== action.payload
-        )
+        [action.namespace]: (state[action.namespace] || []).filter(notif => notif.id !== action.payload)
       };
     case NOTIF_CLEAR:
       return { ...state, [action.namespace]: [] };

@@ -1,15 +1,24 @@
 {
   "bootstrapVersion": 3,
-  "bootstrapCustomizations": "./src/theme/variables.scss",
-  "appStyles": "./src/theme/bootstrap.overrides.scss",
+  "preBootstrapCustomizations": "./src/theme/variables.scss",
+  "appStyles": "./src/theme/app.scss",
   "loglevel": "disabled",
   "env": {
     "development": {
-      "styleLoaders": ["style-loader", "css-loader", "resolve-url-loader", "sass-loader"],
+      "styleLoaders": [
+        "style-loader?sourceMap",
+        "css-loader?sourceMap&importLoaders=2",
+        "resolve-url-loader",
+        "sass-loader?sourceMap"
+      ],
       "extractStyles": false
     },
     "production": {
-      "styleLoaders": ["style-loader", "css-loader", "sass-loader"],
+      "styleLoaders": [
+        "style-loader",
+        "css-loader?importLoaders=1",
+        "sass-loader?sourceMap"
+      ],
       "extractStyles": true
     }
   },

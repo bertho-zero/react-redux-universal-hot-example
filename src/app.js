@@ -4,33 +4,39 @@ import rest from 'feathers-rest/client';
 import socketio from 'feathers-socketio/client';
 import authentication from 'feathers-authentication-client';
 import io from 'socket.io-client';
-import superagent from 'superagent';
-import localForage from 'localforage';
+import axios from 'axios';
 import config from './config';
 
-const storage = __SERVER__ ? require('localstorage-memory') : localForage;
+const storage = __SERVER__ ? null : require('localforage');
 
 const host = clientUrl => (__SERVER__ ? `http://${config.apiHost}:${config.apiPort}` : clientUrl);
 
-const configureApp = transport => feathers()
-  .configure(transport)
-  .configure(hooks())
-  .configure(authentication({ storage }));
+const configureApp = transport =>
+  feathers()
+    .configure(transport)
+    .configure(hooks())
+    .configure(authentication({ storage }));
 
 export const socket = io('', { path: host('/ws'), autoConnect: false });
 
-const app = configureApp(socketio(socket));
+export function createApp(req) {
+  if (req === 'rest') {
+    return configureApp(rest(host('/api')).axios(axios));
+  }
 
-export default app;
+  if (__SERVER__ && req) {
+    const app = configureApp(rest(host('/api')).axios(axios.create({
+      headers: {
+        Cookie: req.get('cookie'),
+        authorization: req.header('authorization') || ''
+      }
+    })));
 
-export const restApp = configureApp(rest(host('/api')).superagent(superagent));
+    const accessToken = req.header('authorization') || (req.cookies && req.cookies['feathers-jwt']);
+    app.set('accessToken', accessToken);
 
-export function exposeInitialRequest(req) {
-  restApp.defaultService = null;
-  restApp.configure(rest(host('/api')).superagent(superagent, {
-    headers: {
-      Cookie: req.get('cookie'),
-      authorization: req.header('authorization')
-    }
-  }));
+    return app;
+  }
+
+  return configureApp(socketio(socket));
 }

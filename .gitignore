@@ -1,8 +1,8 @@
 .idea/
 node_modules/
 yarn.lock
+package-lock.json
 static/dist/
-static/service-worker.js
 *.iml
 webpack-assets.json
 webpack-stats.json
@@ -11,3 +11,4 @@ npm-debug.log
 webpack/dlls/*.json
 api/**/*.nedb
 *.report.html
+coverage

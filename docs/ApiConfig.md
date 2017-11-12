@@ -8,15 +8,14 @@ First things first, you need to add `APIHOST` settings in `package.json`. If you
 
 If the port you use differs between your dev & prod API hosts, you may want to get rid of the `APIPORT` setting, including it right in `APIHOST`. Same with the protocol – if you use HTTP in dev but HTTPS in prod, you may want to include the protocol right in `APIHOST`, and then get rid of the explicit `"http://"` found in the next section.
 
-## Update `ApiClient`
+## Update `apiClient`
 
-Open up `src/helpers/ApiClient.js`. You'll see this line:
+Open up `src/helpers/apiClient.js`. You'll see this line:
 
 ``` javascript
-   if (__SERVER__) {
-     // Prepend host and port of the API server to the path.
-    return 'http://' + config.apiHost + adjustedPath;
-   }
+  const instance = axios.create({
+    baseURL: __SERVER__ ? `http://${config.apiHost}:${config.apiPort}` : '/api'
+  });
 ```
 
 If you added `http://` or `https://` to your APIHOST setting, then you need to remove it here.

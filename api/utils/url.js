@@ -1,4 +1,4 @@
-export function mapUrl(availableActions = {}, url = []) {
+export default function mapUrl(availableActions = {}, url = []) {
   const notFound = { action: null, params: [] };
 
   // test for empty input
@@ -18,5 +18,5 @@ export function mapUrl(availableActions = {}, url = []) {
 
   const actionAndParams = url.reduce(reducer, { action: availableActions, params: [] });
 
-  return (typeof actionAndParams.action === 'function') ? actionAndParams : notFound;
+  return typeof actionAndParams.action === 'function' ? actionAndParams : notFound;
 }

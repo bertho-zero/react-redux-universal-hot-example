@@ -10,6 +10,8 @@ var assetsPath = path.resolve(__dirname, '../static/dist');
 var host = (process.env.HOST || 'localhost');
 var port = (+process.env.PORT + 1) || 3001;
 
+var ReactLoadablePlugin = require('react-loadable/webpack').ReactLoadablePlugin;
+
 // https://github.com/halt-hammerzeit/webpack-isomorphic-tools
 var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
 var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
@@ -51,7 +53,6 @@ var webpackConfig = module.exports = {
       'webpack-hot-middleware/client?path=http://' + host + ':' + port + '/__webpack_hmr',
       'react-hot-loader/patch',
       'bootstrap-loader',
-      'font-awesome-webpack!./src/theme/font-awesome.config.js',
       './src/client.js'
     ]
   },
@@ -123,32 +124,41 @@ var webpackConfig = module.exports = {
     extensions: ['.json', '.js', '.jsx']
   },
   plugins: [
+    new webpack.LoaderOptionsPlugin({
+      test: /\.(less|scss)/,
+      options: {
+        postcss: function (webpack) {
+          return [
+            require("postcss-import")({ addDependencyTo: webpack }),
+            require("postcss-url")(),
+            require("postcss-cssnext")({ browsers: 'last 2 version' }),
+            // add your "plugins" here
+            // ...
+            // and if you want to compress,
+            // just use css-loader option that already use cssnano under the hood
+            require("postcss-browser-reporter")(),
+            require("postcss-reporter")(),
+          ]
+        }
+      }
+    }),
+
     // hot reload
     new webpack.HotModuleReplacementPlugin(),
+
     new webpack.IgnorePlugin(/webpack-stats\.json$/),
+
     new webpack.DefinePlugin({
       __CLIENT__: true,
       __SERVER__: false,
       __DEVELOPMENT__: true,
       __DEVTOOLS__: true  // <-------- DISABLE redux-devtools HERE
     }),
+
     webpackIsomorphicToolsPlugin.development(),
 
-    new webpack.LoaderOptionsPlugin({
-      test: /\.jsx?$/,
-      happy: { id: 'jsx' }
-    }),
-    new webpack.LoaderOptionsPlugin({
-      test: /\.json$/,
-      happy: { id: 'json' }
-    }),
-    new webpack.LoaderOptionsPlugin({
-      test: /\.less$/,
-      happy: { id: 'less' }
-    }),
-    new webpack.LoaderOptionsPlugin({
-      test: /\.scss$/,
-      happy: { id: 'sass' }
+    new ReactLoadablePlugin({
+      filename: path.join(assetsPath, 'loadable-chunks.json')
     }),
 
     helpers.createHappyPlugin('jsx', [
@@ -156,31 +166,32 @@ var webpackConfig = module.exports = {
         loader: 'react-hot-loader/webpack'
       }, {
         loader: 'babel-loader',
-        query: babelLoaderQuery
+        options: babelLoaderQuery
       }, {
-        loader: 'eslint-loader'
+        loader: 'eslint-loader',
+        options: { emitWarning: true }
       }
     ]),
-    helpers.createHappyPlugin('json', ['json-loader']),
     helpers.createHappyPlugin('less', [
       {
-        loader: 'style-loader'
+        loader: 'style-loader',
+        options: { sourceMap: true }
       }, {
         loader: 'css-loader',
-        query: {
+        options: {
           modules: true,
           importLoaders: 2,
           sourceMap: true,
           localIdentName: '[local]___[hash:base64:5]'
         }
       }, {
-        loader: 'autoprefixer-loader',
-        query: {
-          browser: 'last 2 version'
+        loader: 'postcss-loader',
+        options: {
+          sourceMap: true
         }
       }, {
         loader: 'less-loader',
-        query: {
+        options: {
           outputStyle: 'expanded',
           sourceMap: true
         }
@@ -188,23 +199,24 @@ var webpackConfig = module.exports = {
     ]),
     helpers.createHappyPlugin('sass', [
       {
-        loader: 'style-loader'
+        loader: 'style-loader',
+        options: { sourceMap: true }
       }, {
         loader: 'css-loader',
-        query: {
+        options: {
           modules: true,
           importLoaders: 2,
           sourceMap: true,
           localIdentName: '[local]___[hash:base64:5]'
         }
       }, {
-        loader: 'autoprefixer-loader',
-        query: {
-          browsers: 'last 2 version'
+        loader: 'postcss-loader',
+        options: {
+          sourceMap: true
         }
       }, {
         loader: 'sass-loader',
-        query: {
+        options: {
           outputStyle: 'expanded',
           sourceMap: true
         }
