@@ -26,7 +26,7 @@ import getChunks, { waitChunks } from 'utils/getChunks';
 import asyncMatchRoutes from 'utils/asyncMatchRoutes';
 import { ReduxAsyncConnect, Provider } from 'components';
 
-const chunksPath = path.join(__dirname, '../static/dist/loadable-chunks.json');
+const chunksPath = path.join(__dirname, '..', 'static', 'dist', 'loadable-chunks.json');
 
 process.on('unhandledRejection', error => console.error(error));
 

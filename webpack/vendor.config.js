@@ -19,12 +19,13 @@ module.exports = {
     vendor: [
       'babel-polyfill',
 
-      // <babel-runtime>
       //
       // Generate this list using the following command against the stdout of
       // webpack running against the source bundle config (dev/prod.js):
       //
       //    webpack --config webpack/dev.config.js --display-modules | egrep -o 'babel-runtime/\S+' | sed 's/\.js$//' | sort | uniq
+
+      // <babel-runtime>
       'babel-runtime/core-js/array/from',
       'babel-runtime/core-js/get-iterator',
       'babel-runtime/core-js/is-iterable',
@@ -54,10 +55,7 @@ module.exports = {
       'babel-runtime/helpers/slicedToArray',
       'babel-runtime/helpers/toConsumableArray',
       'babel-runtime/helpers/typeof',
-      'babel-runtime/node_modules/regenerator-runtime/runtime',
-      'babel-runtime/node_modules/regenerator-runtime/runtime-module',
       'babel-runtime/regenerator/index',
-
       // </babel-runtime>
 
       'axios',
