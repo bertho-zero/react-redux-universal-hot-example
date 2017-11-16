@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:6
+FROM mhart/alpine-node:8
 
 # Install required dependencies (Alpine Linux packages)
 RUN apk update && \
@@ -25,8 +25,7 @@ RUN echo $user' ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 WORKDIR /external
 
 # Install (global) NPM packages/dependencies
-RUN npm install -g \
-  node-gyp
+RUN yarn global add node-gyp
 
 # Make project directory with permissions
 RUN mkdir /project
@@ -38,4 +37,4 @@ WORKDIR /project
 COPY . .
 
 # Install (local) NPM packages and build
-RUN npm install && npm run postinstall
+RUN yarn
