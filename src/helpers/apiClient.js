@@ -19,9 +19,14 @@ export default function apiClient(req) {
           conf.headers.Cookie = req.header('cookie');
         }
         if (req.header('authorization')) {
-          conf.headers.authorization = token || req.header('authorization') || '';
+          conf.headers.authorization = req.header('authorization');
         }
       }
+
+      if (token) {
+        conf.headers.authorization = token;
+      }
+
       return conf;
     },
     error => Promise.reject(error)
