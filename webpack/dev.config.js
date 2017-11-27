@@ -35,10 +35,6 @@ combinedPlugins = combinedPlugins.concat(babelrcObjectDevelopment.plugins);
 var babelLoaderQuery = Object.assign({}, babelrcObject, babelrcObjectDevelopment, { plugins: combinedPlugins });
 delete babelLoaderQuery.env;
 
-babelLoaderQuery.presets = babelLoaderQuery.presets.map(function (v) {
-  return v === 'es2015' ? ['es2015', { modules: false }] : v;
-});
-
 var validDLLs = helpers.isValidDLLs('vendor', assetsPath);
 if (process.env.WEBPACK_DLLS === '1' && !validDLLs) {
   process.env.WEBPACK_DLLS = '0';
