@@ -66,9 +66,19 @@ global.socket = initSocket();
   });
 
   const hydrate = async _routes => {
-    const components = await asyncMatchRoutes(_routes, history.location.pathname);
-    await trigger('fetch', components, { store, ...providers });
-    await trigger('defer', components, { store, ...providers });
+    const { components, match, params } = await asyncMatchRoutes(_routes, history.location.pathname);
+    const triggerLocals = {
+      ...providers,
+      store,
+      match,
+      params,
+      history,
+      location: history.location
+    };
+
+    await trigger('fetch', components, triggerLocals);
+    await trigger('defer', components, triggerLocals);
+
     ReactDOM.hydrate(
       <HotEnabler>
         <Provider store={store} {...providers}>

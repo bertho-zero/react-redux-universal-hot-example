@@ -7,8 +7,9 @@ import asyncMatchRoutes from 'utils/asyncMatchRoutes';
 @withRouter
 export default class ReduxAsyncConnect extends Component {
   static propTypes = {
-    location: PropTypes.objectOf(PropTypes.any).isRequired,
-    children: PropTypes.node.isRequired
+    children: PropTypes.node.isRequired,
+    history: PropTypes.objectOf(PropTypes.any).isRequired,
+    location: PropTypes.objectOf(PropTypes.any).isRequired
   };
 
   state = {
@@ -17,7 +18,7 @@ export default class ReduxAsyncConnect extends Component {
 
   async componentWillReceiveProps(nextProps) {
     const {
-      routes, location, store, helpers
+      history, location, routes, store, helpers
     } = this.props;
     const navigated = nextProps.location !== location;
 
@@ -26,11 +27,24 @@ export default class ReduxAsyncConnect extends Component {
       this.setState({ previousLocation: location });
 
       // load data while the old screen remains
-      const components = await asyncMatchRoutes(routes, nextProps.location.pathname);
+      const { components, match, params } = await asyncMatchRoutes(routes, nextProps.location.pathname);
 
-      await trigger('fetch', components, { store, ...helpers });
+      await trigger('fetch', components, {
+        ...helpers,
+        store,
+        match,
+        params,
+        history,
+        location: nextProps.location
+      });
       if (__CLIENT__) {
-        await trigger('defer', components, { store, ...helpers });
+        await trigger('defer', components, {
+          ...helpers,
+          store,
+          match,
+          history,
+          location: nextProps.location
+        });
       }
 
       // clear previousLocation so the next screen renders

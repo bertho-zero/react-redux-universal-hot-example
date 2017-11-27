@@ -116,8 +116,15 @@ app.use(async (req, res) => {
   }
 
   try {
-    const components = await asyncMatchRoutes(routes, req.originalUrl);
-    await trigger('fetch', components, { store, ...providers });
+    const { components, match, params } = await asyncMatchRoutes(routes, req.originalUrl);
+    await trigger('fetch', components, {
+      ...providers,
+      store,
+      match,
+      params,
+      history,
+      location: history.location
+    });
 
     const modules = [];
     const component = (
