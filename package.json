@@ -150,7 +150,7 @@
     "feathers-errors": "^2.9.1",
     "feathers-hooks": "^2.0.1",
     "feathers-hooks-common": "^3.7.1",
-    "feathers-nedb": "^2.6.0",
+    "feathers-nedb": "^3.0.0",
     "feathers-rest": "^1.7.3",
     "feathers-socketio": "^2.0.0",
     "history": "^4.7.2",
