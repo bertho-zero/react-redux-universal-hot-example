@@ -28,24 +28,25 @@
   "main": "bin/server.js",
   "scripts": {
     "start": "concurrently --kill-others \"npm run start-prod\" \"npm run start-prod-api\"",
-    "start-prod": "bnr start-prod",
-    "start-prod-api": "bnr start-prod-api",
+    "start-prod": "cross-env NODE_PATH=src NODE_ENV=production PORT=8080 APIPORT=3030 node ./bin/server.js",
+    "start-prod-api": "cross-env NODE_PATH=api NODE_ENV=production APIPORT=3030 node ./bin/api.js",
     "dev": "concurrently --kill-others \"npm run watch-client\" \"npm run start-dev\" \"npm run start-dev-api\"",
-    "start-dev": "bnr start-dev",
-    "start-dev-api": "bnr start-dev-api",
-    "watch-client": "bnr watch-client",
-    "build": "bnr build",
+    "start-dev": "cross-env NODE_PATH=src NODE_ENV=development PORT=3000 APIPORT=3030 WEBPACK_DLLS=1 node ./bin/server.js",
+    "start-dev-api": "cross-env NODE_PATH=api NODE_ENV=development APIPORT=3030 node ./bin/api.js",
+    "watch-client": "cross-env UV_THREADPOOL_SIZE=100 NODE_PATH=src NODE_ENV=development PORT=3000 APIPORT=3030 WEBPACK_DLLS=1 node webpack/webpack-dev-server.js",
+    "build": "cross-env NODE_ENV=production webpack --colors --display-error-details --config=webpack/prod.config.js",
     "build-dlls": "webpack --colors --display-error-details --config webpack/vendor.config.js",
     "postinstall": "concurrently \"npm run build\" \"npm run build-dlls\"",
     "precommit": "lint-staged",
     "prettier": "prettier-eslint --write --eslint-config-path .eslintrc './+(src|api)/**/*.js'",
     "lint": "eslint -c .eslintrc api src",
-    "test": "bnr test",
-    "test-node": "bnr test-node",
+    "test": "cross-env NODE_PATH=src jest src",
+    "test-node": "cross-env NODE_PATH=api jest api",
     "lighthouse-report": "lighthouse http://localhost:8080 --view",
-    "docker-build": ". ./docker/build.sh",
-    "docker-dev": ". ./docker/run.dev.sh",
-    "docker-prod": ". ./docker/run.prod.sh"
+    "docker-build": "docker-compose build",
+    "docker-dev": "cross-env NGINX_HOST=localhost NGINX_PORT=3000 PORT=3000 docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --no-deps",
+    "docker-up": "cross-env NGINX_HOST=localhost NGINX_PORT=80 PORT=8080 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --no-deps -d",
+    "docker-down": "docker-compose down"
   },
   "lint-staged": {
     "+(src|api)/**/*.js": [
@@ -53,72 +54,6 @@
       "eslint -c .eslintrc",
       "git add"
     ]
-  },
-  "betterScripts": {
-    "start-prod": {
-      "command": "node ./bin/server.js",
-      "env": {
-        "NODE_PATH": "./src",
-        "NODE_ENV": "production",
-        "PORT": 8080,
-        "APIPORT": 3030
-      }
-    },
-    "start-prod-api": {
-      "command": "node ./bin/api.js",
-      "env": {
-        "NODE_PATH": "./api",
-        "NODE_ENV": "production",
-        "APIPORT": 3030
-      }
-    },
-    "start-dev": {
-      "command": "node ./bin/server.js",
-      "env": {
-        "NODE_PATH": "./src",
-        "NODE_ENV": "development",
-        "PORT": 3000,
-        "APIPORT": 3030,
-        "WEBPACK_DLLS": 1
-      }
-    },
-    "start-dev-api": {
-      "command": "node ./bin/api.js",
-      "env": {
-        "NODE_PATH": "./api",
-        "NODE_ENV": "development",
-        "APIPORT": 3030
-      }
-    },
-    "watch-client": {
-      "command": "node webpack/webpack-dev-server.js",
-      "env": {
-        "UV_THREADPOOL_SIZE": 100,
-        "NODE_PATH": "./src",
-        "NODE_ENV": "development",
-        "PORT": 3000,
-        "APIPORT": 3030,
-        "WEBPACK_DLLS": 1
-      }
-    },
-    "build": {
-      "command": "webpack --colors --display-error-details --config=webpack/prod.config.js",
-      "env": {
-        "NODE_ENV": "production"
-      }
-    },
-    "test": {
-      "command": "jest src",
-      "env": {
-        "NODE_PATH": "src"
-      }
-    },
-    "test-node": {
-      "command": "jest api",
-      "env": {
-        "NODE_PATH": "api"
-      }
-    }
   },
   "dependencies": {
     "async": "^2.1.4",
@@ -194,12 +129,12 @@
     "babel-jest": "^21.0.2",
     "babel-loader": "^7.0.0",
     "babel-plugin-transform-react-jsx-source": "^6.22.0",
-    "better-npm-run": "^0.1.0",
     "bootstrap-loader": "^2.1.0",
     "bootstrap-sass": "^3.3.7",
     "chai": "^4.1.1",
     "clean-webpack-plugin": "^0.1.15",
     "concurrently": "^3.3.0",
+    "cross-env": "^5.1.1",
     "css-loader": "^0.28.5",
     "enzyme": "^3.1.0",
     "eslint": "^4.4.1",

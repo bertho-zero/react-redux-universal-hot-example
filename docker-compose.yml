@@ -1,0 +1,25 @@
+version: '3.4'
+services:
+  app:
+    build:
+      context: .
+      args:
+        user: ${USER}
+    user: ${USER}
+
+  nginx:
+    image: nginx
+    restart: always
+    volumes:
+      - ./nginx:/home/nginx
+    links:
+      - app:app
+    environment:
+      - NGINX_HOST
+      - NGINX_PORT
+      - PORT
+    command: >
+      /bin/bash -c "envsubst \"`printf '$${%s} ' $$(bash -c \"compgen -A variable\")`\"
+      < /home/nginx/conf.d/default.conf
+      > /etc/nginx/conf.d/default.conf
+      && nginx -g 'daemon off;'"
