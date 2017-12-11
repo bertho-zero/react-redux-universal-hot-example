@@ -1,13 +1,15 @@
 .git/
 .idea/
 node_modules/
-yarn.lock
+package-lock.json
+npm-debug.log
+yarn-error.log
 static/dist/
 *.iml
 webpack-assets.json
 webpack-stats.json
-npm-debug.log
-.happypack
+.happypack/
 webpack/dlls/*.json
-api/**/*.nedb
+# api/**/*.nedb
 *.report.html
+coverage/
