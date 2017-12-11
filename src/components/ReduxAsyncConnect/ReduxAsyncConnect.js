@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter, Route } from 'react-router';
 import { trigger } from 'redial';
+import NProgress from 'nprogress';
 import asyncMatchRoutes from 'utils/asyncMatchRoutes';
 
 @withRouter
@@ -16,6 +17,10 @@ export default class ReduxAsyncConnect extends Component {
     previousLocation: null
   };
 
+  componentWillMount() {
+    NProgress.configure({ trickleSpeed: 200 });
+  }
+
   async componentWillReceiveProps(nextProps) {
     const {
       history, location, routes, store, helpers
@@ -24,6 +29,7 @@ export default class ReduxAsyncConnect extends Component {
 
     if (navigated) {
       // save the location so we can render the old screen
+      NProgress.start();
       this.setState({ previousLocation: location });
 
       // load data while the old screen remains
@@ -49,6 +55,7 @@ export default class ReduxAsyncConnect extends Component {
 
       // clear previousLocation so the next screen renders
       this.setState({ previousLocation: null });
+      NProgress.done();
     }
   }
 
