@@ -1,0 +1,13 @@
+version: '3.4'
+services:
+  app:
+    command: yarn run dev
+    volumes:
+      - .:/project
+      - /project/node_modules
+    ports:
+      - 3001:3001
+
+  nginx:
+    ports:
+      - ${NGINX_PORT}:${NGINX_PORT}

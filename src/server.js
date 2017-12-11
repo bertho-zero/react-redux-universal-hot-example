@@ -26,7 +26,7 @@ import getChunks, { waitChunks } from 'utils/getChunks';
 import asyncMatchRoutes from 'utils/asyncMatchRoutes';
 import { ReduxAsyncConnect, Provider } from 'components';
 
-const chunksPath = path.join(__dirname, '../static/dist/loadable-chunks.json');
+const chunksPath = path.join(__dirname, '..', 'static', 'dist', 'loadable-chunks.json');
 
 process.on('unhandledRejection', error => console.error(error));
 
@@ -116,8 +116,15 @@ app.use(async (req, res) => {
   }
 
   try {
-    const components = await asyncMatchRoutes(routes, req.originalUrl);
-    await trigger('fetch', components, { store, ...providers });
+    const { components, match, params } = await asyncMatchRoutes(routes, req.originalUrl);
+    await trigger('fetch', components, {
+      ...providers,
+      store,
+      match,
+      params,
+      history,
+      location: history.location
+    });
 
     const modules = [];
     const component = (
@@ -134,7 +141,7 @@ app.use(async (req, res) => {
     const content = ReactDOM.renderToString(component);
 
     const locationState = store.getState().router.location;
-    if (locationState.pathname !== req.originalUrl) {
+    if (req.originalUrl !== locationState.pathname + locationState.search) {
       return res.redirect(301, locationState.pathname);
     }
 

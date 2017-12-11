@@ -51,6 +51,7 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         loggingIn: false,
+        loaded: true,
         accessToken: action.result.accessToken,
         user: action.result.user
       };
