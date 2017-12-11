@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import url, { URL } from 'url';
 import express from 'express';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
@@ -142,11 +141,7 @@ app.use(async (req, res) => {
     const content = ReactDOM.renderToString(component);
 
     const locationState = store.getState().router.location;
-    const urlBase = `${req.protocol}://${req.hostname}`;
-    const requestUrl = new URL(req.originalUrl, urlBase);
-    const stateUrl = new URL(locationState.pathname + locationState.search, urlBase);
-
-    if (url.format(stateUrl) !== url.format(requestUrl)) {
+    if (req.originalUrl !== locationState.pathname + locationState.search) {
       return res.redirect(301, locationState.pathname);
     }
 
