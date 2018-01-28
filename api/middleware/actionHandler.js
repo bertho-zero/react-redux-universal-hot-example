@@ -27,7 +27,7 @@ export default function actionHandler(app) {
           return res.redirect(error.redirect);
         }
         console.error('API ERROR:', pretty.render(error));
-        res.status(error.status || 500).json(error);
+        res.status(error.code || 500).json(error);
       }
     } else {
       next();

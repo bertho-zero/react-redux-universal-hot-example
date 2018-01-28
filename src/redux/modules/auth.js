@@ -1,4 +1,3 @@
-import { socket } from 'app';
 import { SubmissionError } from 'redux-form';
 import cookie from 'js-cookie';
 
@@ -51,6 +50,7 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         loggingIn: false,
+        loaded: true,
         accessToken: action.result.accessToken,
         user: action.result.user
       };
@@ -168,15 +168,13 @@ export function register(data) {
 }
 
 export function login(strategy, data) {
-  const socketId = socket.io.engine.id;
   return {
     types: [LOGIN, LOGIN_SUCCESS, LOGIN_FAIL],
     promise: async ({ client, restApp, app }) => {
       try {
-        const response = await restApp.authenticate({
+        const response = await app.authenticate({
           ...data,
-          strategy,
-          socketId
+          strategy
         });
         await setCookie({ app })(response);
         setToken({ client, app, restApp })(response);

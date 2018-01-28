@@ -1,5 +1,5 @@
 import axios from 'axios';
-import config from '../config';
+import config from 'config';
 
 export default function apiClient(req) {
   const instance = axios.create({
@@ -19,9 +19,14 @@ export default function apiClient(req) {
           conf.headers.Cookie = req.header('cookie');
         }
         if (req.header('authorization')) {
-          conf.headers.authorization = token || req.header('authorization') || '';
+          conf.headers.authorization = req.header('authorization');
         }
       }
+
+      if (token) {
+        conf.headers.authorization = token;
+      }
+
       return conf;
     },
     error => Promise.reject(error)

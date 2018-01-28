@@ -1,19 +1,19 @@
-import feathers from 'feathers';
+import express from '@feathersjs/express';
+import feathers from '@feathersjs/feathers';
+import socketio from '@feathersjs/socketio';
 import morgan from 'morgan';
 import session from 'express-session';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import hooks from 'feathers-hooks';
-import rest from 'feathers-rest';
-import socketio from 'feathers-socketio';
 import config from './config';
 import services from './services';
+import channels from './channels';
 import { actionHandler, logger, notFound, errorHandler } from './middleware';
 import auth from './services/authentication';
 
 process.on('unhandledRejection', error => console.error(error));
 
-const app = feathers();
+const app = express(feathers());
 
 app
   .set('config', config)
@@ -28,25 +28,16 @@ app
   .use(bodyParser.urlencoded({ extended: true }))
   .use(bodyParser.json())
   // Core
-  .configure(hooks())
-  .configure(rest())
+  .configure(express.rest())
   .configure(socketio({ path: '/ws' }))
   .configure(auth)
   .use(actionHandler(app))
   .configure(services)
+  .configure(channels)
   // Final handlers
   .use(notFound())
   .use(logger(app))
-  .use(errorHandler({
-    json: (error, req, res) => {
-      res.json(error);
-    },
-    html: (error, req, res) => {
-      res.json(error);
-      // render your error view with the error object
-      // res.render('error', error); // set view engine of express if you want to use res.render
-    }
-  }));
+  .use(errorHandler());
 
 if (process.env.APIPORT) {
   app.listen(process.env.APIPORT, err => {
@@ -65,12 +56,7 @@ const messageBuffer = new Array(bufferSize);
 let messageIndex = 0;
 
 app.io.on('connection', socket => {
-  if (!socket._feathers) {
-    // https://github.com/feathersjs/authentication/pull/604
-    socket._feathers = {};
-  }
-  const user = socket.feathers.user ? { ...socket.feathers.user, password: undefined } : undefined;
-  socket.emit('news', { msg: "'Hello World!' from server", user });
+  socket.emit('news', { msg: "'Hello World!' from server" });
 
   socket.on('history', () => {
     for (let index = 0; index < bufferSize; index += 1) {

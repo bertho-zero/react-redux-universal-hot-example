@@ -3,8 +3,8 @@ dist: trusty
 language: node_js
 
 node_js:
-  - "6"
-  - "stable"
+  - '8'
+  - '6'
 
 addons:
   apt:

@@ -19,4 +19,6 @@ export default function messagesService() {
   app.use('/messages', feathersNedb(options));
 
   app.service('messages').hooks(hooks);
+
+  app.service('messages').publish('created', () => app.channel('authenticated'));
 }

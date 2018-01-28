@@ -1,0 +1,9 @@
+version: '3.4'
+services:
+  app:
+    command: yarn start
+    restart: always
+
+  nginx:
+    ports:
+      - ${NGINX_PORT}:${NGINX_PORT}

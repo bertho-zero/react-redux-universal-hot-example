@@ -33,9 +33,7 @@ export function waitWatchFile({ path, onChange, timeout = 60000 } = {}) {
 
       try {
         const watcher = fs.watch(path, 'utf8', eventType => {
-          if (eventType !== 'change') {
-            return onChange(new Error(`waitFile: file was renamed: ${path}`));
-          }
+          if (eventType !== 'change') return;
           fs.readFile(path, 'utf8', (err2, data) => {
             if (err2) return onChange(err2);
             loaded = true;

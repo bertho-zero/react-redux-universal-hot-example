@@ -1,8 +1,7 @@
-import feathers from 'feathers/client';
-import hooks from 'feathers-hooks';
-import rest from 'feathers-rest/client';
-import socketio from 'feathers-socketio/client';
-import authentication from 'feathers-authentication-client';
+import feathers from '@feathersjs/feathers';
+import rest from '@feathersjs/rest-client';
+import socketio from '@feathersjs/socketio-client';
+import authentication from '@feathersjs/authentication-client';
 import io from 'socket.io-client';
 import axios from 'axios';
 import config from './config';
@@ -14,7 +13,6 @@ const host = clientUrl => (__SERVER__ ? `http://${config.apiHost}:${config.apiPo
 const configureApp = transport =>
   feathers()
     .configure(transport)
-    .configure(hooks())
     .configure(authentication({ storage }));
 
 export const socket = io('', { path: host('/ws'), autoConnect: false });

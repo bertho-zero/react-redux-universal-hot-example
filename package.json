@@ -28,24 +28,25 @@
   "main": "bin/server.js",
   "scripts": {
     "start": "concurrently --kill-others \"npm run start-prod\" \"npm run start-prod-api\"",
-    "start-prod": "bnr start-prod",
-    "start-prod-api": "bnr start-prod-api",
+    "start-prod": "cross-env NODE_PATH=src NODE_ENV=production PORT=8080 APIPORT=3030 node ./bin/server.js",
+    "start-prod-api": "cross-env NODE_PATH=api NODE_ENV=production APIPORT=3030 node ./bin/api.js",
     "dev": "concurrently --kill-others \"npm run watch-client\" \"npm run start-dev\" \"npm run start-dev-api\"",
-    "start-dev": "bnr start-dev",
-    "start-dev-api": "bnr start-dev-api",
-    "watch-client": "bnr watch-client",
-    "build": "bnr build",
+    "start-dev": "cross-env NODE_PATH=src NODE_ENV=development PORT=3000 APIPORT=3030 WEBPACK_DLLS=1 node ./bin/server.js",
+    "start-dev-api": "cross-env NODE_PATH=api NODE_ENV=development APIPORT=3030 node ./bin/api.js",
+    "watch-client": "cross-env UV_THREADPOOL_SIZE=100 NODE_PATH=src NODE_ENV=development PORT=3000 APIPORT=3030 WEBPACK_DLLS=1 node webpack/webpack-dev-server.js",
+    "build": "cross-env NODE_ENV=production webpack --colors --display-error-details --config=webpack/prod.config.js",
     "build-dlls": "webpack --colors --display-error-details --config webpack/vendor.config.js",
     "postinstall": "concurrently \"npm run build\" \"npm run build-dlls\"",
     "precommit": "lint-staged",
     "prettier": "prettier-eslint --write --eslint-config-path .eslintrc './+(src|api)/**/*.js'",
     "lint": "eslint -c .eslintrc api src",
-    "test": "bnr test",
-    "test-node": "bnr test-node",
+    "test": "cross-env NODE_PATH=src jest src",
+    "test-node": "cross-env NODE_PATH=api jest api",
     "lighthouse-report": "lighthouse http://localhost:8080 --view",
-    "docker-build": ". ./docker/build.sh",
-    "docker-dev": ". ./docker/run.dev.sh",
-    "docker-prod": ". ./docker/run.prod.sh"
+    "docker-build": "docker-compose build",
+    "docker-dev": "cross-env NGINX_HOST=localhost NGINX_PORT=3000 PORT=3000 docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --no-deps",
+    "docker-up": "cross-env NGINX_HOST=localhost NGINX_PORT=80 PORT=8080 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --no-deps -d",
+    "docker-down": "docker-compose down"
   },
   "lint-staged": {
     "+(src|api)/**/*.js": [
@@ -53,72 +54,6 @@
       "eslint -c .eslintrc",
       "git add"
     ]
-  },
-  "betterScripts": {
-    "start-prod": {
-      "command": "node ./bin/server.js",
-      "env": {
-        "NODE_PATH": "./src",
-        "NODE_ENV": "production",
-        "PORT": 8080,
-        "APIPORT": 3030
-      }
-    },
-    "start-prod-api": {
-      "command": "node ./bin/api.js",
-      "env": {
-        "NODE_PATH": "./api",
-        "NODE_ENV": "production",
-        "APIPORT": 3030
-      }
-    },
-    "start-dev": {
-      "command": "node ./bin/server.js",
-      "env": {
-        "NODE_PATH": "./src",
-        "NODE_ENV": "development",
-        "PORT": 3000,
-        "APIPORT": 3030,
-        "WEBPACK_DLLS": 1
-      }
-    },
-    "start-dev-api": {
-      "command": "node ./bin/api.js",
-      "env": {
-        "NODE_PATH": "./api",
-        "NODE_ENV": "development",
-        "APIPORT": 3030
-      }
-    },
-    "watch-client": {
-      "command": "node webpack/webpack-dev-server.js",
-      "env": {
-        "UV_THREADPOOL_SIZE": 100,
-        "NODE_PATH": "./src",
-        "NODE_ENV": "development",
-        "PORT": 3000,
-        "APIPORT": 3030,
-        "WEBPACK_DLLS": 1
-      }
-    },
-    "build": {
-      "command": "webpack --colors --display-error-details --config=webpack/prod.config.js",
-      "env": {
-        "NODE_ENV": "production"
-      }
-    },
-    "test": {
-      "command": "jest src",
-      "env": {
-        "NODE_PATH": "src"
-      }
-    },
-    "test-node": {
-      "command": "jest api",
-      "env": {
-        "NODE_PATH": "api"
-      }
-    }
   },
   "dependencies": {
     "@babel/core": "^7.0.0-beta.32",
@@ -130,6 +65,18 @@
     "@babel/preset-stage-0": "^7.0.0-beta.32",
     "@babel/register": "^7.0.0-beta.32",
     "@babel/runtime": "^7.0.0-beta.32",
+    "@feathersjs/authentication": "^2.1.0",
+    "@feathersjs/authentication-client": "^1.0.1",
+    "@feathersjs/authentication-jwt": "^2.0.0",
+    "@feathersjs/authentication-local": "^1.0.2",
+    "@feathersjs/authentication-oauth1": "^1.0.2",
+    "@feathersjs/authentication-oauth2": "^1.0.2",
+    "@feathersjs/errors": "^3.2.0",
+    "@feathersjs/express": "^1.1.2",
+    "@feathersjs/feathers": "^3.0.2",
+    "@feathersjs/rest-client": "^1.3.2",
+    "@feathersjs/socketio": "^3.0.1",
+    "@feathersjs/socketio-client": "^1.0.1",
     "async": "^2.1.4",
     "axios": "^0.17.0",
     "babel-plugin-add-module-exports": "^0.2.1",
@@ -139,20 +86,9 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.15.4",
     "express-session": "^1.15.5",
-    "feathers": "^2.0.3",
-    "feathers-authentication": "^1.0.2",
-    "feathers-authentication-client": "^0.3.3",
-    "feathers-authentication-hooks": "^0.1.3",
-    "feathers-authentication-jwt": "^0.3.1",
-    "feathers-authentication-local": "^0.4.4",
-    "feathers-authentication-oauth1": "^0.2.3",
-    "feathers-authentication-oauth2": "^0.3.1",
-    "feathers-errors": "^2.9.1",
-    "feathers-hooks": "^2.0.1",
+    "feathers-authentication-hooks": "^0.1.6",
     "feathers-hooks-common": "^3.7.1",
-    "feathers-nedb": "^2.6.0",
-    "feathers-rest": "^1.7.3",
-    "feathers-socketio": "^2.0.0",
+    "feathers-nedb": "3.0.0",
     "history": "^4.7.2",
     "http-proxy": "^1.16.2",
     "is-promise": "^2.1.0",
@@ -162,11 +98,12 @@
     "morgan": "^1.8.1",
     "multireducer": "^3.1.0",
     "nedb": "^1.8.0",
+    "nprogress": "^0.2.0",
     "passport-facebook-token": "^3.3.0",
     "pretty-error": "^2.0.2",
     "prop-types": "^15.5.8",
     "react": "^16.0.0",
-    "react-bootstrap": "^0.31.2",
+    "react-bootstrap": "^0.32.1",
     "react-dom": "^16.0.0",
     "react-helmet": "^5.0.3",
     "react-loadable": "^5.3.0",
@@ -175,7 +112,7 @@
     "react-router-bootstrap": "^0.24.4",
     "react-router-config": "^1.0.0-beta.4",
     "react-router-dom": "^4.2.2",
-    "react-router-redux": "^5.0.0-alpha.6",
+    "react-router-redux": "^5.0.0-alpha.9",
     "recompose": "^0.26.0",
     "redial": "^0.5.0",
     "redux": "^3.6.0",
@@ -193,36 +130,36 @@
     "@babel/plugin-transform-react-jsx-source": "^7.0.0-beta.32",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^8.0.1",
-    "babel-jest": "^21.3.0-beta.8",
+    "babel-jest": "^22.0.3",
     "babel-loader": "^8.0.0-beta.0",
-    "better-npm-run": "^0.1.0",
     "bootstrap-loader": "^2.1.0",
     "bootstrap-sass": "^3.3.7",
     "chai": "^4.1.1",
     "clean-webpack-plugin": "^0.1.15",
     "concurrently": "^3.3.0",
+    "cross-env": "^5.1.1",
     "css-loader": "^0.28.5",
     "enzyme": "^3.1.0",
-    "eslint": "^4.4.1",
+    "eslint": "^4.13.1",
     "eslint-config-airbnb": "^16.0.0",
     "eslint-loader": "^1.6.1",
     "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.2.1",
     "extract-text-webpack-plugin": "^3.0.1",
-    "file-loader": "^1.1.5",
+    "file-loader": "^1.1.6",
     "font-awesome": "^4.7.0",
     "happypack": "^4.0.0",
     "html-webpack-plugin": "^2.30.1",
     "husky": "^0.14.3",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^21.1.0",
-    "jest-cli": "^21.1.0",
+    "jest": "^22.0.3",
+    "jest-cli": "^22.0.3",
     "less": "^3.0.0-alpha.3",
     "less-loader": "^4.0.3",
-    "lighthouse": "^2.4.0",
-    "lint-staged": "^5.0.0",
-    "mocha": "^4.0.1",
+    "lighthouse": "^2.7.0",
+    "lint-staged": "^6.0.0",
+    "mocha": "^5.0.0",
     "node-sass": "^4.5.0",
     "piping": "^1.0.0-rc.4",
     "postcss": "^6.0.9",
@@ -232,22 +169,23 @@
     "postcss-loader": "^2.0.5",
     "postcss-reporter": "^5.0.0",
     "postcss-url": "^7.1.2",
-    "prettier-eslint-cli": "^4.3.2",
-    "react-a11y": "^0.3.3",
+    "prettier-eslint-cli": "^4.6.1",
+    "react-a11y": "^1.0.0",
     "react-addons-test-utils": "^15.4.2",
     "react-hot-loader": "^3.0.0-beta.3",
     "react-to-html-webpack-plugin": "^2.2.0",
     "redux-devtools": "^3.3.2",
     "redux-devtools-dock-monitor": "^1.1.1",
     "redux-devtools-log-monitor": "^1.2.0",
-    "resolve-url-loader": "^2.0.2",
+    "resolve-url-loader": "^2.2.1",
     "sass-loader": "^6.0.1",
     "sinon": "^4.0.1",
-    "style-loader": "^0.19.0",
+    "style-loader": "^0.20.1",
     "sw-precache-webpack-plugin": "^0.11.3",
+    "uglifyjs-webpack-plugin": "^1.1.6",
     "url-loader": "^0.6.2",
-    "webpack": "^3.7.1",
-    "webpack-dev-middleware": "^1.12.0",
+    "webpack": "^3.10.0",
+    "webpack-dev-middleware": "^2.0.2",
     "webpack-hot-middleware": "^2.17.0",
     "webpack-isomorphic-tools": "^3.0.2"
   },
