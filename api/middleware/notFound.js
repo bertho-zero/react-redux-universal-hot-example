@@ -1,4 +1,4 @@
-const errors = require('feathers-errors');
+const errors = require('@feathersjs/errors');
 
 export default function notFound() {
   return (req, res, next) => {

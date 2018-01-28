@@ -1,5 +1,5 @@
-import { disallow, discard, populate } from 'feathers-hooks-common';
-import auth from 'feathers-authentication';
+import auth from '@feathersjs/authentication';
+import { disallow, populate } from 'feathers-hooks-common';
 import { required } from 'utils/validation';
 import { validateHook as validate } from 'hooks';
 
@@ -43,9 +43,9 @@ const messagesHooks = {
   },
   after: {
     all: [],
-    find: [populateUser(), discard('sentBy.password')],
-    get: [populateUser(), discard('sentBy.password')],
-    create: [populateUser(), discard('sentBy.password')],
+    find: populateUser(),
+    get: populateUser(),
+    create: populateUser(),
     update: [],
     patch: [],
     remove: []

@@ -1,8 +1,8 @@
-import { discard, iff, isProvider } from 'feathers-hooks-common';
-import auth from 'feathers-authentication';
-import local from 'feathers-authentication-local';
+import auth from '@feathersjs/authentication';
+import local from '@feathersjs/authentication-local';
+import errors from '@feathersjs/errors';
 import { restrictToOwner } from 'feathers-authentication-hooks';
-import errors from 'feathers-errors';
+import { discard } from 'feathers-hooks-common';
 import { validateHook } from 'hooks';
 import { required, email, match, unique } from 'utils/validation';
 
@@ -31,7 +31,7 @@ const userHooks = {
     remove: [auth.hooks.authenticate('jwt'), restrictToOwner({ ownerField: '_id' })]
   },
   after: {
-    all: iff(isProvider('external'), discard('password')),
+    all: local.hooks.protect('password'),
     find: [],
     get: [],
     create: [],

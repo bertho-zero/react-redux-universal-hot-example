@@ -1,4 +1,4 @@
-import errors from 'feathers-errors';
+import errors from '@feathersjs/errors';
 import { createAsyncValidator as validator } from 'utils/validation';
 
 export default function validateHook(schema) {
