@@ -10,6 +10,7 @@ import cookieParser from 'cookie-parser';
 import httpProxy from 'http-proxy';
 import PrettyError from 'pretty-error';
 import http from 'http';
+import { StaticRouter } from 'react-router';
 import { ConnectedRouter } from 'react-router-redux';
 import { renderRoutes } from 'react-router-config';
 import createMemoryHistory from 'history/createMemoryHistory';
@@ -127,12 +128,15 @@ app.use(async (req, res) => {
     });
 
     const modules = [];
+    const context = {};
     const component = (
       <Loadable.Capture report={moduleName => modules.push(moduleName)}>
         <Provider store={store} {...providers}>
           <ConnectedRouter history={history}>
             <ReduxAsyncConnect routes={routes} store={store} helpers={providers}>
-              {renderRoutes(routes)}
+              <StaticRouter location={req.originalUrl} context={context}>
+                {renderRoutes(routes)}
+              </StaticRouter>
             </ReduxAsyncConnect>
           </ConnectedRouter>
         </Provider>
@@ -140,9 +144,8 @@ app.use(async (req, res) => {
     );
     const content = ReactDOM.renderToString(component);
 
-    const locationState = store.getState().router.location;
-    if (req.originalUrl !== locationState.pathname + locationState.search) {
-      return res.redirect(301, locationState.pathname);
+    if (context.url) {
+      return res.redirect(301, context.url);
     }
 
     const bundles = getBundles(getChunks(), modules);
