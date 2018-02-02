@@ -133,11 +133,11 @@ app.use(async (req, res) => {
       <Loadable.Capture report={moduleName => modules.push(moduleName)}>
         <Provider store={store} {...providers}>
           <ConnectedRouter history={history}>
-            <ReduxAsyncConnect routes={routes} store={store} helpers={providers}>
-              <StaticRouter location={req.originalUrl} context={context}>
+            <StaticRouter location={req.originalUrl} context={context}>
+              <ReduxAsyncConnect routes={routes} store={store} helpers={providers}>
                 {renderRoutes(routes)}
-              </StaticRouter>
-            </ReduxAsyncConnect>
+              </ReduxAsyncConnect>
+            </StaticRouter>
           </ConnectedRouter>
         </Provider>
       </Loadable.Capture>
@@ -146,6 +146,11 @@ app.use(async (req, res) => {
 
     if (context.url) {
       return res.redirect(301, context.url);
+    }
+    
+    const locationState = store.getState().router.location;
+    if (req.originalUrl !== locationState.pathname + locationState.search) {
+      return res.redirect(301, locationState.pathname);
     }
 
     const bundles = getBundles(getChunks(), modules);
