@@ -162,6 +162,7 @@ var webpackConfig = module.exports = {
         loader: 'react-hot-loader/webpack'
       }, {
         loader: 'babel-loader',
+        exclude: /node_modules(\/|\\)(?!(@feathersjs))/,
         options: babelLoaderQuery
       }, {
         loader: 'eslint-loader',
