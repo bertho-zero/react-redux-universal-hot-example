@@ -149,7 +149,7 @@
     "file-loader": "^1.1.6",
     "font-awesome": "^4.7.0",
     "happypack": "^4.0.0",
-    "html-webpack-plugin": "^2.30.1",
+    "html-webpack-plugin": "^3.0.0",
     "husky": "^0.14.3",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^22.0.3",
