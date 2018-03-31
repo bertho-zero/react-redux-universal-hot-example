@@ -90,7 +90,10 @@ proxy.on('error', (error, req, res) => {
     res.writeHead(500, { 'content-type': 'application/json' });
   }
 
-  const json = { error: 'proxy_error', reason: error.message };
+  const json = {
+    error: 'proxy_error',
+    reason: error.message
+  };
   res.end(JSON.stringify(json));
 });
 
@@ -106,7 +109,10 @@ app.use(async (req, res) => {
     restApp: createApp(req)
   };
   const history = createMemoryHistory({ initialEntries: [req.originalUrl] });
-  const store = createStore({ history, helpers: providers });
+  const store = createStore({
+    history,
+    helpers: providers
+  });
 
   function hydrate() {
     res.write('<!doctype html>');
