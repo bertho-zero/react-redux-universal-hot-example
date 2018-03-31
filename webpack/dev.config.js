@@ -54,7 +54,7 @@ var webpackConfig = module.exports = {
   output: {
     path: assetsPath,
     filename: '[name]-[hash].js',
-    chunkFilename: '[name]-[chunkhash].js',
+    chunkFilename: '[name]-[chunkhash].chunk.js',
     publicPath: 'http://' + host + ':' + port + '/dist/'
   },
   performance: {
