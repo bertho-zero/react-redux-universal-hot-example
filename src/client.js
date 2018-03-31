@@ -79,7 +79,7 @@ global.socket = initSocket();
     await trigger('fetch', components, triggerLocals);
     await trigger('defer', components, triggerLocals);
 
-    ReactDOM.hydrate(
+    ReactDOM.render(
       <HotEnabler>
         <Provider store={store} {...providers}>
           <ConnectedRouter history={history}>
