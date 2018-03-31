@@ -14,10 +14,10 @@ const Input = ({
       {error && touched && <span className="glyphicon glyphicon-remove form-control-feedback" />}
       {error &&
         touched && (
-          <div className="text-danger">
-            <strong>{error}</strong>
-          </div>
-        )}
+        <div className="text-danger">
+          <strong>{error}</strong>
+        </div>
+      )}
     </div>
   </div>
 );

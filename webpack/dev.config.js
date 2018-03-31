@@ -47,7 +47,6 @@ var webpackConfig = module.exports = {
   entry: {
     'main': [
       'webpack-hot-middleware/client?path=http://' + host + ':' + port + '/__webpack_hmr',
-      'react-hot-loader/patch',
       'bootstrap-loader',
       './src/client.js'
     ]
@@ -159,8 +158,6 @@ var webpackConfig = module.exports = {
 
     helpers.createHappyPlugin('jsx', [
       {
-        loader: 'react-hot-loader/webpack'
-      }, {
         loader: 'babel-loader',
         exclude: /node_modules(\/|\\)(?!(@feathersjs))/,
         options: babelLoaderQuery

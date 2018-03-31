@@ -17,7 +17,8 @@
     "transform-runtime",
     "add-module-exports",
     "transform-decorators-legacy",
-    "react-loadable/babel"
+    "react-loadable/babel",
+    "react-hot-loader/babel"
   ],
   "env": {
     "development": {

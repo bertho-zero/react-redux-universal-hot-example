@@ -75,36 +75,36 @@ export default class Widgets extends Component {
         )}
         {widgets &&
           widgets.length && (
-            <table className="table table-striped">
-              <thead>
-                <tr>
-                  <th className={styles.idCol}>ID</th>
-                  <th className={styles.colorCol}>Color</th>
-                  <th className={styles.sprocketsCol}>Sprockets</th>
-                  <th className={styles.ownerCol}>Owner</th>
-                  <th className={styles.buttonCol} />
-                </tr>
-              </thead>
-              <tbody>
-                {widgets.map(widget =>
-                  editing[widget.id] ? (
-                    <WidgetForm form={String(widget.id)} key={String(widget.id)} initialValues={widget} />
-                  ) : (
-                    <tr key={widget.id}>
-                      <td className={styles.idCol}>{widget.id}</td>
-                      <td className={styles.colorCol}>{widget.color}</td>
-                      <td className={styles.sprocketsCol}>{widget.sprocketCount}</td>
-                      <td className={styles.ownerCol}>{widget.owner}</td>
-                      <td className={styles.buttonCol}>
-                        <button className="btn btn-primary" onClick={handleEdit(widget)}>
-                          <i className="fa fa-pencil" /> Edit
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          )}
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th className={styles.idCol}>ID</th>
+                <th className={styles.colorCol}>Color</th>
+                <th className={styles.sprocketsCol}>Sprockets</th>
+                <th className={styles.ownerCol}>Owner</th>
+                <th className={styles.buttonCol} />
+              </tr>
+            </thead>
+            <tbody>
+              {widgets.map(widget =>
+                editing[widget.id] ? (
+                  <WidgetForm form={String(widget.id)} key={String(widget.id)} initialValues={widget} />
+                ) : (
+                  <tr key={widget.id}>
+                    <td className={styles.idCol}>{widget.id}</td>
+                    <td className={styles.colorCol}>{widget.color}</td>
+                    <td className={styles.sprocketsCol}>{widget.sprocketCount}</td>
+                    <td className={styles.ownerCol}>{widget.owner}</td>
+                    <td className={styles.buttonCol}>
+                      <button className="btn btn-primary" onClick={handleEdit(widget)}>
+                        <i className="fa fa-pencil" /> Edit
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        )}
       </div>
     );
   }
