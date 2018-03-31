@@ -196,6 +196,7 @@ export function logout() {
     promise: async ({ client, app, restApp }) => {
       await app.logout();
       setToken({ client, app, restApp })({ accessToken: null });
+      cookie.set('feathers-jwt', '');
     }
   };
 }
