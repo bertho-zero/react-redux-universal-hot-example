@@ -82,6 +82,7 @@
     "babel-register": "^6.26.0",
     "babel-runtime": "^6.26.0",
     "body-parser": "^1.16.1",
+    "chokidar": "^2.0.3",
     "compression": "^1.6.2",
     "cookie-parser": "^1.4.3",
     "express": "^4.15.4",

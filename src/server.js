@@ -23,7 +23,7 @@ import apiClient from 'helpers/apiClient';
 import Html from 'helpers/Html';
 import routes from 'routes';
 import { createApp } from 'app';
-import getChunks, { waitChunks } from 'utils/getChunks';
+import { getChunks, waitChunks } from 'utils/chunks';
 import asyncMatchRoutes from 'utils/asyncMatchRoutes';
 import { ReduxAsyncConnect, Provider } from 'components';
 
