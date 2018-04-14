@@ -45,7 +45,7 @@ function initSocket() {
   return socket;
 }
 
-global.socket = initSocket();
+initSocket();
 
 (async () => {
   const storedData = await getStoredState(persistConfig);
