@@ -86,7 +86,7 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.15.4",
     "express-session": "^1.15.5",
-    "feathers-authentication-hooks": "^0.1.6",
+    "feathers-authentication-hooks": "^0.2.0",
     "feathers-hooks-common": "^4.10.0",
     "feathers-nedb": "3.0.0",
     "history": "^4.7.2",
