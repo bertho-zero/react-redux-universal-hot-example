@@ -249,7 +249,7 @@ To run the tests in the project, just simply run `npm test` if you have `Chrome`
 
 To get this project to work on Heroku, you need to:
 
-1. Remove the `"PORT": 8080` line from the `betterScripts` / `start-prod` section of `package.json`.
+1. Remove the `"PORT": 8080` line from the `start-prod` scripts of `package.json`.
 2. `heroku config:set NODE_ENV=production`
 3. `heroku config:set NODE_PATH=./src`
 4. `heroku config:set NPM_CONFIG_PRODUCTION=false`
