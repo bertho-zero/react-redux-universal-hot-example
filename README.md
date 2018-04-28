@@ -26,7 +26,7 @@ This is a starter boilerplate app I've put together using the following technolo
 * [Redux Dev Tools](https://github.com/reactjs/redux-devtools) for next generation DX (developer experience). Watch [Dan Abramov's talk](https://www.youtube.com/watch?v=xsSnOQynTHs).
 * [React Router Redux](https://github.com/reactjs/react-router-redux) Redux/React Router bindings.
 * [ESLint](http://eslint.org) to maintain a consistent code style
-* [redux-form](http://redux-form.com/) to manage form state in Redux
+* [react-final-form](https://github.com/final-form/react-final-form) to manage form state
 * [lru-memoize](https://github.com/erikras/lru-memoize) to speed up form validation
 * [multireducer](https://github.com/erikras/multireducer) to combine single reducers into one key-based reducer
 * [style-loader](https://github.com/webpack/style-loader), [sass-loader](https://github.com/jtangelder/sass-loader) and [less-loader](https://github.com/webpack/less-loader) to allow import of stylesheets in plain css, sass and less,

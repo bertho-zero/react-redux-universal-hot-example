@@ -195,14 +195,7 @@ module.exports = {
 
       directoryIndex: '/',
       verbose: true,
-      navigateFallback: '/dist/index.html',
-      runtimeCaching: [{
-        urlPattern: /\/api\/widget\/load(.*)/,
-        handler: 'networkFirst',
-        options: {
-          debug: true
-        }
-      }]
+      navigateFallback: '/dist/index.html'
     })
   ]
 };

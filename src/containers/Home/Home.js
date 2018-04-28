@@ -171,10 +171,10 @@ export default class Home extends Component {
               to maintain a consistent code style
             </li>
             <li>
-              <a href="https://github.com/erikras/redux-form" target="_blank" rel="noopener noreferrer">
-                redux-form
+              <a href="https://github.com/erikras/react-final-form" target="_blank" rel="noopener noreferrer">
+                react-final-form
               </a>{' '}
-              to manage form state in Redux
+              to manage form state
             </li>
             <li>
               <a href="https://github.com/erikras/multireducer" target="_blank" rel="noopener noreferrer">
@@ -219,17 +219,10 @@ export default class Home extends Component {
             </dd>
             <dt>Server-side data loading</dt>
             <dd>
-              The <Link to="/widgets">Widgets page</Link> demonstrates how to fetch data asynchronously from some source
-              that is needed to complete the server-side rendering. <code>Widgets.js</code>'s
-              <code>provideHooks()</code> function is called before the widgets page is loaded, on either the server or
-              the client, allowing all the widget data to be loaded and ready for the page to render.
-            </dd>
-            <dt>Data loading errors</dt>
-            <dd>
-              The <Link to="/widgets">Widgets page</Link> also demonstrates how to deal with data loading errors in
-              Redux. The API endpoint that delivers the widget data intentionally fails 33% of the time to highlight
-              this. The <code>clientMiddleware</code> sends an error action which the <code>widgets</code> reducer picks
-              up and saves to the Redux state for presenting to the user.
+              The <Link to="/chat">Chat page</Link> demonstrates how to fetch data asynchronously from some source that
+              is needed to complete the server-side rendering. <code>Chat.js</code>'s
+              <code>provideHooks()</code> function is called before the chat page is loaded, on either the server or the
+              client, allowing all the widget data to be loaded and ready for the page to render.
             </dd>
             <dt>Session based login</dt>
             <dd>
@@ -249,14 +242,6 @@ export default class Home extends Component {
               <Link to="/login-success">go there</Link> when you are not logged in, you will be forwarded back to this
               home page. This <strike>magic</strike> logic is performed by the
               <code>onEnter</code> hook within <code>routes.js</code>.
-            </dd>
-            <dt>Forms</dt>
-            <dd>
-              The <Link to="/survey">Survey page</Link> uses the still-experimental{' '}
-              <a href="https://github.com/erikras/redux-form" target="_blank" rel="noopener noreferrer">
-                redux-form
-              </a>{' '}
-              to manage form state inside the Redux store. This includes immediate client-side validation.
             </dd>
             <dt>WebSockets / socket.io</dt>
             <dd>

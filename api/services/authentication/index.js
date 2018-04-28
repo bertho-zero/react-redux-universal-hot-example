@@ -4,13 +4,10 @@ import local from '@feathersjs/authentication-local';
 // import oauth1 from '@feathersjs/authentication-oauth1';
 import oauth2 from '@feathersjs/authentication-oauth2';
 import FacebookTokenStrategy from 'passport-facebook-token';
-import { discard } from 'feathers-hooks-common';
 
-function populateUser(authConfig) {
-  return async hook => {
-    const payload = await hook.app.passport.verifyJWT(hook.result.accessToken, authConfig);
-    const user = await hook.app.service('users').get(payload.userId);
-    hook.result.user = user;
+function populateUser() {
+  return context => {
+    context.result.user = context.params.user;
   };
 }
 
@@ -35,7 +32,15 @@ export default function authenticationService() {
       remove: auth.hooks.authenticate('jwt')
     },
     after: {
-      create: [populateUser(config), discard('user.password')]
+      create: [populateUser(), local.hooks.protect('user.password')]
     }
+  });
+
+  // https://github.com/feathersjs/authentication/pull/665
+  app.on('logout', (result, meta) => {
+    Object.assign(meta.socket.feathers, {
+      user: null,
+      payload: null
+    });
   });
 }

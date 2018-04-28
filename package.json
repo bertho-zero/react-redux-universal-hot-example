@@ -37,30 +37,20 @@
     "build": "cross-env NODE_ENV=production webpack --colors --display-error-details --config=webpack/prod.config.js",
     "build-dlls": "webpack --colors --display-error-details --config webpack/vendor.config.js",
     "postinstall": "concurrently \"npm run build\" \"npm run build-dlls\"",
-    "precommit": "lint-staged",
     "prettier": "prettier-eslint --write --eslint-config-path .eslintrc './+(src|api)/**/*.js'",
     "lint": "eslint -c .eslintrc api src",
     "test": "cross-env NODE_PATH=src jest src",
-    "test-node": "cross-env NODE_PATH=api jest api",
     "lighthouse-report": "lighthouse http://localhost:8080 --view",
     "docker-build": "docker-compose build",
     "docker-dev": "cross-env NGINX_HOST=localhost NGINX_PORT=3000 PORT=3000 docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --no-deps",
     "docker-up": "cross-env NGINX_HOST=localhost NGINX_PORT=80 PORT=8080 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --no-deps -d",
     "docker-down": "docker-compose down"
   },
-  "lint-staged": {
-    "+(src|api)/**/*.js": [
-      "prettier-eslint --write --eslint-config-path .eslintrc",
-      "eslint -c .eslintrc",
-      "git add"
-    ]
-  },
   "dependencies": {
     "@feathersjs/authentication": "^2.1.0",
     "@feathersjs/authentication-client": "^1.0.1",
     "@feathersjs/authentication-jwt": "^2.0.0",
     "@feathersjs/authentication-local": "^1.0.2",
-    "@feathersjs/authentication-oauth1": "^1.0.2",
     "@feathersjs/authentication-oauth2": "^1.0.2",
     "@feathersjs/errors": "^3.2.0",
     "@feathersjs/express": "^1.1.2",
@@ -68,7 +58,6 @@
     "@feathersjs/rest-client": "^1.3.2",
     "@feathersjs/socketio": "^3.0.1",
     "@feathersjs/socketio-client": "^1.0.1",
-    "async": "^2.1.4",
     "axios": "^0.18.0",
     "babel-core": "^6.26.0",
     "babel-plugin-add-module-exports": "^0.2.1",
@@ -82,16 +71,17 @@
     "babel-register": "^6.26.0",
     "babel-runtime": "^6.26.0",
     "body-parser": "^1.16.1",
+    "classnames": "^2.2.5",
     "compression": "^1.6.2",
     "cookie-parser": "^1.4.3",
     "express": "^4.15.4",
     "express-session": "^1.15.5",
-    "feathers-authentication-hooks": "^0.1.6",
+    "feathers-authentication-hooks": "^0.2.0",
     "feathers-hooks-common": "^4.10.0",
     "feathers-nedb": "3.0.0",
+    "final-form": "^4.6.1",
     "history": "^4.7.2",
     "http-proxy": "^1.16.2",
-    "is-promise": "^2.1.0",
     "js-cookie": "^2.1.3",
     "localforage": "^1.4.3",
     "lru-memoize": "^1.0.1",
@@ -105,6 +95,7 @@
     "react": "^16.3.1",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.3.1",
+    "react-final-form": "^3.4.0",
     "react-helmet": "^5.0.3",
     "react-loadable": "^5.3.0",
     "react-redux": "^5.0.6",
@@ -113,18 +104,15 @@
     "react-router-config": "^1.0.0-beta.4",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.9",
-    "recompose": "^0.26.0",
+    "recompose": "^0.27.0",
     "redial": "^0.5.0",
-    "redux": "^3.6.0",
+    "redux": "^4.0.0",
     "redux-auth-wrapper": "^2.0.2",
-    "redux-form": "^7.1.1",
     "redux-logger": "^3.0.6",
     "redux-persist": "^5.3.4",
     "serialize-javascript": "^1.3.0",
     "serve-favicon": "^2.3.2",
-    "socket.io": "^2.0.1",
-    "socket.io-client": "^2.0.1",
-    "verror": "^1.10.0"
+    "socket.io-client": "^2.0.1"
   },
   "devDependencies": {
     "babel-eslint": "^8.0.1",
@@ -138,7 +126,6 @@
     "concurrently": "^3.3.0",
     "cross-env": "^5.1.1",
     "css-loader": "^0.28.5",
-    "enzyme": "^3.1.0",
     "eslint": "^4.13.1",
     "eslint-config-airbnb": "^16.0.0",
     "eslint-loader": "^2.0.0",
@@ -148,9 +135,9 @@
     "extract-text-webpack-plugin": "^3.0.1",
     "file-loader": "^1.1.6",
     "font-awesome": "^4.7.0",
-    "happypack": "^4.0.0",
+    "happypack": "^5.0.0",
     "html-webpack-plugin": "^3.1.0",
-    "husky": "^0.14.3",
+    "husky": "^1.0.0-rc.2",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^22.0.3",
     "jest-cli": "^22.0.3",
@@ -158,7 +145,7 @@
     "less-loader": "^4.0.3",
     "lighthouse": "^2.7.0",
     "lint-staged": "^7.0.1",
-    "node-sass": "^4.5.0",
+    "node-sass": "^4.9.0",
     "piping": "^1.0.0-rc.4",
     "postcss": "^6.0.9",
     "postcss-browser-reporter": "^0.5.0",
@@ -170,14 +157,12 @@
     "prettier-eslint-cli": "^4.6.1",
     "react-a11y": "^1.0.0",
     "react-hot-loader": "^4.0.0",
-    "react-to-html-webpack-plugin": "^2.2.0",
     "redux-devtools": "^3.3.2",
     "redux-devtools-dock-monitor": "^1.1.1",
     "redux-devtools-log-monitor": "^1.2.0",
     "resolve-url-loader": "^2.2.1",
     "sass-loader": "^7.0.1",
-    "sinon": "^4.0.1",
-    "style-loader": "^0.20.1",
+    "style-loader": "^0.21.0",
     "sw-precache-webpack-plugin": "^0.11.3",
     "uglifyjs-webpack-plugin": "^1.1.6",
     "url-loader": "^1.0.1",
@@ -188,5 +173,17 @@
   },
   "engines": {
     "node": ">=6.9.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "+(src|api)/**/*.js": [
+      "prettier-eslint --write --eslint-config-path .eslintrc",
+      "eslint -c .eslintrc",
+      "git add"
+    ]
   }
 }
