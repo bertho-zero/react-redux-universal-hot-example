@@ -5,13 +5,15 @@ import morgan from 'morgan';
 import session from 'express-session';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import PrettyError from 'pretty-error';
 import config from './config';
 import services from './services';
 import channels from './channels';
-import { actionHandler, logger, notFound, errorHandler } from './middleware';
-import auth from './services/authentication';
 
-process.on('unhandledRejection', error => console.error(error));
+const pretty = new PrettyError();
+
+process.on('unhandledRejection', (reason, p) =>
+  console.error('Unhandled Rejection at: Promise ', p, pretty.render(reason)));
 
 const app = express(feathers());
 
@@ -30,14 +32,19 @@ app
   // Core
   .configure(express.rest())
   .configure(socketio({ path: '/ws' }))
-  .configure(auth)
-  .use(actionHandler(app))
   .configure(services)
   .configure(channels)
   // Final handlers
-  .use(notFound())
-  .use(logger(app))
-  .use(errorHandler());
+  .use(express.notFound())
+  .use(express.errorHandler({
+    logger: {
+      error: error => {
+        if (error && error.code !== 404) {
+          console.error('API ERROR:', pretty.render(error));
+        }
+      }
+    }
+  }));
 
 if (process.env.APIPORT) {
   app.listen(process.env.APIPORT, err => {
@@ -51,27 +58,6 @@ if (process.env.APIPORT) {
   console.error('==>     ERROR: No APIPORT environment variable has been specified');
 }
 
-const bufferSize = 100;
-const messageBuffer = new Array(bufferSize);
-let messageIndex = 0;
-
 app.io.on('connection', socket => {
   socket.emit('news', { msg: "'Hello World!' from server" });
-
-  socket.on('history', () => {
-    for (let index = 0; index < bufferSize; index += 1) {
-      const msgNo = (messageIndex + index) % bufferSize;
-      const msg = messageBuffer[msgNo];
-      if (msg) {
-        socket.emit('msg', msg);
-      }
-    }
-  });
-
-  socket.on('msg', data => {
-    const message = { ...data, id: messageIndex };
-    messageBuffer[messageIndex % bufferSize] = message;
-    messageIndex += 1;
-    app.io.emit('msg', message);
-  });
 });

@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { createStore as _createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 import { createPersistoid, persistCombineReducers, REGISTER } from 'redux-persist';
@@ -59,7 +58,7 @@ export default function createStore({
   const store = finalCreateStore(combine({ ...noopReducers, ...reducers }, persistConfig), data);
 
   store.asyncReducers = {};
-  store.inject = _.partial(inject, store, _, persistConfig);
+  store.inject = _reducers => inject(store, _reducers, persistConfig);
 
   if (persistConfig) {
     const persistoid = createPersistoid(persistConfig);

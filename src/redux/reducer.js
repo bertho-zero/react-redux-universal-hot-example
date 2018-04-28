@@ -1,6 +1,5 @@
 import multireducer from 'multireducer';
 import { routerReducer } from 'react-router-redux';
-import { reducer as form } from 'redux-form';
 import auth from './modules/auth';
 import notifs from './modules/notifs';
 import counter from './modules/counter';
@@ -10,7 +9,6 @@ export default function createReducers(asyncReducers) {
   return {
     router: routerReducer,
     online: (v = true) => v,
-    form,
     notifs,
     auth,
     counter: multireducer({

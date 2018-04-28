@@ -29,9 +29,8 @@ const persistConfig = {
 const dest = document.getElementById('content');
 
 const app = createApp();
-const restApp = createApp('rest');
 const client = apiClient();
-const providers = { app, restApp, client };
+const providers = { app, client };
 
 function initSocket() {
   socket.on('news', data => {
@@ -97,6 +96,7 @@ initSocket();
 
   await hydrate(routes);
 
+  // Hot reload
   if (module.hot) {
     module.hot.accept('./routes', () => {
       const nextRoutes = require('./routes');
@@ -106,6 +106,7 @@ initSocket();
     });
   }
 
+  // Server-side rendering check
   if (process.env.NODE_ENV !== 'production') {
     window.React = React; // enable debugger
 
@@ -115,6 +116,7 @@ initSocket();
     }
   }
 
+  // Dev tools
   if (__DEVTOOLS__ && !window.devToolsExtension) {
     const devToolsDest = document.createElement('div');
     window.document.body.insertBefore(devToolsDest, null);
@@ -127,6 +129,7 @@ initSocket();
     );
   }
 
+  // Service worker
   if (!__DEVELOPMENT__ && 'serviceWorker' in navigator) {
     try {
       await navigator.serviceWorker.register('/dist/service-worker.js', { scope: '/' });

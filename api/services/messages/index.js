@@ -20,5 +20,5 @@ export default function messagesService() {
 
   app.service('messages').hooks(hooks);
 
-  app.service('messages').publish('created', () => app.channel('authenticated'));
+  app.service('messages').publish('created', () => app.channel('anonymous', 'authenticated'));
 }
