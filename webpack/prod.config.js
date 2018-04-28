@@ -57,7 +57,10 @@ module.exports = {
             }, {
               loader: 'postcss-loader',
               options: {
-                sourceMap: true
+                sourceMap: false,
+                config: {
+                  path: 'postcss.config.js'
+                }
               }
             }, {
               loader: 'less-loader',
@@ -84,7 +87,10 @@ module.exports = {
             }, {
               loader: 'postcss-loader',
               options: {
-                sourceMap: true
+                sourceMap: false,
+                config: {
+                  path: 'postcss.config.js'
+                }
               }
             }, {
               loader: 'sass-loader',
@@ -137,24 +143,10 @@ module.exports = {
     extensions: ['.json', '.js', '.jsx']
   },
   plugins: [
-    new webpack.LoaderOptionsPlugin({
-      test: /\.(less|scss)/,
-      options: {
-        postcss: function (webpack) {
-          return [
-            require("postcss-import")({ addDependencyTo: webpack }),
-            require("postcss-url")(),
-            require("postcss-cssnext")({ browsers: 'last 2 version' }),
-            // add your "plugins" here
-            // ...
-            // and if you want to compress,
-            // just use css-loader option that already use cssnano under the hood
-            require("postcss-browser-reporter")(),
-            require("postcss-reporter")(),
-          ]
-        }
-      }
-    }),
+    // https://goo.gl/dTQYan
+    // new webpack.LoaderOptionsPlugin({
+    //   minimize: true,
+    // }),
 
     new CleanPlugin([assetsPath], { root: projectRootPath }),
 
