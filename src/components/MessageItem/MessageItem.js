@@ -30,7 +30,6 @@ export default class MessageItem extends Component {
         [msg._id]: msg.text
       }
     });
-    console.log(this.state.editing);
   }
 
   stopEdit(msg) {
@@ -65,8 +64,7 @@ export default class MessageItem extends Component {
               render={({ handleSubmit }) => (
                 <form onSubmit={handleSubmit}>
                   <h4 className="media-heading">
-                    {message.author ? message.author.email : 'Anonymous'}
-                    <small>08 Apr 2018</small>{' '}
+                    {message.author ? message.author.email : 'Anonymous'} <small>08 Apr 2018</small>{' '}
                     <button
                       type="submit"
                       className={cn('btn btn-sm btn-link', styles.controlBtn)}
