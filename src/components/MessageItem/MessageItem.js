@@ -64,7 +64,8 @@ export default class MessageItem extends Component {
               render={({ handleSubmit }) => (
                 <form onSubmit={handleSubmit}>
                   <h4 className="media-heading">
-                    {message.author ? message.author.email : 'Anonymous'} <small>08 Apr 2018</small>{' '}
+                    {message.author ? message.author.email : 'Anonymous'}{' '}
+                    <small>{new Date(message.createdAt).toLocaleString()}</small>{' '}
                     <button
                       type="submit"
                       className={cn('btn btn-sm btn-link', styles.controlBtn)}
@@ -96,7 +97,8 @@ export default class MessageItem extends Component {
           ) : (
             <Fragment>
               <h4 className="media-heading">
-                {message.author ? message.author.email : 'Anonymous'} <small>08 Apr 2018</small>
+                {message.author ? message.author.email : 'Anonymous'}{' '}
+                <small>{new Date(message.createdAt).toLocaleString()}</small>
                 {user && message.author && user._id === message.author._id ? (
                   <Fragment>
                     {' '}
