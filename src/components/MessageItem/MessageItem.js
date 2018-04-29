@@ -27,7 +27,7 @@ export default class MessageItem extends Component {
     this.setState({
       editing: {
         ...this.state.editing,
-        [msg._id]: msg.text
+        [msg._id]: true
       }
     });
   };
