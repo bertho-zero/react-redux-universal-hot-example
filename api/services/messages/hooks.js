@@ -1,7 +1,7 @@
 import auth from '@feathersjs/authentication';
 import local from '@feathersjs/authentication-local';
 import { restrictToOwner } from 'feathers-authentication-hooks';
-import { fastJoin, disallow } from 'feathers-hooks-common';
+import { fastJoin, disallow, iff, isProvider, keep } from 'feathers-hooks-common';
 import { required } from 'utils/validation';
 import { validateHook as validate } from 'hooks';
 
@@ -47,7 +47,11 @@ const messagesHooks = {
       }
     ],
     update: disallow(),
-    patch: [auth.hooks.authenticate('jwt'), restrictToOwner({ ownerField: 'sentBy' })],
+    patch: [
+      auth.hooks.authenticate('jwt'),
+      restrictToOwner({ ownerField: 'sentBy' }),
+      iff(isProvider('external'), keep('text'))
+    ],
     remove: disallow()
   },
   after: {

@@ -96,8 +96,7 @@ export default class MessageItem extends Component {
           ) : (
             <Fragment>
               <h4 className="media-heading">
-                {message.author ? message.author.email : 'Anonymous'}
-                <small>08 Apr 2018</small>
+                {message.author ? message.author.email : 'Anonymous'} <small>08 Apr 2018</small>
                 {user && message.author && user._id === message.author._id ? (
                   <Fragment>
                     {' '}

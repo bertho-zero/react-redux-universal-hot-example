@@ -35,12 +35,4 @@ export default function authenticationService() {
       create: [populateUser(), local.hooks.protect('user.password')]
     }
   });
-
-  // https://github.com/feathersjs/authentication/pull/665
-  app.on('logout', (result, meta) => {
-    Object.assign(meta.socket.feathers, {
-      user: null,
-      payload: null
-    });
-  });
 }

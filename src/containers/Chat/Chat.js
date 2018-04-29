@@ -6,6 +6,7 @@ import cn from 'classnames';
 import reducer, * as chatActions from 'redux/modules/chat';
 import { withApp } from 'hoc';
 import MessageItem from 'components/MessageItem/MessageItem';
+import { socket } from 'app';
 
 @provideHooks({
   fetch: async ({ store: { dispatch, getState, inject } }) => {
@@ -38,7 +39,7 @@ export default class ChatFeathers extends Component {
     }),
     addMessage: PropTypes.func.isRequired,
     patchMessage: PropTypes.func.isRequired,
-    listVisitors: PropTypes.func.isRequired,
+    updateVisitors: PropTypes.func.isRequired,
     messages: PropTypes.arrayOf(PropTypes.object).isRequired,
     visitors: PropTypes.shape({
       authenticated: PropTypes.array,
@@ -61,11 +62,13 @@ export default class ChatFeathers extends Component {
   };
 
   componentDidMount() {
-    this.props.app.service('messages').on('created', this.props.addMessage);
+    const service = this.props.app.service('messages');
+
+    service.on('created', this.props.addMessage);
     setImmediate(() => this.scrollToBottom());
-    this.visitorsUpdater = setInterval(() => {
-      this.props.listVisitors();
-    }, 2500);
+
+    service.on('updateVisitors', this.props.updateVisitors);
+    socket.emit('joinChat');
   }
 
   componentDidUpdate(prevProps) {
@@ -75,8 +78,11 @@ export default class ChatFeathers extends Component {
   }
 
   componentWillUnmount() {
-    this.props.app.service('messages').removeListener('created', this.props.addMessage);
-    clearInterval(this.visitorsUpdater);
+    this.props.app
+      .service('messages')
+      .removeListener('created', this.props.addMessage)
+      .removeListener('updateVisitors', this.props.updateVisitors);
+    socket.emit('leaveChat');
   }
 
   handleSubmit = async event => {

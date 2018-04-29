@@ -126,7 +126,7 @@ export default class App extends Component {
             </Nav>
             {user && (
               <p className="navbar-text">
-                Logged in as <strong>{user.email}</strong>.
+                <strong>{user.email}</strong>
               </p>
             )}
             <Nav navbar pullRight>

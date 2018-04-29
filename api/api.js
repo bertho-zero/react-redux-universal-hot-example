@@ -57,7 +57,3 @@ if (process.env.APIPORT) {
 } else {
   console.error('==>     ERROR: No APIPORT environment variable has been specified');
 }
-
-app.io.on('connection', socket => {
-  socket.emit('news', { msg: "'Hello World!' from server" });
-});

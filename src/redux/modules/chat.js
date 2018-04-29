@@ -4,6 +4,7 @@ const LOAD_FAIL = 'redux-example/chat/LOAD_FAIL';
 const LIST_VISITORS = 'redux-example/chat/LIST_VISITORS';
 const LIST_VISITORS_SUCCESS = 'redux-example/chat/LIST_VISITORS_SUCCESS';
 const LIST_VISITORS_FAIL = 'redux-example/chat/LIST_VISITORS_FAIL';
+const UPDATE_VISITORS = 'redux-example/chat/UPDATE_VISITORS';
 const ADD_MESSAGE = 'redux-example/chat/ADD_MESSAGE';
 const PATCH_MESSAGE = 'redux-example/chat/PATCH_MESSAGE';
 const PATCH_MESSAGE_SUCCESS = 'redux-example/chat/PATCH_MESSAGE_SUCCESS';
@@ -39,6 +40,11 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         visitors: action.result
+      };
+    case UPDATE_VISITORS:
+      return {
+        ...state,
+        visitors: action.visitors
       };
     case ADD_MESSAGE:
       return {
@@ -76,6 +82,13 @@ export function listVisitors() {
   return {
     types: [LIST_VISITORS, LIST_VISITORS_SUCCESS, LIST_VISITORS_FAIL],
     promise: async ({ client }) => client.get('/visitors')
+  };
+}
+
+export function updateVisitors(visitors) {
+  return {
+    type: UPDATE_VISITORS,
+    visitors
   };
 }
 
