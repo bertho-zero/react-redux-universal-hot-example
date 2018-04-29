@@ -1,5 +1,4 @@
-import { socket } from 'app';
-import { SubmissionError } from 'redux-form';
+import { FORM_ERROR } from 'final-form';
 import cookie from 'js-cookie';
 
 const LOAD = 'redux-example/auth/LOAD';
@@ -103,9 +102,12 @@ export default function reducer(state = initialState, action = {}) {
 const catchValidation = error => {
   if (error.message) {
     if (error.message === 'Validation failed' && error.data) {
-      throw new SubmissionError(error.data);
+      return Promise.reject(error.data);
     }
-    throw new SubmissionError({ _error: error.message });
+    const err = {
+      [FORM_ERROR]: error.message
+    };
+    return Promise.reject(err);
   }
   return Promise.reject(error);
 };
@@ -119,20 +121,18 @@ function setCookie({ app }) {
   };
 }
 
-function setToken({ client, app, restApp }) {
+function setToken({ client, app }) {
   return response => {
     const { accessToken } = response;
 
     app.set('accessToken', accessToken);
-    restApp.set('accessToken', accessToken);
     client.setJwtToken(accessToken);
   };
 }
 
-function setUser({ app, restApp }) {
+function setUser({ app }) {
   return response => {
     app.set('user', response.user);
-    restApp.set('user', response.user);
   };
 }
 
@@ -147,11 +147,14 @@ export function isLoaded(globalState) {
 export function load() {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: async ({ app, restApp, client }) => {
-      const response = await restApp.authenticate();
+    promise: async ({ app, client }) => {
+      const response = await app.authenticate();
       await setCookie({ app })(response);
-      setToken({ client, app, restApp })(response);
-      setUser({ app, restApp })(response);
+      setToken({
+        client,
+        app
+      })(response);
+      setUser({ app })(response);
       return response;
     }
   };
@@ -169,19 +172,20 @@ export function register(data) {
 }
 
 export function login(strategy, data) {
-  const socketId = socket.io.engine.id;
   return {
     types: [LOGIN, LOGIN_SUCCESS, LOGIN_FAIL],
-    promise: async ({ client, restApp, app }) => {
+    promise: async ({ client, app }) => {
       try {
-        const response = await restApp.authenticate({
+        const response = await app.authenticate({
           ...data,
-          strategy,
-          socketId
+          strategy
         });
         await setCookie({ app })(response);
-        setToken({ client, app, restApp })(response);
-        setUser({ app, restApp })(response);
+        setToken({
+          client,
+          app
+        })(response);
+        setUser({ app })(response);
         return response;
       } catch (error) {
         if (strategy === 'local') {
@@ -196,9 +200,14 @@ export function login(strategy, data) {
 export function logout() {
   return {
     types: [LOGOUT, LOGOUT_SUCCESS, LOGOUT_FAIL],
-    promise: async ({ client, app, restApp }) => {
+    promise: async ({ client, app }) => {
       await app.logout();
-      setToken({ client, app, restApp })({ accessToken: null });
+      setToken({
+        client,
+        app
+      })({ accessToken: null });
+      setUser({ app })({ user: null });
+      cookie.set('feathers-jwt', '');
     }
   };
 }

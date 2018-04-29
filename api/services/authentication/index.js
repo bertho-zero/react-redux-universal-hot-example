@@ -1,35 +1,13 @@
-import auth from 'feathers-authentication';
-import jwt from 'feathers-authentication-jwt';
-import local from 'feathers-authentication-local';
-// import oauth1 from 'feathers-authentication-oauth1';
-import oauth2 from 'feathers-authentication-oauth2';
+import auth from '@feathersjs/authentication';
+import jwt from '@feathersjs/authentication-jwt';
+import local from '@feathersjs/authentication-local';
+// import oauth1 from '@feathersjs/authentication-oauth1';
+import oauth2 from '@feathersjs/authentication-oauth2';
 import FacebookTokenStrategy from 'passport-facebook-token';
-import { discard } from 'feathers-hooks-common';
 
-function populateUser(authConfig) {
-  return async hook => {
-    const payload = await hook.app.passport.verifyJWT(hook.result.accessToken, authConfig);
-    const user = await hook.app.service('users').get(payload.userId);
-    hook.result.user = user;
-  };
-}
-
-function restToSocketAuth() {
-  return hook => {
-    if (hook.params.provider !== 'rest') return hook;
-    const { accessToken, user } = hook.result;
-    const { socketId } = hook.data;
-    if (socketId && hook.app.io && accessToken) {
-      const userSocket = Object.values(hook.app.io.sockets.connected).find(socket => socket.client.id === socketId);
-      if (userSocket) {
-        Object.assign(userSocket.feathers, {
-          accessToken,
-          user,
-          authenticated: true
-        });
-      }
-    }
-    return hook;
+function populateUser() {
+  return context => {
+    context.result.user = context.params.user;
   };
 }
 
@@ -54,7 +32,7 @@ export default function authenticationService() {
       remove: auth.hooks.authenticate('jwt')
     },
     after: {
-      create: [populateUser(config), discard('user.password'), restToSocketAuth()]
+      create: [populateUser(), local.hooks.protect('user.password')]
     }
   });
 }

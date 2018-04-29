@@ -47,7 +47,6 @@ var webpackConfig = module.exports = {
   entry: {
     'main': [
       'webpack-hot-middleware/client?path=http://' + host + ':' + port + '/__webpack_hmr',
-      'react-hot-loader/patch',
       'bootstrap-loader',
       './src/client.js'
     ]
@@ -55,7 +54,7 @@ var webpackConfig = module.exports = {
   output: {
     path: assetsPath,
     filename: '[name]-[hash].js',
-    chunkFilename: '[name]-[chunkhash].js',
+    chunkFilename: '[name]-[chunkhash].chunk.js',
     publicPath: 'http://' + host + ':' + port + '/dist/'
   },
   performance: {
@@ -120,24 +119,9 @@ var webpackConfig = module.exports = {
     extensions: ['.json', '.js', '.jsx']
   },
   plugins: [
-    new webpack.LoaderOptionsPlugin({
-      test: /\.(less|scss)/,
-      options: {
-        postcss: function (webpack) {
-          return [
-            require("postcss-import")({ addDependencyTo: webpack }),
-            require("postcss-url")(),
-            require("postcss-cssnext")({ browsers: 'last 2 version' }),
-            // add your "plugins" here
-            // ...
-            // and if you want to compress,
-            // just use css-loader option that already use cssnano under the hood
-            require("postcss-browser-reporter")(),
-            require("postcss-reporter")(),
-          ]
-        }
-      }
-    }),
+    // https://goo.gl/dTQYan
+    // new webpack.LoaderOptionsPlugin({
+    // }),
 
     // hot reload
     new webpack.HotModuleReplacementPlugin(),
@@ -159,9 +143,8 @@ var webpackConfig = module.exports = {
 
     helpers.createHappyPlugin('jsx', [
       {
-        loader: 'react-hot-loader/webpack'
-      }, {
         loader: 'babel-loader',
+        exclude: /node_modules(\/|\\)(?!(@feathersjs))/,
         options: babelLoaderQuery
       }, {
         loader: 'eslint-loader',
@@ -183,7 +166,10 @@ var webpackConfig = module.exports = {
       }, {
         loader: 'postcss-loader',
         options: {
-          sourceMap: true
+          sourceMap: true,
+          config: {
+            path: 'postcss.config.js'
+          }
         }
       }, {
         loader: 'less-loader',
@@ -208,7 +194,10 @@ var webpackConfig = module.exports = {
       }, {
         loader: 'postcss-loader',
         options: {
-          sourceMap: true
+          sourceMap: true,
+          config: {
+            path: 'postcss.config.js'
+          }
         }
       }, {
         loader: 'sass-loader',

@@ -30,30 +30,6 @@ The page is rendered from HTML including React components coded as custom HTML t
 The components use properties to alter appearance and sets of data.  Notice some of the components on the page:
 
 ![Screenshot with Annotations](ExploringTheDemoApp/frontpage_markup.png)
-
-### Explore the Widgets Page
-
-Click on *Widgets* link on the top of the screen.   You come to a page with some arbitrary widgets and more logic
-in the form.  Notice how much state affects the display and formatting of buttons:
-
-![Screenshot with Annotations](ExploringTheDemoApp/widgets_markup.png)
-
-### Explore the Survey Page
-
-Click on the *Survey* link.  Following the programming style of this kit, the code for this page is 
-spread over a [Survey container][scont], a [SurveyForm component][scomp], mentioned in the 
-[container][conlist] and [component][complist] lists, 
-mentioned in the [routes][routes] function and the navigation of the main [App][app].  The code also uses
-various libraries for React, Redux, validation, memoize and other functions.   Learn to use [ack](http://beyondgrep.com) 
-or the project wide search built into your editor.
-
-Try clicking on the 'Initialize Form' button and then hitting Submit.  You will see just an error under
-'Little Bobby Tables'.  Now click in the email field then the name field.   You now see errors in both
-the name and the email.  Even with a good kit, forms can be difficult to code.
-
-![Screenshot with Annotations](ExploringTheDemoApp/survey_markup.png)
-[scont]: https://github.com/erikras/react-redux-universal-hot-example/tree/master/src/containers/Survey
-[scomp]: https://github.com/erikras/react-redux-universal-hot-example/tree/master/src/components/SurveyForm
 [conlist]: https://github.com/erikras/react-redux-universal-hot-example/blob/master/src/containers/index.js
 [complist]: https://github.com/erikras/react-redux-universal-hot-example/blob/master/src/components/index.js
 [routes]: https://github.com/erikras/react-redux-universal-hot-example/blob/master/src/routes.js
@@ -87,8 +63,6 @@ Here are some additional quests you could undertake:
 * How do the About page MiniBar and the status bar share data about the time last loaded?
 * How would you add a fourth counter that incremented by two?   How many files would you need
   to touch?
-* What order are calls made when you click "Reload Widgets" on the widgets page?
-* Why does surveyValidation use memoize?
 
 Install, hack, explore!
 

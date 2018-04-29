@@ -4,8 +4,9 @@
 var path = require('path');
 var webpack = require('webpack');
 var CleanPlugin = require('clean-webpack-plugin');
-var ReactLoadablePlugin = require('react-loadable/webpack').ReactLoadablePlugin;
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+var ReactLoadablePlugin = require('react-loadable/webpack').ReactLoadablePlugin;
 
 var projectRootPath = path.resolve(__dirname, '../');
 var assetsPath = path.resolve(projectRootPath, './static/dist');
@@ -29,8 +30,8 @@ module.exports = {
   output: {
     path: assetsPath,
     filename: '[name]-[chunkhash].js',
-    chunkFilename: '[name]-[chunkhash].js',
-    publicPath: '/dist/'
+    chunkFilename: '[name]-[chunkhash].chunk.js',
+    publicPath: '/dist/',
   },
   performance: {
     hints: false
@@ -40,7 +41,7 @@ module.exports = {
       {
         test: /\.jsx?$/,
         loader: 'babel-loader',
-        exclude: /node_modules/
+        exclude: /node_modules(\/|\\)(?!(@feathersjs))/
       }, {
         test: /\.less$/,
         loader: ExtractTextPlugin.extract({
@@ -56,7 +57,10 @@ module.exports = {
             }, {
               loader: 'postcss-loader',
               options: {
-                sourceMap: true
+                sourceMap: true,
+                config: {
+                  path: 'postcss.config.js'
+                }
               }
             }, {
               loader: 'less-loader',
@@ -83,7 +87,10 @@ module.exports = {
             }, {
               loader: 'postcss-loader',
               options: {
-                sourceMap: true
+                sourceMap: true,
+                config: {
+                  path: 'postcss.config.js'
+                }
               }
             }, {
               loader: 'sass-loader',
@@ -136,24 +143,10 @@ module.exports = {
     extensions: ['.json', '.js', '.jsx']
   },
   plugins: [
-    new webpack.LoaderOptionsPlugin({
-      test: /\.(less|scss)/,
-      options: {
-        postcss: function (webpack) {
-          return [
-            require("postcss-import")({ addDependencyTo: webpack }),
-            require("postcss-url")(),
-            require("postcss-cssnext")({ browsers: 'last 2 version' }),
-            // add your "plugins" here
-            // ...
-            // and if you want to compress,
-            // just use css-loader option that already use cssnano under the hood
-            require("postcss-browser-reporter")(),
-            require("postcss-reporter")(),
-          ]
-        }
-      }
-    }),
+    // https://goo.gl/dTQYan
+    // new webpack.LoaderOptionsPlugin({
+    //   minimize: true,
+    // }),
 
     new CleanPlugin([assetsPath], { root: projectRootPath }),
 
@@ -178,11 +171,7 @@ module.exports = {
     new webpack.IgnorePlugin(/\.\/dev/, /\/config$/),
 
     // optimizations
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      }
-    }),
+    new UglifyJsPlugin(),
 
     webpackIsomorphicToolsPlugin,
 
@@ -206,14 +195,7 @@ module.exports = {
 
       directoryIndex: '/',
       verbose: true,
-      navigateFallback: '/dist/index.html',
-      runtimeCaching: [{
-        urlPattern: /\/api\/widget\/load(.*)/,
-        handler: 'networkFirst',
-        options: {
-          debug: true
-        }
-      }]
+      navigateFallback: '/dist/index.html'
     })
   ]
 };

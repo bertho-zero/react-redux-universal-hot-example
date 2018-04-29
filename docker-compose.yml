@@ -19,7 +19,11 @@ services:
       - NGINX_PORT
       - PORT
     command: >
-      /bin/bash -c "envsubst \"`printf '$${%s} ' $$(bash -c \"compgen -A variable\")`\"
-      < /home/nginx/conf.d/default.conf
-      > /etc/nginx/conf.d/default.conf
-      && nginx -g 'daemon off;'"
+      /bin/bash -c
+        "for filename in $$(find /home/nginx/ -type f -name '*'); do
+          mkdir -p $$(dirname $${filename/\/home\/nginx/\/etc\/nginx});
+          cat $$filename \
+            | envsubst \"`printf '$${%s} ' $$(bash -c \"compgen -A variable\")`\" \
+            | tee $${filename/\/home\/nginx/\/etc\/nginx};
+        done;
+        nginx -g 'daemon off;'"

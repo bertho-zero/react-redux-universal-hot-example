@@ -10,6 +10,7 @@ import cookieParser from 'cookie-parser';
 import httpProxy from 'http-proxy';
 import PrettyError from 'pretty-error';
 import http from 'http';
+import { StaticRouter } from 'react-router';
 import { ConnectedRouter } from 'react-router-redux';
 import { renderRoutes } from 'react-router-config';
 import createMemoryHistory from 'history/createMemoryHistory';
@@ -22,16 +23,17 @@ import apiClient from 'helpers/apiClient';
 import Html from 'helpers/Html';
 import routes from 'routes';
 import { createApp } from 'app';
-import getChunks, { waitChunks } from 'utils/getChunks';
+import { getChunks, waitChunks } from 'utils/chunks';
 import asyncMatchRoutes from 'utils/asyncMatchRoutes';
 import { ReduxAsyncConnect, Provider } from 'components';
 
+const pretty = new PrettyError();
 const chunksPath = path.join(__dirname, '..', 'static', 'dist', 'loadable-chunks.json');
 
-process.on('unhandledRejection', error => console.error(error));
+process.on('unhandledRejection', (reason, p) =>
+  console.error('Unhandled Rejection at: Promise ', p, pretty.render(reason)));
 
 const targetUrl = `http://${config.apiHost}:${config.apiPort}`;
-const pretty = new PrettyError();
 const app = express();
 const server = new http.Server(app);
 const proxy = httpProxy.createProxyServer({
@@ -48,6 +50,7 @@ app
 
 app.use('/dist/service-worker.js', (req, res, next) => {
   res.setHeader('Service-Worker-Allowed', '/');
+  res.setHeader('Cache-Control', 'no-store');
   return next();
 });
 
@@ -88,7 +91,10 @@ proxy.on('error', (error, req, res) => {
     res.writeHead(500, { 'content-type': 'application/json' });
   }
 
-  const json = { error: 'proxy_error', reason: error.message };
+  const json = {
+    error: 'proxy_error',
+    reason: error.message
+  };
   res.end(JSON.stringify(json));
 });
 
@@ -99,12 +105,14 @@ app.use(async (req, res) => {
     webpackIsomorphicTools.refresh();
   }
   const providers = {
-    client: apiClient(req),
     app: createApp(req),
-    restApp: createApp(req)
+    client: apiClient(req)
   };
   const history = createMemoryHistory({ initialEntries: [req.originalUrl] });
-  const store = createStore({ history, helpers: providers });
+  const store = createStore({
+    history,
+    helpers: providers
+  });
 
   function hydrate() {
     res.write('<!doctype html>');
@@ -127,18 +135,25 @@ app.use(async (req, res) => {
     });
 
     const modules = [];
+    const context = {};
     const component = (
       <Loadable.Capture report={moduleName => modules.push(moduleName)}>
         <Provider store={store} {...providers}>
           <ConnectedRouter history={history}>
-            <ReduxAsyncConnect routes={routes} store={store} helpers={providers}>
-              {renderRoutes(routes)}
-            </ReduxAsyncConnect>
+            <StaticRouter location={req.originalUrl} context={context}>
+              <ReduxAsyncConnect routes={routes} store={store} helpers={providers}>
+                {renderRoutes(routes)}
+              </ReduxAsyncConnect>
+            </StaticRouter>
           </ConnectedRouter>
         </Provider>
       </Loadable.Capture>
     );
     const content = ReactDOM.renderToString(component);
+
+    if (context.url) {
+      return res.redirect(301, context.url);
+    }
 
     const locationState = store.getState().router.location;
     if (req.originalUrl !== locationState.pathname + locationState.search) {

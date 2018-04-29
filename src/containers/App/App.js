@@ -99,20 +99,8 @@ export default class App extends Component {
 
           <Navbar.Collapse>
             <Nav navbar>
-              {user && (
-                <LinkContainer to="/chat-feathers">
-                  <NavItem>Chat with Feathers</NavItem>
-                </LinkContainer>
-              )}
-
               <LinkContainer to="/chat">
                 <NavItem>Chat</NavItem>
-              </LinkContainer>
-              <LinkContainer to="/widgets">
-                <NavItem>Widgets</NavItem>
-              </LinkContainer>
-              <LinkContainer to="/survey">
-                <NavItem>Survey</NavItem>
               </LinkContainer>
               <LinkContainer to="/about">
                 <NavItem>About Us</NavItem>
@@ -138,7 +126,7 @@ export default class App extends Component {
             </Nav>
             {user && (
               <p className="navbar-text">
-                Logged in as <strong>{user.email}</strong>.
+                <strong>{user.email}</strong>
               </p>
             )}
             <Nav navbar pullRight>

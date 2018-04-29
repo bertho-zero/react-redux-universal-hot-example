@@ -34,23 +34,18 @@ export default class ReduxAsyncConnect extends Component {
 
       // load data while the old screen remains
       const { components, match, params } = await asyncMatchRoutes(routes, nextProps.location.pathname);
-
-      await trigger('fetch', components, {
+      const triggerLocals = {
         ...helpers,
         store,
         match,
         params,
         history,
         location: nextProps.location
-      });
+      };
+
+      await trigger('fetch', components, triggerLocals);
       if (__CLIENT__) {
-        await trigger('defer', components, {
-          ...helpers,
-          store,
-          match,
-          history,
-          location: nextProps.location
-        });
+        await trigger('defer', components, triggerLocals);
       }
 
       // clear previousLocation so the next screen renders

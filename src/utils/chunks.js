@@ -2,11 +2,11 @@ import fs from 'fs';
 
 let chunksStats = [];
 
-export default function getChunks() {
+export function getChunks() {
   return chunksStats;
 }
 
-export function waitWatchFile({ path, onChange, timeout = 60000 } = {}) {
+function waitWatchFile({ path, onChange, timeout = 60000 } = {}) {
   function watch(loaded, timeleft) {
     return new Promise((resolve, reject) => {
       if (timeleft < 0) {
