@@ -33,9 +33,7 @@ Input.propTypes = {
 const RegisterForm = ({ onSubmit, initialValues }) => (
   <Form
     initialValues={initialValues}
-    onSubmit={values => {
-      onSubmit(values).catch(err => err);
-    }}
+    onSubmit={values => onSubmit(values).then(() => {}, err => err)}
     validate={registerValidation}
     render={({ handleSubmit, submitError }) => (
       <form className="form-horizontal" onSubmit={handleSubmit}>

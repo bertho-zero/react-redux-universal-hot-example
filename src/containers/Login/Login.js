@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import LoginForm from 'components/LoginForm/LoginForm';
@@ -8,6 +9,7 @@ import * as authActions from 'redux/modules/auth';
 import * as notifActions from 'redux/modules/notifs';
 
 @connect(state => ({ user: state.auth.user }), { ...notifActions, ...authActions })
+@withRouter
 export default class Login extends Component {
   static propTypes = {
     user: PropTypes.shape({
@@ -15,15 +17,12 @@ export default class Login extends Component {
     }),
     login: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
-    notifSend: PropTypes.func.isRequired
+    notifSend: PropTypes.func.isRequired,
+    history: PropTypes.objectOf(PropTypes.any).isRequired
   };
 
   static defaultProps = {
     user: null
-  };
-
-  static contextTypes = {
-    router: PropTypes.object
   };
 
   onFacebookLogin = async (err, data) => {
@@ -34,7 +33,7 @@ export default class Login extends Component {
       this.successLogin();
     } catch (error) {
       if (error.message === 'Incomplete oauth registration') {
-        this.context.router.push({
+        this.props.history.push({
           pathname: '/register',
           state: { oauth: error.data }
         });

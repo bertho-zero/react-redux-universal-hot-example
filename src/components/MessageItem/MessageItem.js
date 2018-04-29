@@ -57,8 +57,8 @@ export default class MessageItem extends Component {
               initialValues={{
                 text: message.text
               }}
-              onSubmit={values => {
-                patchMessage(message._id, values);
+              onSubmit={async values => {
+                await patchMessage(message._id, values);
                 this.stopEdit(message);
               }}
               render={({ handleSubmit }) => (
