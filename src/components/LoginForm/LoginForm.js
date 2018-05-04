@@ -32,9 +32,7 @@ Input.propTypes = {
 
 const LoginForm = ({ onSubmit }) => (
   <Form
-    onSubmit={values => {
-      onSubmit(values).catch(err => err);
-    }}
+    onSubmit={values => onSubmit(values).then(() => {}, err => err)}
     validate={loginValidation}
     render={({ handleSubmit, submitError }) => (
       <form className="form-horizontal" onSubmit={handleSubmit}>
