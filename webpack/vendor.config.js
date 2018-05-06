@@ -3,7 +3,8 @@ var webpack = require('webpack');
 var projectRootPath = path.resolve(__dirname, '../');
 
 module.exports = {
-  devtool: process.env.NODE_ENV === 'production' ? false : 'inline-source-map',
+  mode: 'development',
+  devtool: 'inline-source-map',
 
   output: {
     path: path.join(projectRootPath, 'static/dist/dlls'),
