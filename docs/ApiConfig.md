@@ -66,8 +66,8 @@ You can remove the whole `api` folder, as well as `bin/api.js`.
 
 Once you do that, you'll also need to remove the lines in `package.json` that called those things. Remove all this:
 
-* ` \"npm run start-prod-api\"` from the `start` script command
-* ` \"npm run start-dev-api\"` from the `dev` script command
+* ` \"yarn start-prod-api\"` from the `start` script command
+* ` \"yarn start-dev-api\"` from the `dev` script command
 * the `start-prod-api` and `start-dev-api` scripts altogether
 * the ` api` argument from the `lint` script
 

@@ -12,7 +12,7 @@ Please make sure that there aren't existing pull requests attempting to address 
 
 ### Linting
 
-Please check your code using `npm run lint` before submitting your pull requests, as the CI build will fail if `eslint` fails.
+Please check your code using `yarn lint` before submitting your pull requests, as the CI build will fail if `eslint` fails.
 
 ### Commit Message Format
 

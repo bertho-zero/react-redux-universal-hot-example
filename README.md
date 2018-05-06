@@ -82,13 +82,13 @@ This new level of quality allows Progressive Web Apps to earn a place on the use
 ## Installation
 
 ```bash
-npm install
+yarn
 ```
 
 ## Running Dev Server
 
 ```bash
-npm run dev
+yarn dev
 ```
 
 The first time it may take a little while to generate the first `webpack-assets.json` and complain with a few dozen `[webpack-isomorphic-tools] (waiting for the first Webpack build to finish)` printouts, but be patient. Give it 30 seconds.
@@ -109,8 +109,8 @@ DevTools are not enabled during production by default.
 ## Building and Running Production Server
 
 ```bash
-npm run build
-npm run start
+yarn build
+yarn start
 ```
 
 ## Demo
@@ -243,7 +243,7 @@ After this modification to both loaders you will be able to use scss and less fi
 
 The project uses [Jest](https://facebook.github.io/jest/) to run your unit tests.
 
-To run the tests in the project, just simply run `npm test` if you have `Chrome` installed, it will be automatically launched as a test service for you.
+To run the tests in the project, just simply run `yarn test` if you have `Chrome` installed, it will be automatically launched as a test service for you.
 
 ## Deployment on Heroku
 

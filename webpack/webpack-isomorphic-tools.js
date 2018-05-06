@@ -4,13 +4,13 @@ var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
 // https://github.com/halt-hammerzeit/webpack-isomorphic-tools
 module.exports = {
 
-  // when adding "js" extension to asset types 
+  // when adding "js" extension to asset types
   // and then enabling debug mode, it may cause a weird error:
   //
-  // [0] npm run start-prod exited with code 1
+  // [0] yarn start-prod exited with code 1
   // Sending SIGTERM to other processes..
   //
-  // debug: true, 
+  // debug: true,
 
   assets: {
     images: {

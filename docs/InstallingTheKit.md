@@ -18,13 +18,13 @@ That's the minimum view of git, equivalent to the [xkcd view](https://xkcd.com/1
 Nothing more complex than creating new copy is necessary until contributing code to a project.
 
 
-## Run npm install
+## Run yarn
 
 Only part of the project is stored in github.  All the JavaScript libraries upon which the project depends 
 are imported using npm, the node package manager.  It might be a good time to check that your version of `npm` is
 up to date; OS/X users type `brew upgrade && brew update`.  
 
-Npm installs libraries according to the [semvar](https://docs.npmjs.com/getting-started/semantic-versioning) 
+Yarn installs libraries according to the [semvar](https://docs.npmjs.com/getting-started/semantic-versioning) 
 minimum versions in the `dependencies` section of `package.json` file:
 
 ![The Dependencies](InstallingTheKit/dependencies.png)
@@ -43,14 +43,14 @@ to over 1,000 packages.
 And then you should see pages and pages of output.  Some packages suggest installing "globally" or "-g"; don't. 
 Global packages install into  `/usr/local/lib/node_modules` and mix links to binaries into `/usr/local/bin`.
 Local packages install into `./node_modules` with the links to binaries separate in `./node_modules/.bin`.
-This provides you the to option of doing a `rm -rf node_modules && npm install` to get back to a known state.
+This provides you the to option of doing a `rm -rf node_modules && yarn` to get back to a known state.
 
 This installation step fails some days; the kit juggles many moving parts and these packages are independently 
 developed.  Some packages have [peer dependencies](https://nodejs.org/en/blog/npm/peer-dependencies/)
 which end up conflicting with one another.   You can check the 
 [open install issues](https://github.com/erikras/react-redux-universal-hot-example/issues?utf8=✓&q=is%3Aissue+is%3Aopen+install),
-run `npm install` again, or try `npm outdated && npm update`.   Errors in installation are often not caught by 
-running `npm run test`.  The only way to know it works is to run it.
+run `yarn` again, or try `yarn outdated && yarn upgrade`.   Errors in installation are often not caught by 
+running `yarn test`.  The only way to know it works is to run it.
 
 ## Run the Development Server
 

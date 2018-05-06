@@ -24,11 +24,11 @@ RUN set -x ; \
   && exit 0 ; exit 1
 RUN echo $user' ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-# Install (global) NPM packages/dependencies
+# Install (global) Yarn packages/dependencies
 RUN yarn global add node-gyp
 RUN git clone --recursive https://github.com/sass/node-sass.git \
   && cd node-sass \
-  && npm install \
+  && yarn \
   && node scripts/build -f
 
 # Make project directory with permissions
@@ -43,7 +43,7 @@ COPY . .
 # Give owner rights to the current user
 RUN chown -Rh $user:$user /project
 
-# Install (local) NPM packages and build
+# Install (local) Yarn packages and build
 RUN yarn
 
 USER $user

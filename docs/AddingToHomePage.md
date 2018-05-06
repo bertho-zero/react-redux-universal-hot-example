@@ -20,7 +20,7 @@ So, the likely file is `src/containers/Home/Home.js`.
 
 ## Start the server and open the browser
 
-Execute `npm run dev` and open http://localhost:3000:
+Execute `yarn dev` and open http://localhost:3000:
 
 *  `./package.json`, using [concurrently](https://www.npmjs.com/package/concurrently)
 and [better-npm-run](https://www.npmjs.com/package/better-npm-run), runs 
