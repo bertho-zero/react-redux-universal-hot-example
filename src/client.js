@@ -56,7 +56,7 @@ initSocket();
   }
 
   const history = createBrowserHistory();
-  const data = !online ? { ...storedData, ...window.__data, online } : { ...window.__data, online };
+  const data = !online ? { ...window.__data, ...storedData, online } : { ...window.__data, online };
   const store = createStore({
     history,
     data,
