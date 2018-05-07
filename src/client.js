@@ -2,6 +2,7 @@
  * THIS IS THE ENTRY POINT FOR THE CLIENT, JUST LIKE server.js IS THE ENTRY POINT FOR THE SERVER.
  */
 import 'babel-polyfill';
+import _ from 'lodash';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ConnectedRouter } from 'react-router-redux';
@@ -30,7 +31,10 @@ const dest = document.getElementById('content');
 
 const app = createApp();
 const client = apiClient();
-const providers = { app, client };
+const providers = {
+  app,
+  client
+};
 
 function initSocket() {
   socket.on('news', data => {
@@ -56,7 +60,14 @@ initSocket();
   }
 
   const history = createBrowserHistory();
-  const data = !online ? { ...window.__data, ...storedData, online } : { ...window.__data, online };
+  const data = {
+    ...storedData,
+    ...window.__data,
+    ..._.pick(storedData, [
+      /* data always from store */
+    ]),
+    online
+  };
   const store = createStore({
     history,
     data,
