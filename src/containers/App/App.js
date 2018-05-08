@@ -56,16 +56,39 @@ export default class App extends Component {
     store: PropTypes.object.isRequired
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.user && nextProps.user) {
-      // login
-      const query = new URLSearchParams(this.props.location.search);
-      this.props.pushState(query.get('redirect') || '/login-success');
-    } else if (this.props.user && !nextProps.user) {
-      // logout
-      this.props.pushState('/');
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (!prevState.user && nextProps.user) {
+      const query = new URLSearchParams(nextProps.location.search);
+      nextProps.pushState(query.get('redirect') || '/login-success');
+      return {
+        user: nextProps.user
+      };
+    } else if (prevState.user && !nextProps.user) {
+      nextProps.pushState('/');
+      return {
+        user: null
+      };
     }
+    return null;
   }
+
+  state = {
+    user: null
+  };
+  /* Made Unsafe as per React Docs v16.3 */
+  // componentWillReceiveProps(nextProps) {
+  //   console.log(this.props.user);
+  //   console.log(nextProps.user);
+  //   if (!this.props.user && nextProps.user) {
+  //     // login
+  //     const query = new URLSearchParams(this.props.location.search);
+  //     this.props.pushState(query.get('redirect') || '/login-success');
+  //   } else if (this.props.user && !nextProps.user) {
+  //     // logout
+  //     this.props.pushState('/');
+  //   }
+  // }
+  /* Unsafe as per v16.3 */
 
   componentDidUpdate(prevProps) {
     if (this.props.location !== prevProps.location) {
@@ -79,7 +102,8 @@ export default class App extends Component {
   };
 
   render() {
-    const { user, notifs, route } = this.props;
+    const { notifs, route } = this.props;
+    const { user } = this.state;
     const styles = require('./App.scss');
 
     return (

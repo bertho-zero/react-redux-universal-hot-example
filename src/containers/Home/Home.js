@@ -232,7 +232,7 @@ export default class Home extends Component {
             <dt>Redirect after state change</dt>
             <dd>
               After you log in, you will be redirected to a Login Success page. This <strike>magic</strike> logic is
-              performed in <code>componentWillReceiveProps()</code> in <code>App.js</code>, but it could be done in any
+              performed in <code>getDerivedStateFromProps()</code> in <code>App.js</code>, but it could be done in any
               component that listens to the appropriate store slice, via Redux's <code>@connect</code>, and pulls the
               router from the context.
             </dd>
