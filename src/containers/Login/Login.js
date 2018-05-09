@@ -51,7 +51,7 @@ export default class Login extends Component {
 
   successLogin = () => {
     this.props.notifSend({
-      message: "You're logged !",
+      message: "You're logged in now !",
       kind: 'success',
       dismissAfter: 2000
     });
