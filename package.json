@@ -141,7 +141,7 @@
     "husky": "^1.0.0-rc.2",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^22.0.3",
-    "jest-cli": "^22.0.3",
+    "jest-cli": "^23.0.0",
     "less": "^3.0.0-alpha.3",
     "less-loader": "^4.0.3",
     "lighthouse": "^2.7.0",
