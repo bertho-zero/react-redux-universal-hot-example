@@ -29,7 +29,7 @@ export default class Register extends Component {
 
   successRegister = () => {
     this.props.notifSend({
-      message: "You'r now registered !",
+      message: "You're now registered !",
       kind: 'success',
       dismissAfter: 2000
     });

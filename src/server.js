@@ -124,7 +124,7 @@ app.use(async (req, res) => {
   }
 
   try {
-    const { components, match, params } = await asyncMatchRoutes(routes, req.originalUrl);
+    const { components, match, params } = await asyncMatchRoutes(routes, req.path);
     await trigger('fetch', components, {
       ...providers,
       store,
