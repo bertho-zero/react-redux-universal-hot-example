@@ -42,6 +42,7 @@ if (process.env.WEBPACK_DLLS === '1' && !validDLLs) {
 }
 
 var webpackConfig = module.exports = {
+  mode: 'development',
   devtool: 'inline-source-map',
   context: path.resolve(__dirname, '..'),
   entry: {

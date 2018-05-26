@@ -19,6 +19,7 @@ var SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
+  mode: 'production',
   devtool: 'source-map',
   context: path.resolve(__dirname, '..'),
   entry: {

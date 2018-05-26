@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -11,6 +12,7 @@ import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Alert from 'react-bootstrap/lib/Alert';
 import Helmet from 'react-helmet';
+import qs from 'qs';
 import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
 import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
 import { Notifs, InfoBar } from 'components';
@@ -56,16 +58,30 @@ export default class App extends Component {
     store: PropTypes.object.isRequired
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.user && nextProps.user) {
-      // login
-      const redirect = this.props.location.query && this.props.location.query.redirect;
-      this.props.pushState(redirect || '/login-success');
-    } else if (this.props.user && !nextProps.user) {
+  static getDerivedStateFromProps(props, state) {
+    const { prevProps } = state;
+    // Compare the incoming prop to previous prop
+    const user = !_.isEqual(prevProps.user, props.user) ? props.user : state.user;
+
+    if (!prevProps.user && props.user) {
+      const query = qs.parse(props.location.search, { ignoreQueryPrefix: true });
+      props.pushState(query.redirect || '/login-success');
+    } else if (prevProps.user && !props.user) {
       // logout
-      this.props.pushState('/');
+      props.pushState('/');
     }
+
+    return {
+      // Store the previous props in state
+      prevProps: props,
+      user
+    };
   }
+
+  state = {
+    prevProps: this.props, // eslint-disable-line react/no-unused-state
+    user: this.props.user
+  };
 
   componentDidUpdate(prevProps) {
     if (this.props.location !== prevProps.location) {
@@ -79,7 +95,8 @@ export default class App extends Component {
   };
 
   render() {
-    const { user, notifs, route } = this.props;
+    const { notifs, route } = this.props;
+    const { user } = this.state;
     const styles = require('./App.scss');
 
     return (
