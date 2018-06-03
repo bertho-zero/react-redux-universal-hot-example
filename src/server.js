@@ -17,6 +17,9 @@ import createMemoryHistory from 'history/createMemoryHistory';
 import Loadable from 'react-loadable';
 import { getBundles } from 'react-loadable/webpack';
 import { trigger } from 'redial';
+import { getStoredState } from 'redux-persist';
+import { CookieStorage, NodeCookiesWrapper } from 'redux-persist-cookie-storage';
+import Cookies from 'cookies';
 import config from 'config';
 import createStore from 'redux/create';
 import apiClient from 'helpers/apiClient';
@@ -109,9 +112,27 @@ app.use(async (req, res) => {
     client: apiClient(req)
   };
   const history = createMemoryHistory({ initialEntries: [req.originalUrl] });
+
+  const cookieJar = new NodeCookiesWrapper(new Cookies(req, res));
+
+  const persistConfig = {
+    key: 'root',
+    storage: new CookieStorage(cookieJar),
+    stateReconciler: (inboundState, originalState) => originalState,
+    whitelist: ['auth', 'info', 'chat']
+  };
+
+  let preloadedState;
+  try {
+    preloadedState = await getStoredState(persistConfig);
+  } catch (e) {
+    preloadedState = {};
+  }
+
   const store = createStore({
     history,
-    helpers: providers
+    helpers: providers,
+    data: preloadedState
   });
 
   function hydrate() {
