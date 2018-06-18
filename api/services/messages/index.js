@@ -13,9 +13,7 @@ const updateVisitors = app => {
   });
 };
 
-export default function messagesService() {
-  const app = this;
-
+export default function messagesService(app) {
   const options = {
     Model: new NeDB({
       filename: `${__dirname}/messages.nedb`,
