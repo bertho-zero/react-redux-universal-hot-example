@@ -130,7 +130,7 @@
     "concurrently": "^3.3.0",
     "cross-env": "^5.1.1",
     "css-loader": "^0.28.5",
-    "eslint": "^4.13.1",
+    "eslint": "^5.0.0",
     "eslint-config-airbnb": "^16.0.0",
     "eslint-loader": "^2.0.0",
     "eslint-plugin-import": "^2.2.0",
