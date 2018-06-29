@@ -147,7 +147,7 @@
     "jest-cli": "^23.0.0",
     "less": "^3.0.0-alpha.3",
     "less-loader": "^4.0.3",
-    "lighthouse": "^2.7.0",
+    "lighthouse": "^3.0.0",
     "lint-staged": "^7.0.1",
     "node-sass": "^4.9.0",
     "piping": "^1.0.0-rc.4",
