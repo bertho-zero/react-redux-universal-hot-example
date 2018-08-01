@@ -163,11 +163,10 @@ export function load() {
 export function register(data) {
   return {
     types: [REGISTER, REGISTER_SUCCESS, REGISTER_FAIL],
-    promise: ({ app }) =>
-      app
-        .service('users')
-        .create(data)
-        .catch(catchValidation)
+    promise: ({ app }) => app
+      .service('users')
+      .create(data)
+      .catch(catchValidation)
   };
 }
 

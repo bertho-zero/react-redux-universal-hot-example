@@ -1,5 +1,7 @@
 import memoize from 'lru-memoize';
-import { createValidator, required, email, match } from 'utils/validation';
+import {
+  createValidator, required, email, match
+} from 'utils/validation';
 
 const registerValidation = createValidator({
   email: [required, email],

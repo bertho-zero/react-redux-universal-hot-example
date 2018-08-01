@@ -4,7 +4,9 @@ import errors from '@feathersjs/errors';
 import { restrictToOwner } from 'feathers-authentication-hooks';
 import { discard } from 'feathers-hooks-common';
 import { validateHook } from 'hooks';
-import { required, email, match, unique } from 'utils/validation';
+import {
+  required, email, match, unique
+} from 'utils/validation';
 
 const schemaValidator = {
   email: [required, email, unique('email')],
@@ -14,9 +16,12 @@ const schemaValidator = {
 
 function validate() {
   return context => {
-    if (context.data.facebook && !context.data.email) {
-      throw new errors.BadRequest('Incomplete oauth registration', context.data);
+    const { data } = context;
+
+    if (data.facebook && !data.email) {
+      throw new errors.BadRequest('Incomplete oauth registration', data);
     }
+
     return validateHook(schemaValidator)(context);
   };
 }

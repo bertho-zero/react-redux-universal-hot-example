@@ -24,18 +24,22 @@ export default class MessageItem extends Component {
   };
 
   startEdit = msg => {
+    const { editing } = this.state;
+
     this.setState({
       editing: {
-        ...this.state.editing,
+        ...editing,
         [msg._id]: true
       }
     });
   };
 
   stopEdit = msg => {
+    const { editing } = this.state;
+
     this.setState({
       editing: {
-        ...this.state.editing,
+        ...editing,
         [msg._id]: null
       }
     });

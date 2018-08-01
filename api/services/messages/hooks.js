@@ -1,7 +1,9 @@
 import auth from '@feathersjs/authentication';
 import local from '@feathersjs/authentication-local';
 import { restrictToOwner } from 'feathers-authentication-hooks';
-import { fastJoin, disallow, iff, isProvider, keep } from 'feathers-hooks-common';
+import {
+  fastJoin, disallow, iff, isProvider, keep
+} from 'feathers-hooks-common';
 import { required } from 'utils/validation';
 import { validateHook as validate } from 'hooks';
 
@@ -39,9 +41,11 @@ const messagesHooks = {
     create: [
       validate(schemaValidator),
       context => {
+        const { data, params } = context;
+
         context.data = {
-          text: context.data.text,
-          sentBy: context.params.user ? context.params.user._id : null, // Set the id of current user
+          text: data.text,
+          sentBy: params.user ? params.user._id : null, // Set the id of current user
           createdAt: new Date()
         };
       }

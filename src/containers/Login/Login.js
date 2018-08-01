@@ -8,7 +8,10 @@ import FacebookLogin from 'components/FacebookLogin/FacebookLogin';
 import * as authActions from 'redux/modules/auth';
 import * as notifActions from 'redux/modules/notifs';
 
-@connect(state => ({ user: state.auth.user }), { ...notifActions, ...authActions })
+@connect(
+  state => ({ user: state.auth.user }),
+  { ...notifActions, ...authActions }
+)
 @withRouter
 export default class Login extends Component {
   static propTypes = {
@@ -28,12 +31,14 @@ export default class Login extends Component {
   onFacebookLogin = async (err, data) => {
     if (err) return;
 
+    const { login, history } = this.props;
+
     try {
-      await this.props.login('facebook', data);
+      await login('facebook', data);
       this.successLogin();
     } catch (error) {
       if (error.message === 'Incomplete oauth registration') {
-        this.props.history.push({
+        history.push({
           pathname: '/register',
           state: { oauth: error.data }
         });
@@ -44,13 +49,18 @@ export default class Login extends Component {
   };
 
   onLocalLogin = async data => {
-    const result = await this.props.login('local', data);
+    const { login } = this.props;
+
+    const result = await login('local', data);
     this.successLogin();
+
     return result;
   };
 
   successLogin = () => {
-    this.props.notifSend({
+    const { notifSend } = this.props;
+
+    notifSend({
       message: "You're logged in now !",
       kind: 'success',
       dismissAfter: 2000
@@ -58,21 +68,28 @@ export default class Login extends Component {
   };
 
   FacebookLoginButton = ({ facebookLogin }) => (
-    <button className="btn btn-primary" onClick={facebookLogin}>
-      Login with <i className="fa fa-facebook-f" />
+    <button type="button" className="btn btn-primary" onClick={facebookLogin}>
+      Login with
+      {' '}
+      <i className="fa fa-facebook-f" />
     </button>
   );
 
   render() {
     const { user, logout } = this.props;
+
     return (
       <div className="container">
         <Helmet title="Login" />
-        <h1>Login</h1>
+        <h1>
+Login
+        </h1>
         {!user && (
           <div>
             <LoginForm onSubmit={this.onLocalLogin} />
-            <p>This will "log you in" as this user, storing the username in the session of the API server.</p>
+            <p>
+This will "log you in" as this user, storing the username in the session of the API server.
+            </p>
             <FacebookLogin
               appId="635147529978862"
               /* autoLoad={true} */
@@ -84,11 +101,17 @@ export default class Login extends Component {
         )}
         {user && (
           <div>
-            <p>You are currently logged in as {user.email}.</p>
+            <p>
+              You are currently logged in as
+              {user.email}
+.
+            </p>
 
             <div>
-              <button className="btn btn-danger" onClick={logout}>
-                <i className="fa fa-sign-out" /> Log Out
+              <button type="button" className="btn btn-danger" onClick={logout}>
+                <i className="fa fa-sign-out" />
+                {' '}
+Log Out
               </button>
             </div>
           </div>

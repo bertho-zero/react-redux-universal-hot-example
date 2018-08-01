@@ -1,9 +1,9 @@
-var path = require('path');
-var fs = require('fs');
-var projectRootPath = path.resolve(__dirname, '../');
-var webpack = require('webpack');
-var HappyPack = require('happypack');
-var happyThreadPool = HappyPack.ThreadPool({ size: 5 });
+const path = require('path');
+const fs = require('fs');
+const projectRootPath = path.resolve(__dirname, '../');
+const webpack = require('webpack');
+const HappyPack = require('happypack');
+const happyThreadPool = HappyPack.ThreadPool({ size: 5 });
 
 module.exports = {
   createHappyPlugin: createHappyPlugin,
@@ -23,7 +23,7 @@ function createHappyPlugin(id, loaders) {
 }
 
 function installVendorDLL(config, dllName) {
-  var manifest = loadDLLManifest(path.join(projectRootPath, `webpack/dlls/${dllName}.json`));
+  const manifest = loadDLLManifest(path.join(projectRootPath, `webpack/dlls/${dllName}.json`));
 
   if (manifest) {
     console.log(`Webpack: will be using the ${dllName} DLL.`);
@@ -57,10 +57,11 @@ The request to use DLLs for this build will be ignored.`);
 }
 
 function isValidDLLs(dllNames, assetsPath) {
-  for (var dllName of [].concat(dllNames)) {
+  for (const dllName of [].concat(dllNames)) {
     try {
-      var manifest = require(path.join(projectRootPath, `webpack/dlls/${dllName}.json`));
-      var dll = fs.readFileSync(path.join(assetsPath, `dlls/dll__${dllName}.js`)).toString('utf-8');
+      const manifest = require(path.join(projectRootPath, `webpack/dlls/${dllName}.json`));
+      const dll = fs.readFileSync(path.join(assetsPath, `dlls/dll__${dllName}.js`, 'utf8'));
+
       if (dll.indexOf(manifest.name) === -1) {
         console.warn(`Invalid dll: ${dllName}`);
         return false;

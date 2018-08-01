@@ -13,10 +13,12 @@ const Input = ({
     <div className="col-sm-10">
       <input {...input} {...rest} type={type} className="form-control" />
       {(error || submitError) && touched && <span className="glyphicon glyphicon-remove form-control-feedback" />}
-      {(error || submitError) &&
-        touched && (
+      {(error || submitError)
+        && touched && (
         <div className="text-danger">
-          <strong>{error || submitError}</strong>
+          <strong>
+            {error || submitError}
+          </strong>
         </div>
       )}
     </div>
@@ -42,11 +44,15 @@ const RegisterForm = ({ onSubmit, initialValues }) => (
         <Field name="password_confirmation" type="password" component={Input} label="Password confirmation" />
         {submitError && (
           <p className="text-danger">
-            <strong>{submitError}</strong>
+            <strong>
+              {submitError}
+            </strong>
           </p>
         )}
         <button className="btn btn-success" type="submit">
-          <i className="fa fa-sign-in" /> Register
+          <i className="fa fa-sign-in" />
+          {' '}
+Register
         </button>
       </form>
     )}

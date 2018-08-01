@@ -1,23 +1,23 @@
 require('babel-polyfill');
 
 // Webpack config for development
-var fs = require('fs');
-var path = require('path');
-var webpack = require('webpack');
-var helpers = require('./helpers');
+const fs = require('fs');
+const path = require('path');
+const webpack = require('webpack');
+const helpers = require('./helpers');
 
-var assetsPath = path.resolve(__dirname, '../static/dist');
-var host = (process.env.HOST || 'localhost');
-var port = (+process.env.PORT + 1) || 3001;
+const assetsPath = path.resolve(__dirname, '../static/dist');
+const host = (process.env.HOST || 'localhost');
+const port = (+process.env.PORT + 1) || 3001;
 
-var ReactLoadablePlugin = require('react-loadable/webpack').ReactLoadablePlugin;
+const ReactLoadablePlugin = require('react-loadable/webpack').ReactLoadablePlugin;
 
 // https://github.com/halt-hammerzeit/webpack-isomorphic-tools
-var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
-var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
+const WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
+const webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
 
-var babelrc = fs.readFileSync('./.babelrc');
-var babelrcObject = {};
+const babelrc = fs.readFileSync('./.babelrc', 'utf8');
+let babelrcObject = {};
 
 try {
   babelrcObject = JSON.parse(babelrc);
@@ -26,22 +26,21 @@ try {
   console.error(err);
 }
 
-var babelrcObjectDevelopment = babelrcObject.env && babelrcObject.env.development || {};
+const babelrcObjectDevelopment = babelrcObject.env && babelrcObject.env.development || {};
 
 // merge global and dev-only plugins
-var combinedPlugins = babelrcObject.plugins || [];
-combinedPlugins = combinedPlugins.concat(babelrcObjectDevelopment.plugins);
+const combinedPlugins = (babelrcObject.plugins || []).concat(babelrcObjectDevelopment.plugins);
 
-var babelLoaderQuery = Object.assign({}, babelrcObject, babelrcObjectDevelopment, { plugins: combinedPlugins });
+const babelLoaderQuery = Object.assign({}, babelrcObject, babelrcObjectDevelopment, { plugins: combinedPlugins });
 delete babelLoaderQuery.env;
 
-var validDLLs = helpers.isValidDLLs('vendor', assetsPath);
+const validDLLs = helpers.isValidDLLs('vendor', assetsPath);
 if (process.env.WEBPACK_DLLS === '1' && !validDLLs) {
   process.env.WEBPACK_DLLS = '0';
   console.warn('webpack dlls disabled');
 }
 
-var webpackConfig = module.exports = {
+const webpackConfig = module.exports = {
   mode: 'development',
   devtool: 'inline-source-map',
   context: path.resolve(__dirname, '..'),

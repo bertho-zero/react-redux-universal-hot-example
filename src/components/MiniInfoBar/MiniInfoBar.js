@@ -12,7 +12,11 @@ export default class MiniInfoBar extends Component {
     const { time } = this.props;
     return (
       <div className="mini-info-bar">
-        The info bar was last loaded at <span>{time && new Date(time).toString()}</span>
+        The info bar was last loaded at
+        {' '}
+        <span>
+          {time && new Date(time).toString()}
+        </span>
       </div>
     );
   }

@@ -10,10 +10,9 @@ const storage = __SERVER__ ? null : require('localforage');
 
 const host = clientUrl => (__SERVER__ ? `http://${config.apiHost}:${config.apiPort}` : clientUrl);
 
-const configureApp = transport =>
-  feathers()
-    .configure(transport)
-    .configure(authentication({ storage }));
+const configureApp = transport => feathers()
+  .configure(transport)
+  .configure(authentication({ storage }));
 
 export const socket = io('', { path: host('/ws'), autoConnect: false });
 
@@ -23,12 +22,16 @@ export function createApp(req) {
   }
 
   if (__SERVER__ && req) {
-    const app = configureApp(rest(host('/api')).axios(axios.create({
-      headers: {
-        Cookie: req.get('cookie'),
-        authorization: req.header('authorization') || ''
-      }
-    })));
+    const app = configureApp(
+      rest(host('/api')).axios(
+        axios.create({
+          headers: {
+            Cookie: req.get('cookie'),
+            authorization: req.header('authorization') || ''
+          }
+        })
+      )
+    );
 
     const accessToken = req.header('authorization') || (req.cookies && req.cookies['feathers-jwt']);
     app.set('accessToken', accessToken);

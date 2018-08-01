@@ -33,8 +33,7 @@ import { ReduxAsyncConnect, Provider } from 'components';
 const pretty = new PrettyError();
 const chunksPath = path.join(__dirname, '..', 'static', 'dist', 'loadable-chunks.json');
 
-process.on('unhandledRejection', (reason, p) =>
-  console.error('Unhandled Rejection at: Promise ', p, pretty.render(reason)));
+process.on('unhandledRejection', (reason, p) => console.error('Unhandled Rejection at: Promise ', p, pretty.render(reason)));
 
 const targetUrl = `http://${config.apiHost}:${config.apiPort}`;
 const app = express();

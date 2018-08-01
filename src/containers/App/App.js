@@ -14,7 +14,7 @@ import Alert from 'react-bootstrap/lib/Alert';
 import Helmet from 'react-helmet';
 import qs from 'qs';
 import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
-import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
+import { isLoaded as isAuthLoaded, load as loadAuth, logout as logoutAction } from 'redux/modules/auth';
 import { Notifs, InfoBar } from 'components';
 import config from 'config';
 
@@ -33,7 +33,7 @@ import config from 'config';
     notifs: state.notifs,
     user: state.auth.user
   }),
-  { logout, pushState: push }
+  { logout: logoutAction, pushState: push }
 )
 @withRouter
 export default class App extends Component {
@@ -50,13 +50,30 @@ export default class App extends Component {
     pushState: PropTypes.func.isRequired
   };
 
+  static contextTypes = {
+    store: PropTypes.objectOf(PropTypes.any).isRequired
+  };
+
   static defaultProps = {
     user: null
   };
 
-  static contextTypes = {
-    store: PropTypes.object.isRequired
-  };
+  getInitialState() {
+    const { user } = this.props;
+
+    return {
+      user,
+      prevProps: this.props // eslint-disable-line react/no-unused-state
+    };
+  }
+
+  componentDidUpdate(prevProps) {
+    const { location } = this.props;
+
+    if (location !== prevProps.location) {
+      window.scrollTo(0, 0);
+    }
+  }
 
   static getDerivedStateFromProps(props, state) {
     const { prevProps } = state;
@@ -72,26 +89,17 @@ export default class App extends Component {
     }
 
     return {
+      user,
       // Store the previous props in state
-      prevProps: props,
-      user
+      prevProps: props
     };
   }
 
-  state = {
-    prevProps: this.props, // eslint-disable-line react/no-unused-state
-    user: this.props.user
-  };
-
-  componentDidUpdate(prevProps) {
-    if (this.props.location !== prevProps.location) {
-      window.scrollTo(0, 0);
-    }
-  }
-
   handleLogout = event => {
+    const { logout } = this.props;
+
     event.preventDefault();
-    this.props.logout();
+    logout();
   };
 
   render() {
@@ -107,7 +115,9 @@ export default class App extends Component {
             <Navbar.Brand>
               <IndexLinkContainer to="/" activeStyle={{ color: '#33e0ff' }} className={styles.title}>
                 <div className={styles.brand}>
-                  <span>{config.app.title}</span>
+                  <span>
+                    {config.app.title}
+                  </span>
                 </div>
               </IndexLinkContainer>
             </Navbar.Brand>
@@ -117,20 +127,28 @@ export default class App extends Component {
           <Navbar.Collapse>
             <Nav navbar>
               <LinkContainer to="/chat">
-                <NavItem>Chat</NavItem>
+                <NavItem>
+Chat
+                </NavItem>
               </LinkContainer>
               <LinkContainer to="/about">
-                <NavItem>About Us</NavItem>
+                <NavItem>
+About Us
+                </NavItem>
               </LinkContainer>
 
               {!user && (
                 <LinkContainer to="/login">
-                  <NavItem>Login</NavItem>
+                  <NavItem>
+Login
+                  </NavItem>
                 </LinkContainer>
               )}
               {!user && (
                 <LinkContainer to="/register">
-                  <NavItem>Register</NavItem>
+                  <NavItem>
+Register
+                  </NavItem>
                 </LinkContainer>
               )}
               {user && (
@@ -143,7 +161,9 @@ export default class App extends Component {
             </Nav>
             {user && (
               <p className="navbar-text">
-                <strong>{user.email}</strong>
+                <strong>
+                  {user.email}
+                </strong>
               </p>
             )}
             <Nav navbar pullRight>
@@ -164,7 +184,11 @@ export default class App extends Component {
               <Notifs
                 className={styles.notifs}
                 namespace="global"
-                NotifComponent={props => <Alert bsStyle={props.kind}>{props.message}</Alert>}
+                NotifComponent={props => (
+                  <Alert bsStyle={props.kind}>
+                    {props.message}
+                  </Alert>
+                )}
               />
             </div>
           )}
@@ -174,14 +198,16 @@ export default class App extends Component {
         <InfoBar />
 
         <div className="well text-center">
-          Have questions? Ask for help{' '}
+          Have questions? Ask for help
+          {' '}
           <a
             href="https://github.com/bertho-zero/react-redux-universal-hot-example/issues"
             target="_blank"
             rel="noopener noreferrer"
           >
             on Github
-          </a>.
+          </a>
+          .
         </div>
       </div>
     );
