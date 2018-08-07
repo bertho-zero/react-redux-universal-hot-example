@@ -166,7 +166,7 @@
     "redux-devtools-log-monitor": "^1.2.0",
     "resolve-url-loader": "^2.2.1",
     "sass-loader": "^7.0.1",
-    "style-loader": "^0.21.0",
+    "style-loader": "^0.22.0",
     "sw-precache-webpack-plugin": "^0.11.3",
     "uglifyjs-webpack-plugin": "^1.1.6",
     "url-loader": "^1.0.1",
