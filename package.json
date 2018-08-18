@@ -156,7 +156,7 @@
     "postcss-cssnext": "^3.0.2",
     "postcss-import": "^11.0.0",
     "postcss-loader": "^2.0.5",
-    "postcss-reporter": "^5.0.0",
+    "postcss-reporter": "^6.0.0",
     "postcss-url": "^7.1.2",
     "prettier-eslint-cli": "^4.6.1",
     "react-a11y": "^1.0.0",
