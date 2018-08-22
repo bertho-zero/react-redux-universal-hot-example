@@ -4,17 +4,17 @@ require('babel-polyfill');
 const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
+const { ReactLoadablePlugin } = require('react-loadable/webpack');
+
+// https://github.com/halt-hammerzeit/webpack-isomorphic-tools
+const WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
+const webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
+
 const helpers = require('./helpers');
 
 const assetsPath = path.resolve(__dirname, '../static/dist');
 const host = (process.env.HOST || 'localhost');
 const port = (+process.env.PORT + 1) || 3001;
-
-const ReactLoadablePlugin = require('react-loadable/webpack').ReactLoadablePlugin;
-
-// https://github.com/halt-hammerzeit/webpack-isomorphic-tools
-const WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
-const webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
 
 const babelrc = fs.readFileSync('./.babelrc', 'utf8');
 let babelrcObject = {};
@@ -26,7 +26,7 @@ try {
   console.error(err);
 }
 
-const babelrcObjectDevelopment = babelrcObject.env && babelrcObject.env.development || {};
+const babelrcObjectDevelopment = (babelrcObject.env && babelrcObject.env.development) || {};
 
 // merge global and dev-only plugins
 const combinedPlugins = (babelrcObject.plugins || []).concat(babelrcObjectDevelopment.plugins);
@@ -40,13 +40,13 @@ if (process.env.WEBPACK_DLLS === '1' && !validDLLs) {
   console.warn('webpack dlls disabled');
 }
 
-const webpackConfig = module.exports = {
+const webpackConfig = {
   mode: 'development',
   devtool: 'inline-source-map',
   context: path.resolve(__dirname, '..'),
   entry: {
-    'main': [
-      'webpack-hot-middleware/client?path=http://' + host + ':' + port + '/__webpack_hmr',
+    main: [
+      `webpack-hot-middleware/client?path=http://${host}:${port}/__webpack_hmr`,
       'bootstrap-loader',
       './src/client.js'
     ]
@@ -55,7 +55,7 @@ const webpackConfig = module.exports = {
     path: assetsPath,
     filename: '[name]-[hash].js',
     chunkFilename: '[name]-[chunkhash].chunk.js',
-    publicPath: 'http://' + host + ':' + port + '/dist/'
+    publicPath: `http://${host}:${port}/dist/`
   },
   performance: {
     hints: false
@@ -132,7 +132,7 @@ const webpackConfig = module.exports = {
       __CLIENT__: true,
       __SERVER__: false,
       __DEVELOPMENT__: true,
-      __DEVTOOLS__: true  // <-------- DISABLE redux-devtools HERE
+      __DEVTOOLS__: true // <-------- DISABLE redux-devtools HERE
     }),
 
     webpackIsomorphicToolsPlugin.development(),
@@ -213,3 +213,5 @@ const webpackConfig = module.exports = {
 if (process.env.WEBPACK_DLLS === '1' && validDLLs) {
   helpers.installVendorDLL(webpackConfig, 'vendor');
 }
+
+module.exports = webpackConfig;

@@ -1,6 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
+
 const projectRootPath = path.resolve(__dirname, '../');
+
 
 module.exports = {
   mode: 'development',
@@ -24,7 +26,7 @@ module.exports = {
       // Generate this list using the following command against the stdout of
       // webpack running against the source bundle config (dev/prod.js):
       //
-      //    webpack --config webpack/dev.config.js --display-modules | egrep -o 'babel-runtime/\S+' | sed 's/\.js$//' | sort | uniq
+      // webpack --config webpack/dev.config.js --display-modules | egrep -o 'babel-runtime/\S+' | sed 's/\.js$//' | sort | uniq
 
       // <babel-runtime>
       'babel-runtime/core-js/array/from',

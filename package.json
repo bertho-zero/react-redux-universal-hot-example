@@ -38,7 +38,7 @@
     "build-dlls": "webpack --colors --display-error-details --config webpack/vendor.config.js",
     "postinstall": "concurrently \"yarn build\" \"yarn build-dlls\"",
     "prettier": "prettier-eslint --write --eslint-config-path .eslintrc './+(src|api)/**/*.js'",
-    "lint": "eslint -c .eslintrc api src",
+    "lint": "eslint .",
     "test": "cross-env NODE_PATH=src jest src",
     "lighthouse-report": "lighthouse http://localhost:8080 --view",
     "docker-build": "docker-compose build",

@@ -6,17 +6,17 @@ const webpack = require('webpack');
 const CleanPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const ReactLoadablePlugin = require('react-loadable/webpack').ReactLoadablePlugin;
-
-const projectRootPath = path.resolve(__dirname, '../');
-const assetsPath = path.resolve(projectRootPath, './static/dist');
+const { ReactLoadablePlugin } = require('react-loadable/webpack');
+const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 // https://github.com/halt-hammerzeit/webpack-isomorphic-tools
 const WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
 const webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
 
-const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const projectRootPath = path.resolve(__dirname, '../');
+const assetsPath = path.resolve(projectRootPath, './static/dist');
+
 
 module.exports = {
   mode: 'production',
@@ -191,7 +191,7 @@ module.exports = {
       maximumFileSizeToCacheInBytes: 8388608,
 
       // Ensure all our static, local assets are cached.
-      staticFileGlobs: [path.dirname(assetsPath) + '/**/*.{js,html,css,png,jpg,gif,svg,eot,ttf,woff,woff2}'],
+      staticFileGlobs: [`${path.dirname(assetsPath)}/**/*.{js,html,css,png,jpg,gif,svg,eot,ttf,woff,woff2}`],
       stripPrefix: path.dirname(assetsPath),
 
       directoryIndex: '/',

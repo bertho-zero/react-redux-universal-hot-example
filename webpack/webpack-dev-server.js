@@ -1,14 +1,14 @@
 const express = require('express');
 const webpack = require('webpack');
-
 const config = require('../src/config');
 const webpackConfig = require('./dev.config');
+
 const compiler = webpack(webpackConfig);
 
 const host = config.host || 'localhost';
 const port = (Number(config.port) + 1) || 3001;
 const serverOptions = {
-  contentBase: 'http://' + host + ':' + port,
+  contentBase: `http://${host}:${port}`,
   quiet: true,
   noInfo: true,
   hot: true,
@@ -23,7 +23,7 @@ const app = express();
 app.use(require('webpack-dev-middleware')(compiler, serverOptions));
 app.use(require('webpack-hot-middleware')(compiler));
 
-app.listen(port, function onAppListening(err) {
+app.listen(port, err => {
   if (err) {
     console.error(err);
   } else {
