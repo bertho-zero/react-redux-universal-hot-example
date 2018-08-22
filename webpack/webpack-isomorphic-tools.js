@@ -3,7 +3,6 @@ const WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
 // see this link for more info on what all of this means
 // https://github.com/halt-hammerzeit/webpack-isomorphic-tools
 module.exports = {
-
   // when adding "js" extension to asset types
   // and then enabling debug mode, it may cause a weird error:
   //
@@ -14,21 +13,11 @@ module.exports = {
 
   assets: {
     images: {
-      extensions: [
-        'jpeg',
-        'jpg',
-        'png',
-        'gif'
-      ],
+      extensions: ['jpeg', 'jpg', 'png', 'gif'],
       parser: WebpackIsomorphicToolsPlugin.url_loader_parser
     },
     fonts: {
-      extensions: [
-        'woff',
-        'woff2',
-        'ttf',
-        'eot'
-      ],
+      extensions: ['woff', 'woff2', 'ttf', 'eot'],
       parser: WebpackIsomorphicToolsPlugin.url_loader_parser
     },
     svg: {

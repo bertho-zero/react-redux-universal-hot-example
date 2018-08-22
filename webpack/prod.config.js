@@ -17,22 +17,18 @@ const webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('.
 const projectRootPath = path.resolve(__dirname, '../');
 const assetsPath = path.resolve(projectRootPath, './static/dist');
 
-
 module.exports = {
   mode: 'production',
   devtool: 'source-map',
   context: path.resolve(__dirname, '..'),
   entry: {
-    main: [
-      'bootstrap-loader',
-      './src/client.js'
-    ]
+    main: ['bootstrap-loader', './src/client.js']
   },
   output: {
     path: assetsPath,
     filename: '[name]-[chunkhash].js',
     chunkFilename: '[name]-[chunkhash].chunk.js',
-    publicPath: '/dist/',
+    publicPath: '/dist/'
   },
   performance: {
     hints: false
@@ -43,7 +39,8 @@ module.exports = {
         test: /\.jsx?$/,
         loader: 'babel-loader',
         exclude: /node_modules(\/|\\)(?!(@feathersjs))/
-      }, {
+      },
+      {
         test: /\.less$/,
         loader: ExtractTextPlugin.extract({
           fallback: 'style-loader',
@@ -55,7 +52,8 @@ module.exports = {
                 importLoaders: 2,
                 sourceMap: true
               }
-            }, {
+            },
+            {
               loader: 'postcss-loader',
               options: {
                 sourceMap: true,
@@ -63,7 +61,8 @@ module.exports = {
                   path: 'postcss.config.js'
                 }
               }
-            }, {
+            },
+            {
               loader: 'less-loader',
               options: {
                 outputStyle: 'expanded',
@@ -73,7 +72,8 @@ module.exports = {
             }
           ]
         })
-      }, {
+      },
+      {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract({
           fallback: 'style-loader',
@@ -85,7 +85,8 @@ module.exports = {
                 importLoaders: 2,
                 sourceMap: true
               }
-            }, {
+            },
+            {
               loader: 'postcss-loader',
               options: {
                 sourceMap: true,
@@ -93,7 +94,8 @@ module.exports = {
                   path: 'postcss.config.js'
                 }
               }
-            }, {
+            },
+            {
               loader: 'sass-loader',
               options: {
                 outputStyle: 'expanded',
@@ -103,31 +105,36 @@ module.exports = {
             }
           ]
         })
-      }, {
+      },
+      {
         test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'url-loader',
         options: {
           limit: 10240,
           mimetype: 'application/font-woff'
         }
-      }, {
+      },
+      {
         test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'url-loader',
         options: {
           limit: 10240,
           mimetype: 'application/octet-stream'
         }
-      }, {
+      },
+      {
         test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'file-loader'
-      }, {
+      },
+      {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'url-loader',
         options: {
           limit: 10240,
           mimetype: 'image/svg+xml'
         }
-      }, {
+      },
+      {
         test: webpackIsomorphicToolsPlugin.regular_expression('images'),
         loader: 'url-loader',
         options: {
@@ -137,10 +144,7 @@ module.exports = {
     ]
   },
   resolve: {
-    modules: [
-      'src',
-      'node_modules'
-    ],
+    modules: ['src', 'node_modules'],
     extensions: ['.json', '.js', '.jsx']
   },
   plugins: [

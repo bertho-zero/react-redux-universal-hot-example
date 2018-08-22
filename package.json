@@ -37,7 +37,7 @@
     "build": "cross-env NODE_ENV=production webpack --colors --display-error-details --config=webpack/prod.config.js",
     "build-dlls": "webpack --colors --display-error-details --config webpack/vendor.config.js",
     "postinstall": "concurrently \"yarn build\" \"yarn build-dlls\"",
-    "prettier": "prettier-eslint --write --eslint-config-path .eslintrc './+(src|api)/**/*.js'",
+    "prettier": "prettier-eslint --write --eslint-config-path .eslintrc '**/*.js'",
     "lint": "eslint .",
     "test": "cross-env NODE_PATH=src jest src",
     "lighthouse-report": "lighthouse http://localhost:8080 --view",

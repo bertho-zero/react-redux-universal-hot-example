@@ -13,7 +13,7 @@ function createHappyPlugin(id, loaders) {
     threadPool,
 
     // make happypack more verbose with HAPPY_VERBOSE=1
-    verbose: process.env.HAPPY_VERBOSE === '1',
+    verbose: process.env.HAPPY_VERBOSE === '1'
   });
 }
 
@@ -44,30 +44,31 @@ function installVendorDLL(config, dllName) {
   if (manifest) {
     console.log(`Webpack: will be using the ${dllName} DLL.`);
 
-    config.plugins.push(new webpack.DllReferencePlugin({
-      context: projectRootPath,
-      manifest
-    }));
+    config.plugins.push(
+      new webpack.DllReferencePlugin({
+        context: projectRootPath,
+        manifest
+      })
+    );
   }
 }
 
 function isValidDLLs(dllNames, assetsPath) {
-  return (Array.isArray(dllNames) ? dllNames : [dllNames])
-    .every(dllName => {
-      try {
-        // eslint-disable-next-line import/no-dynamic-require
-        const manifest = require(path.join(projectRootPath, `webpack/dlls/${dllName}.json`));
-        const dll = fs.readFileSync(path.join(assetsPath, `dlls/dll__${dllName}.js`, 'utf8'));
+  return (Array.isArray(dllNames) ? dllNames : [dllNames]).every(dllName => {
+    try {
+      // eslint-disable-next-line import/no-dynamic-require
+      const manifest = require(path.join(projectRootPath, `webpack/dlls/${dllName}.json`));
+      const dll = fs.readFileSync(path.join(assetsPath, `dlls/dll__${dllName}.js`, 'utf8'));
 
-        if (dll.indexOf(manifest.name) === -1) {
-          console.warn(`Invalid dll: ${dllName}`);
-          return false;
-        }
-      } catch (e) {
+      if (dll.indexOf(manifest.name) === -1) {
+        console.warn(`Invalid dll: ${dllName}`);
         return false;
       }
-      return true;
-    });
+    } catch (e) {
+      return false;
+    }
+    return true;
+  });
 }
 
 module.exports = {

@@ -13,8 +13,8 @@ const webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('.
 const helpers = require('./helpers');
 
 const assetsPath = path.resolve(__dirname, '../static/dist');
-const host = (process.env.HOST || 'localhost');
-const port = (+process.env.PORT + 1) || 3001;
+const host = process.env.HOST || 'localhost';
+const port = +process.env.PORT + 1 || 3001;
 
 const babelrc = fs.readFileSync('./.babelrc', 'utf8');
 let babelrcObject = {};
@@ -66,43 +66,51 @@ const webpackConfig = {
         test: /\.jsx?$/,
         loader: 'happypack/loader?id=jsx',
         include: [path.resolve(__dirname, '../src')]
-      }, {
+      },
+      {
         test: /\.json$/,
         loader: 'happypack/loader?id=json',
         include: [path.resolve(__dirname, '../src')]
-      }, {
+      },
+      {
         test: /\.less$/,
         loader: 'happypack/loader?id=less',
         include: [path.resolve(__dirname, '../src')]
-      }, {
+      },
+      {
         test: /\.scss$/,
         loader: 'happypack/loader?id=sass',
         include: [path.resolve(__dirname, '../src')]
-      }, {
+      },
+      {
         test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'url-loader',
         options: {
           limit: 10240,
           mimetype: 'application/font-woff'
         }
-      }, {
+      },
+      {
         test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'url-loader',
         options: {
           limit: 10240,
           mimetype: 'application/octet-stream'
         }
-      }, {
+      },
+      {
         test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'file-loader'
-      }, {
+      },
+      {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'url-loader',
         options: {
           limit: 10240,
           mimetype: 'image/svg+xml'
         }
-      }, {
+      },
+      {
         test: webpackIsomorphicToolsPlugin.regular_expression('images'),
         loader: 'url-loader',
         options: {
@@ -112,10 +120,7 @@ const webpackConfig = {
     ]
   },
   resolve: {
-    modules: [
-      'src',
-      'node_modules'
-    ],
+    modules: ['src', 'node_modules'],
     extensions: ['.json', '.js', '.jsx']
   },
   plugins: [
@@ -146,7 +151,8 @@ const webpackConfig = {
         loader: 'babel-loader',
         exclude: /node_modules(\/|\\)(?!(@feathersjs))/,
         options: babelLoaderQuery
-      }, {
+      },
+      {
         loader: 'eslint-loader',
         options: { emitWarning: true }
       }
@@ -155,7 +161,8 @@ const webpackConfig = {
       {
         loader: 'style-loader',
         options: { sourceMap: true }
-      }, {
+      },
+      {
         loader: 'css-loader',
         options: {
           modules: true,
@@ -163,7 +170,8 @@ const webpackConfig = {
           sourceMap: true,
           localIdentName: '[local]___[hash:base64:5]'
         }
-      }, {
+      },
+      {
         loader: 'postcss-loader',
         options: {
           sourceMap: true,
@@ -171,7 +179,8 @@ const webpackConfig = {
             path: 'postcss.config.js'
           }
         }
-      }, {
+      },
+      {
         loader: 'less-loader',
         options: {
           outputStyle: 'expanded',
@@ -183,7 +192,8 @@ const webpackConfig = {
       {
         loader: 'style-loader',
         options: { sourceMap: true }
-      }, {
+      },
+      {
         loader: 'css-loader',
         options: {
           modules: true,
@@ -191,7 +201,8 @@ const webpackConfig = {
           sourceMap: true,
           localIdentName: '[local]___[hash:base64:5]'
         }
-      }, {
+      },
+      {
         loader: 'postcss-loader',
         options: {
           sourceMap: true,
@@ -199,7 +210,8 @@ const webpackConfig = {
             path: 'postcss.config.js'
           }
         }
-      }, {
+      },
+      {
         loader: 'sass-loader',
         options: {
           outputStyle: 'expanded',
