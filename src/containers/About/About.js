@@ -24,9 +24,7 @@ export default class About extends Component {
 
     return (
       <div className="container">
-        <h1>
-About Us
-        </h1>
+        <h1>About Us</h1>
         <Helmet title="About Us" />
 
         <p>
@@ -55,9 +53,7 @@ About Us
         <h3>
           Mini Bar
           {' '}
-          <span style={{ color: '#aaa' }}>
-(not that kind)
-          </span>
+          <span style={{ color: '#aaa' }}>(not that kind)</span>
         </h3>
 
         <p>
@@ -67,9 +63,7 @@ About Us
 
         <MiniInfoBar />
 
-        <h3>
-Images
-        </h3>
+        <h3>Images</h3>
 
         <p>
           Psst! Would you like to see a kitten?

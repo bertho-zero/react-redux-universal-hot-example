@@ -9,9 +9,7 @@ const Message = ({
     <h4 className="media-heading">
       {message.author ? message.author.email : 'Anonymous'}
       {' '}
-      <small>
-        {new Date(message.createdAt).toLocaleString()}
-      </small>
+      <small>{new Date(message.createdAt).toLocaleString()}</small>
       {user && message.author && user._id === message.author._id ? (
         <Fragment>
           {' '}

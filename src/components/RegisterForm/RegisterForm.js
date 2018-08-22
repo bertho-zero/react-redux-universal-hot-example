@@ -16,9 +16,7 @@ const Input = ({
       {(error || submitError)
         && touched && (
         <div className="text-danger">
-          <strong>
-            {error || submitError}
-          </strong>
+          <strong>{error || submitError}</strong>
         </div>
       )}
     </div>
@@ -44,9 +42,7 @@ const RegisterForm = ({ onSubmit, initialValues }) => (
         <Field name="password_confirmation" type="password" component={Input} label="Password confirmation" />
         {submitError && (
           <p className="text-danger">
-            <strong>
-              {submitError}
-            </strong>
+            <strong>{submitError}</strong>
           </p>
         )}
         <button className="btn btn-success" type="submit">

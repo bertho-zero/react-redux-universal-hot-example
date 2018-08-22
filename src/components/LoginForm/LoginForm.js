@@ -16,9 +16,7 @@ const Input = ({
       {(error || submitError)
         && touched && (
         <div className="text-danger">
-          <strong>
-            {error || submitError}
-          </strong>
+          <strong>{error || submitError}</strong>
         </div>
       )}
     </div>
@@ -42,9 +40,7 @@ const LoginForm = ({ onSubmit }) => (
         <Field name="password" type="password" component={Input} label="Password" />
         {submitError && (
           <p className="text-danger">
-            <strong>
-              {submitError}
-            </strong>
+            <strong>{submitError}</strong>
           </p>
         )}
         <button className="btn btn-success" type="submit">

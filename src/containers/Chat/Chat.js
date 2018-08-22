@@ -133,9 +133,7 @@ Users
 
             <ul className="list-group">
               <li className="list-group-item text-center text-info">
-                <b>
-                  {visitors.anonymous}
-                </b>
+                <b>{visitors.anonymous}</b>
                 {' '}
 anonymous
               </li>
@@ -147,9 +145,7 @@ anonymous
             </ul>
           </div>
           <div className={cn('col-sm-9', styles.chatColumn)}>
-            <h2 className="text-center">
-Messages
-            </h2>
+            <h2 className="text-center">Messages</h2>
 
             <div className={styles.messages} ref={this.messageList}>
               {messages.map(msg => (
@@ -159,9 +155,7 @@ Messages
 
             <form onSubmit={this.handleSubmit}>
               <label htmlFor="message">
-                <em>
-                  {user ? user.email : 'Anonymous'}
-                </em>
+                <em>{user ? user.email : 'Anonymous'}</em>
                 {' '}
               </label>
               <div className={cn('input-group', { 'has-error': error })}>

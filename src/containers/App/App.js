@@ -115,9 +115,7 @@ export default class App extends Component {
             <Navbar.Brand>
               <IndexLinkContainer to="/" activeStyle={{ color: '#33e0ff' }} className={styles.title}>
                 <div className={styles.brand}>
-                  <span>
-                    {config.app.title}
-                  </span>
+                  <span>{config.app.title}</span>
                 </div>
               </IndexLinkContainer>
             </Navbar.Brand>
@@ -127,28 +125,20 @@ export default class App extends Component {
           <Navbar.Collapse>
             <Nav navbar>
               <LinkContainer to="/chat">
-                <NavItem>
-Chat
-                </NavItem>
+                <NavItem>Chat</NavItem>
               </LinkContainer>
               <LinkContainer to="/about">
-                <NavItem>
-About Us
-                </NavItem>
+                <NavItem>About Us</NavItem>
               </LinkContainer>
 
               {!user && (
                 <LinkContainer to="/login">
-                  <NavItem>
-Login
-                  </NavItem>
+                  <NavItem>Login</NavItem>
                 </LinkContainer>
               )}
               {!user && (
                 <LinkContainer to="/register">
-                  <NavItem>
-Register
-                  </NavItem>
+                  <NavItem>Register</NavItem>
                 </LinkContainer>
               )}
               {user && (
@@ -161,9 +151,7 @@ Register
             </Nav>
             {user && (
               <p className="navbar-text">
-                <strong>
-                  {user.email}
-                </strong>
+                <strong>{user.email}</strong>
               </p>
             )}
             <Nav navbar pullRight>
@@ -184,11 +172,7 @@ Register
               <Notifs
                 className={styles.notifs}
                 namespace="global"
-                NotifComponent={props => (
-                  <Alert bsStyle={props.kind}>
-                    {props.message}
-                  </Alert>
-                )}
+                NotifComponent={props => <Alert bsStyle={props.kind}>{props.message}</Alert>}
               />
             </div>
           )}

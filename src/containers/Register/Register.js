@@ -48,9 +48,7 @@ export default class Register extends Component {
     return (
       <div className="container">
         <Helmet title="Register" />
-        <h1>
-Register
-        </h1>
+        <h1>Register</h1>
         <RegisterForm onSubmit={this.register} initialValues={this.getInitialValues()} />
       </div>
     );

@@ -29,13 +29,9 @@ export default class Home extends Component {
                 <img src={logoImage} alt="presentation" />
               </p>
             </div>
-            <h1>
-              {config.app.title}
-            </h1>
+            <h1>{config.app.title}</h1>
 
-            <h2>
-              {config.app.description}
-            </h2>
+            <h2>{config.app.description}</h2>
 
             <p>
               <a
@@ -96,25 +92,17 @@ View on Github
             <CounterButton multireducerKey="counter3" />
           </div>
 
-          <p>
-This starter boilerplate app uses the following technologies:
-          </p>
+          <p>This starter boilerplate app uses the following technologies:</p>
 
           <ul>
             <li>
-              <del>
-Isomorphic
-              </del>
+              <del>Isomorphic</del>
               {' '}
-              <a href="https://medium.com/@mjackson/universal-javascript-4761051b7ae9">
-Universal
-              </a>
+              <a href="https://medium.com/@mjackson/universal-javascript-4761051b7ae9">Universal</a>
               {' '}
 rendering
             </li>
-            <li>
-Both client and server make calls to load data from separate API server
-            </li>
+            <li>Both client and server make calls to load data from separate API server</li>
             <li>
               <a href="https://github.com/facebook/react" target="_blank" rel="noopener noreferrer">
                 React
@@ -240,162 +228,110 @@ Both client and server make calls to load data from separate API server
               </a>
             </li>
             <li>
-              <a href="http://socket.io/">
-socket.io
-              </a>
+              <a href="http://socket.io/">socket.io</a>
               {' '}
 for real-time communication
             </li>
           </ul>
 
-          <h3>
-Features demonstrated in this project
-          </h3>
+          <h3>Features demonstrated in this project</h3>
 
           <dl>
-            <dt>
-Multiple components subscribing to same redux store slice
-            </dt>
+            <dt>Multiple components subscribing to same redux store slice</dt>
             <dd>
               The
               {' '}
-              <code>
-App.js
-              </code>
+              <code>App.js</code>
               {' '}
 that wraps all the pages contains an
               {' '}
-              <code>
-InfoBar
-              </code>
+              <code>InfoBar</code>
               {' '}
 component that fetches
               data from the server initially, but allows for the user to refresh the data from the client.
               {' '}
-              <code>
-About.js
-              </code>
+              <code>About.js</code>
               {' '}
 contains a
-              <code>
-MiniInfoBar
-              </code>
+              <code>MiniInfoBar</code>
               {' '}
 that displays the same data.
             </dd>
-            <dt>
-Server-side data loading
-            </dt>
+            <dt>Server-side data loading</dt>
             <dd>
               The
               {' '}
-              <Link to="/chat">
-Chat page
-              </Link>
+              <Link to="/chat">Chat page</Link>
               {' '}
 demonstrates how to fetch data asynchronously from some source that
               is needed to complete the server-side rendering.
               {' '}
-              <code>
-Chat.js
-              </code>
+              <code>Chat.js</code>
               's
-              <code>
-provideHooks()
-              </code>
+              <code>provideHooks()</code>
               {' '}
 function is called before the chat page is loaded, on either the server or the
               client, allowing all the widget data to be loaded and ready for the page to render.
             </dd>
-            <dt>
-Session based login
-            </dt>
+            <dt>Session based login</dt>
             <dd>
               On the
               {' '}
-              <Link to="/login">
-Login page
-              </Link>
+              <Link to="/login">Login page</Link>
               {' '}
 you can submit a username which will be sent to the server and
               stored in the session. Subsequent refreshes will show that you are still logged in.
             </dd>
-            <dt>
-Redirect after state change
-            </dt>
+            <dt>Redirect after state change</dt>
             <dd>
               After you log in, you will be redirected to a Login Success page. This
               {' '}
-              <strike>
-magic
-              </strike>
+              <strike>magic</strike>
               {' '}
 logic is
               performed in
               {' '}
-              <code>
-getDerivedStateFromProps()
-              </code>
+              <code>getDerivedStateFromProps()</code>
               {' '}
 in
               {' '}
-              <code>
-App.js
-              </code>
+              <code>App.js</code>
 , but it could be done in any
               component that listens to the appropriate store slice, via Redux's
               {' '}
-              <code>
-@connect
-              </code>
+              <code>@connect</code>
 , and pulls the
               router from the context.
             </dd>
-            <dt>
-Auth-required views
-            </dt>
+            <dt>Auth-required views</dt>
             <dd>
               The aforementioned Login Success page is only visible to you if you are logged in. If you try to
               {' '}
-              <Link to="/login-success">
-go there
-              </Link>
+              <Link to="/login-success">go there</Link>
               {' '}
 when you are not logged in, you will be forwarded back to this
               home page. This
-              <strike>
-magic
-              </strike>
+              <strike>magic</strike>
               {' '}
 logic is performed by the
-              <code>
-onEnter
-              </code>
+              <code>onEnter</code>
               {' '}
 hook within
-              <code>
-routes.js
-              </code>
+              <code>routes.js</code>
 .
             </dd>
-            <dt>
-WebSockets / socket.io
-            </dt>
+            <dt>WebSockets / socket.io</dt>
             <dd>
               The
               {' '}
-              <Link to="/chat">
-Chat
-              </Link>
+              <Link to="/chat">Chat</Link>
               {' '}
 uses the socket.io technology for real-time communication between
               clients.
             </dd>
           </dl>
 
-          <h3>
-From the author
-          </h3>
+          <h3>From the author</h3>
 
           <p>
             I cobbled this together from a wide variety of similar "starter" repositories. As I post this in June 2015,
@@ -405,13 +341,9 @@ From the author
             too.
           </p>
 
-          <p>
-Thanks for taking the time to check this out.
-          </p>
+          <p>Thanks for taking the time to check this out.</p>
 
-          <p>
-– Erik Rasmussen
-          </p>
+          <p>– Erik Rasmussen</p>
         </div>
       </div>
     );

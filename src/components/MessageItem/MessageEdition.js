@@ -19,9 +19,7 @@ const MessageEdition = ({
         <h4 className="media-heading">
           {message.author ? message.author.email : 'Anonymous'}
           {' '}
-          <small>
-            {new Date(message.createdAt).toLocaleString()}
-          </small>
+          <small>{new Date(message.createdAt).toLocaleString()}</small>
           {' '}
           <button type="submit" className={cn('btn btn-sm btn-link', styles.controlBtn)} tabIndex={0} title="Validate">
             <span className="fa fa-check text-success" aria-hidden="true" />

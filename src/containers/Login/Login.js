@@ -81,15 +81,11 @@ export default class Login extends Component {
     return (
       <div className="container">
         <Helmet title="Login" />
-        <h1>
-Login
-        </h1>
+        <h1>Login</h1>
         {!user && (
           <div>
             <LoginForm onSubmit={this.onLocalLogin} />
-            <p>
-This will "log you in" as this user, storing the username in the session of the API server.
-            </p>
+            <p>This will "log you in" as this user, storing the username in the session of the API server.</p>
             <FacebookLogin
               appId="635147529978862"
               /* autoLoad={true} */
