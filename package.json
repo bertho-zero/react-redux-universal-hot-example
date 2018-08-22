@@ -177,7 +177,7 @@
     "webpack-isomorphic-tools": "^3.0.2"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=8.9.0"
   },
   "husky": {
     "hooks": {
