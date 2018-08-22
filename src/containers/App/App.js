@@ -58,14 +58,10 @@ export default class App extends Component {
     user: null
   };
 
-  getInitialState() {
-    const { user } = this.props;
-
-    return {
-      user,
-      prevProps: this.props // eslint-disable-line react/no-unused-state
-    };
-  }
+  state = {
+    user: this.props.user, // eslint-disable-line react/destructuring-assignment
+    prevProps: this.props // eslint-disable-line react/no-unused-state
+  };
 
   componentDidUpdate(prevProps) {
     const { location } = this.props;
