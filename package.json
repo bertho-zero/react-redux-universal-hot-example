@@ -127,7 +127,7 @@
     "bootstrap-sass": "^3.3.7",
     "chai": "^4.1.1",
     "clean-webpack-plugin": "^0.1.15",
-    "concurrently": "^3.3.0",
+    "concurrently": "^4.0.0",
     "cross-env": "^5.1.1",
     "css-loader": "^0.28.5",
     "eslint": "^4.13.1",
