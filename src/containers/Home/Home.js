@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 @connect(state => ({
   online: state.online
 }))
-export default class Home extends Component {
+class Home extends Component {
   static propTypes = {
     online: PropTypes.bool.isRequired
   };
@@ -349,3 +349,5 @@ uses the socket.io technology for real-time communication between
     );
   }
 }
+
+export default Home;

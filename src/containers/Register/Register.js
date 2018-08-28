@@ -10,7 +10,7 @@ import * as notifActions from 'redux/modules/notifs';
   () => ({}),
   { ...notifActions, ...authActions }
 )
-export default class Register extends Component {
+class Register extends Component {
   static propTypes = {
     location: PropTypes.shape({
       state: PropTypes.object
@@ -54,3 +54,5 @@ export default class Register extends Component {
     );
   }
 }
+
+export default Register;

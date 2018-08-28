@@ -1,5 +1,5 @@
 //  enable runtime transpilation to use ES6/7 in node
-require('babel-polyfill');
+require('@babel/polyfill');
 
 const fs = require('fs');
 
@@ -16,4 +16,4 @@ try {
   console.error(err);
 }
 
-require('babel-register')(config);
+require('@babel/register')(config);

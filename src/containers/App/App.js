@@ -36,7 +36,7 @@ import config from 'config';
   { logout: logoutAction, pushState: push }
 )
 @withRouter
-export default class App extends Component {
+class App extends Component {
   static propTypes = {
     route: PropTypes.objectOf(PropTypes.any).isRequired,
     location: PropTypes.objectOf(PropTypes.any).isRequired,
@@ -193,3 +193,5 @@ export default class App extends Component {
     );
   }
 }
+
+export default App;

@@ -13,7 +13,7 @@ import * as notifActions from 'redux/modules/notifs';
   { ...notifActions, ...authActions }
 )
 @withRouter
-export default class Login extends Component {
+class Login extends Component {
   static propTypes = {
     user: PropTypes.shape({
       email: PropTypes.string
@@ -116,3 +116,5 @@ Log Out
     );
   }
 }
+
+export default Login;

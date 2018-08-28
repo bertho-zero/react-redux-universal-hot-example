@@ -1,10 +1,10 @@
-// require('babel-polyfill');
+// require('@babel/polyfill');
 
 // Webpack config for creating the production bundle.
 const path = require('path');
 const webpack = require('webpack');
 const CleanPlugin = require('clean-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const { ReactLoadablePlugin } = require('react-loadable/webpack');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
@@ -33,6 +33,18 @@ module.exports = {
   performance: {
     hints: false
   },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        styles: {
+          name: 'styles',
+          test: /\.(less|scss)$/,
+          chunks: 'all',
+          enforce: true
+        }
+      }
+    }
+  },
   module: {
     rules: [
       {
@@ -42,69 +54,71 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        loader: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                modules: true,
-                importLoaders: 2,
-                sourceMap: true
-              }
-            },
-            {
-              loader: 'postcss-loader',
-              options: {
-                sourceMap: true,
-                config: {
-                  path: 'postcss.config.js'
-                }
-              }
-            },
-            {
-              loader: 'less-loader',
-              options: {
-                outputStyle: 'expanded',
-                sourceMap: true,
-                sourceMapContents: true
+        use: [
+          {
+            loader: 'style-loader',
+            options: { sourceMap: true }
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              importLoaders: 2,
+              sourceMap: true
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: true,
+              config: {
+                path: 'postcss.config.js'
               }
             }
-          ]
-        })
+          },
+          {
+            loader: 'less-loader',
+            options: {
+              outputStyle: 'expanded',
+              sourceMap: true,
+              sourceMapContents: true
+            }
+          }
+        ]
       },
       {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                modules: true,
-                importLoaders: 2,
-                sourceMap: true
-              }
-            },
-            {
-              loader: 'postcss-loader',
-              options: {
-                sourceMap: true,
-                config: {
-                  path: 'postcss.config.js'
-                }
-              }
-            },
-            {
-              loader: 'sass-loader',
-              options: {
-                outputStyle: 'expanded',
-                sourceMap: true,
-                sourceMapContents: true
+        use: [
+          {
+            loader: 'style-loader',
+            options: { sourceMap: true }
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              importLoaders: 2,
+              sourceMap: true
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: true,
+              config: {
+                path: 'postcss.config.js'
               }
             }
-          ]
-        })
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              outputStyle: 'expanded',
+              sourceMap: true,
+              sourceMapContents: true
+            }
+          }
+        ]
       },
       {
         test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/,
@@ -148,18 +162,19 @@ module.exports = {
     extensions: ['.json', '.js', '.jsx']
   },
   plugins: [
-    // https://goo.gl/dTQYan
-    // new webpack.LoaderOptionsPlugin({
-    //   minimize: true,
-    // }),
+    // https://webpack.js.org/plugins/loader-options-plugin/
+    new webpack.LoaderOptionsPlugin({
+      minimize: true,
+    }),
 
     new CleanPlugin([assetsPath], { root: projectRootPath }),
 
     // css files from the extract-text-plugin loader
-    new ExtractTextPlugin({
-      filename: '[name]-[chunkhash].css',
-      // disable: false,
-      allChunks: true
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      filename: '[name].[hash].css',
+      chunkFilename: '[id].[hash].css'
     }),
 
     new webpack.DefinePlugin({

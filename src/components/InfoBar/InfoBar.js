@@ -7,7 +7,7 @@ import { load } from 'redux/modules/info';
   state => ({ info: state.info.data }),
   { load }
 )
-export default class InfoBar extends Component {
+class InfoBar extends Component {
   static propTypes = {
     info: PropTypes.shape({
       message: PropTypes.string,
@@ -38,3 +38,5 @@ export default class InfoBar extends Component {
     );
   }
 }
+
+export default InfoBar;

@@ -29,7 +29,7 @@ import { socket } from 'app';
   { ...chatActions }
 )
 @withApp
-export default class ChatFeathers extends Component {
+class Chat extends Component {
   static propTypes = {
     app: PropTypes.shape({
       service: PropTypes.func
@@ -180,3 +180,5 @@ anonymous
     );
   }
 }
+
+export default Chat;

@@ -7,7 +7,7 @@ import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
 @provideHooks({
   fetch: ({ store: { dispatch, getState } }) => !isInfoLoaded(getState()) ? dispatch(loadInfo()).catch(() => null) : Promise.resolve()
 })
-export default class About extends Component {
+class About extends Component {
   state = {
     showKitten: false
   };
@@ -86,3 +86,5 @@ export default class About extends Component {
     );
   }
 }
+
+export default About;
