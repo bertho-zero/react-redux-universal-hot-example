@@ -3,19 +3,18 @@
   "preBootstrapCustomizations": "./src/theme/variables.scss",
   "appStyles": "./src/theme/app.scss",
   "loglevel": "disabled",
-  "styleLoaders": [
-    "style-loader?sourceMap",
-    "css-loader?sourceMap&importLoaders=2",
-    "resolve-url-loader",
-    "sass-loader?sourceMap"
-  ],
   "env": {
     "development": {
+      "styleLoaders": [
+        "style-loader?sourceMap",
+        "css-loader?sourceMap&importLoaders=2",
+        "resolve-url-loader",
+        "sass-loader?sourceMap"
+      ],
       "extractStyles": false
     },
     "production": {
       "styleLoaders": [
-        "style-loader",
         "css-loader?importLoaders=1",
         "sass-loader?sourceMap"
       ],

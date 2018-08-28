@@ -22,7 +22,7 @@ module.exports = {
   devtool: 'source-map',
   context: path.resolve(__dirname, '..'),
   entry: {
-    main: ['bootstrap-loader', './src/client.js']
+    main: ['bootstrap-loader/extractStyles', './src/client.js']
   },
   output: {
     path: assetsPath,
@@ -43,7 +43,14 @@ module.exports = {
           enforce: true
         }
       }
-    }
+    },
+    minimizer: [
+      new UglifyJsPlugin({
+        cache: true,
+        parallel: true,
+        sourceMap: true // set to true if you want JS source maps
+      })
+    ]
   },
   module: {
     rules: [
@@ -56,8 +63,10 @@ module.exports = {
         test: /\.less$/,
         use: [
           {
-            loader: 'style-loader',
-            options: { sourceMap: true }
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              sourceMap: true
+            }
           },
           {
             loader: 'css-loader',
@@ -90,8 +99,10 @@ module.exports = {
         test: /\.scss$/,
         use: [
           {
-            loader: 'style-loader',
-            options: { sourceMap: true }
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              sourceMap: true
+            }
           },
           {
             loader: 'css-loader',
@@ -162,19 +173,12 @@ module.exports = {
     extensions: ['.json', '.js', '.jsx']
   },
   plugins: [
-    // https://webpack.js.org/plugins/loader-options-plugin/
-    new webpack.LoaderOptionsPlugin({
-      minimize: true,
-    }),
-
     new CleanPlugin([assetsPath], { root: projectRootPath }),
 
     // css files from the extract-text-plugin loader
     new MiniCssExtractPlugin({
-      // Options similar to the same options in webpackOptions.output
-      // both options are optional
       filename: '[name].[hash].css',
-      chunkFilename: '[id].[hash].css'
+      chunkFilename: '[name].[hash].css'
     }),
 
     new webpack.DefinePlugin({
@@ -189,9 +193,6 @@ module.exports = {
 
     // ignore dev config
     new webpack.IgnorePlugin(/\.\/dev/, /\/config$/),
-
-    // optimizations
-    new UglifyJsPlugin(),
 
     webpackIsomorphicToolsPlugin,
 
