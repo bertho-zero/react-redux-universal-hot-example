@@ -9,7 +9,7 @@ const environment = {
   }
 }[process.env.NODE_ENV || 'development'];
 
-module.exports = Object.assign(
+const config = Object.assign(
   {
     host: process.env.HOST || 'localhost',
     port: process.env.PORT,
@@ -39,3 +39,5 @@ module.exports = Object.assign(
   },
   environment
 );
+
+export default config;

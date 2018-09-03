@@ -15,6 +15,7 @@
     },
     "production": {
       "styleLoaders": [
+        "style-loader",
         "css-loader?importLoaders=1",
         "sass-loader?sourceMap"
       ],
