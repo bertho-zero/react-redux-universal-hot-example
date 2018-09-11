@@ -3,9 +3,7 @@ import custom from './custom';
 import users from './users';
 import messages from './messages';
 
-export default function services() {
-  const app = this;
-
+export default function services(app) {
   app.configure(authentication);
   app.configure(custom);
   app.configure(users);

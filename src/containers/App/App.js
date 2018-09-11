@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -11,6 +12,7 @@ import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Alert from 'react-bootstrap/lib/Alert';
 import Helmet from 'react-helmet';
+import qs from 'qs';
 import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
 import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
 import { Notifs, InfoBar } from 'components';
@@ -56,39 +58,30 @@ export default class App extends Component {
     store: PropTypes.object.isRequired
   };
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (!prevState.user && nextProps.user) {
-      const query = new URLSearchParams(nextProps.location.search);
-      nextProps.pushState(query.get('redirect') || '/login-success');
-      return {
-        user: nextProps.user
-      };
-    } else if (prevState.user && !nextProps.user) {
-      nextProps.pushState('/');
-      return {
-        user: null
-      };
+  static getDerivedStateFromProps(props, state) {
+    const { prevProps } = state;
+    // Compare the incoming prop to previous prop
+    const user = !_.isEqual(prevProps.user, props.user) ? props.user : state.user;
+
+    if (!prevProps.user && props.user) {
+      const query = qs.parse(props.location.search, { ignoreQueryPrefix: true });
+      props.pushState(query.redirect || '/login-success');
+    } else if (prevProps.user && !props.user) {
+      // logout
+      props.pushState('/');
     }
-    return null;
+
+    return {
+      // Store the previous props in state
+      prevProps: props,
+      user
+    };
   }
 
   state = {
-    user: null
+    prevProps: this.props, // eslint-disable-line react/no-unused-state
+    user: this.props.user
   };
-  /* Made Unsafe as per React Docs v16.3 */
-  // componentWillReceiveProps(nextProps) {
-  //   console.log(this.props.user);
-  //   console.log(nextProps.user);
-  //   if (!this.props.user && nextProps.user) {
-  //     // login
-  //     const query = new URLSearchParams(this.props.location.search);
-  //     this.props.pushState(query.get('redirect') || '/login-success');
-  //   } else if (this.props.user && !nextProps.user) {
-  //     // logout
-  //     this.props.pushState('/');
-  //   }
-  // }
-  /* Unsafe as per v16.3 */
 
   componentDidUpdate(prevProps) {
     if (this.props.location !== prevProps.location) {

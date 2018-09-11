@@ -1,9 +1,7 @@
 import _ from 'lodash';
 import { SOCKET_KEY } from '@feathersjs/socketio';
 
-export default function customService() {
-  const app = this;
-
+export default function customService(app) {
   app.use('/load-info', (req, res) => {
     res.json({
       message: 'This came from the api server',

@@ -2,9 +2,7 @@ import feathersNedb from 'feathers-nedb';
 import NeDB from 'nedb';
 import hooks from './hooks';
 
-export default function userService() {
-  const app = this;
-
+export default function userService(app) {
   const options = {
     Model: new NeDB({
       filename: `${__dirname}/users.nedb`,

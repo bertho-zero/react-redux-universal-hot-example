@@ -11,9 +11,7 @@ function populateUser() {
   };
 }
 
-export default function authenticationService() {
-  const app = this;
-
+export default function authenticationService(app) {
   const config = app.get('config').auth;
 
   app

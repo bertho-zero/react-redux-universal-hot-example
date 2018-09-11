@@ -43,7 +43,7 @@ export default class Login extends Component {
     }
   };
 
-  login = async data => {
+  onLocalLogin = async data => {
     const result = await this.props.login('local', data);
     this.successLogin();
     return result;
@@ -71,7 +71,7 @@ export default class Login extends Component {
         <h1>Login</h1>
         {!user && (
           <div>
-            <LoginForm onSubmit={this.login} />
+            <LoginForm onSubmit={this.onLocalLogin} />
             <p>This will "log you in" as this user, storing the username in the session of the API server.</p>
             <FacebookLogin
               appId="635147529978862"
