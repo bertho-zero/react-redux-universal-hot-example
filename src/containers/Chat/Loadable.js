@@ -1,9 +1,7 @@
-import React from 'react';
-import Loadable from 'react-loadable';
+import DefaultLoader from 'components/DefaultLoader';
 
-const ChatFeathersLoadable = Loadable({
-  loader: () => import('./Chat' /* webpackChunkName: 'chat' */).then(module => module.default),
-  loading: () => <div>Loading</div>
+const ChatFeathersLoadable = DefaultLoader({
+  loader: () => import('./Chat' /* webpackChunkName: 'chat' */).then(module => module.default)
 });
 
 export default ChatFeathersLoadable;

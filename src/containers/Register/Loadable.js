@@ -1,9 +1,7 @@
-import React from 'react';
-import Loadable from 'react-loadable';
+import DefaultLoader from 'components/DefaultLoader';
 
-const RegisterLoadable = Loadable({
-  loader: () => import('./Register' /* webpackChunkName: 'register' */).then(module => module.default),
-  loading: () => <div>Loading</div>
+const RegisterLoadable = DefaultLoader({
+  loader: () => import('./Register' /* webpackChunkName: 'register' */).then(module => module.default)
 });
 
 export default RegisterLoadable;
