@@ -8321,9 +8321,9 @@ react-router-bootstrap@^0.24.4:
   dependencies:
     prop-types "^15.5.10"
 
-react-router-config@^1.0.0-beta.4:
-  version "1.0.0-beta.4"
-  resolved "https://registry.yarnpkg.com/react-router-config/-/react-router-config-1.0.0-beta.4.tgz#d202496dd0eabdf06cf24eb0793031f6891eef01"
+react-router-config@^4.4.0-beta.0:
+  version "4.4.0-beta.0"
+  resolved "https://registry.yarnpkg.com/react-router-config/-/react-router-config-4.4.0-beta.0.tgz#df725bef431c3b7c42d97587376e02641d4f189a"
 
 react-router-dom@^4.2.2:
   version "4.2.2"
