@@ -26,9 +26,7 @@ class InfoBar extends Component {
     return (
       <div className={`${styles.infoBar} well`}>
         <div className="container">
-          This is an info bar
-          {' '}
-          <strong>{info ? info.message : 'no info!'}</strong>
+          This is an info bar <strong>{info ? info.message : 'no info!'}</strong>
           <span className={styles.time}>{info && new Date(info.time).toString()}</span>
           <button type="button" className="btn btn-primary" onClick={load}>
             Reload from server

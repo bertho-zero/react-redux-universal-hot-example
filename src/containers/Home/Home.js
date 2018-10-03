@@ -40,9 +40,7 @@ class Home extends Component {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <i className="fa fa-github" />
-                {' '}
-View on Github
+                <i className="fa fa-github" /> View on Github
               </a>
             </p>
             {online && (
@@ -69,14 +67,11 @@ View on Github
             )}
 
             <p className={styles.humility}>
-              Created by
-              {' '}
+              Created by{' '}
               <a href="https://twitter.com/erikras" target="_blank" rel="noopener noreferrer">
                 @erikras
-              </a>
-              {' '}
-              and maintained by
-              {' '}
+              </a>{' '}
+              and maintained by{' '}
               <a href="https://github.com/bertho-zero" target="_blank" rel="noopener noreferrer">
                 @bertho-zero
               </a>
@@ -96,11 +91,8 @@ View on Github
 
           <ul>
             <li>
-              <del>Isomorphic</del>
-              {' '}
-              <a href="https://medium.com/@mjackson/universal-javascript-4761051b7ae9">Universal</a>
-              {' '}
-rendering
+              <del>Isomorphic</del>{' '}
+              <a href="https://medium.com/@mjackson/universal-javascript-4761051b7ae9">Universal</a> rendering
             </li>
             <li>Both client and server make calls to load data from separate API server</li>
             <li>
@@ -121,15 +113,13 @@ rendering
             <li>
               <a href="http://babeljs.io" target="_blank" rel="noopener noreferrer">
                 Babel
-              </a>
-              {' '}
+              </a>{' '}
               for ES6 and ES7 magic
             </li>
             <li>
               <a href="http://webpack.github.io" target="_blank" rel="noopener noreferrer">
                 Webpack
-              </a>
-              {' '}
+              </a>{' '}
               for bundling
             </li>
             <li>
@@ -150,25 +140,21 @@ rendering
               <a href="https://github.com/rackt/redux" target="_blank" rel="noopener noreferrer">
                 Redux
               </a>
-              's futuristic
-              {' '}
+              's futuristic{' '}
               <a
                 href="https://facebook.github.io/react/blog/2014/05/06/flux.html"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 Flux
-              </a>
-              {' '}
+              </a>{' '}
               implementation
             </li>
             <li>
               <a href="https://github.com/gaearon/redux-devtools" target="_blank" rel="noopener noreferrer">
                 Redux Dev Tools
-              </a>
-              {' '}
-              for next generation DX (developer experience). Watch
-              {' '}
+              </a>{' '}
+              for next generation DX (developer experience). Watch{' '}
               <a href="https://www.youtube.com/watch?v=xsSnOQynTHs" target="_blank" rel="noopener noreferrer">
                 Dan Abramov's talk
               </a>
@@ -177,49 +163,41 @@ rendering
             <li>
               <a href="https://github.com/rackt/redux-router" target="_blank" rel="noopener noreferrer">
                 Redux Router
-              </a>
-              {' '}
+              </a>{' '}
               Keep your router state in your Redux store
             </li>
             <li>
               <a href="http://eslint.org" target="_blank" rel="noopener noreferrer">
                 ESLint
-              </a>
-              {' '}
+              </a>{' '}
               to maintain a consistent code style
             </li>
             <li>
               <a href="https://github.com/erikras/react-final-form" target="_blank" rel="noopener noreferrer">
                 react-final-form
-              </a>
-              {' '}
+              </a>{' '}
               to manage form state
             </li>
             <li>
               <a href="https://github.com/erikras/multireducer" target="_blank" rel="noopener noreferrer">
                 multireducer
-              </a>
-              {' '}
+              </a>{' '}
               combine several identical reducer states into one key-based reducer
             </li>
             <li>
               <a href="https://github.com/webpack/style-loader" target="_blank" rel="noopener noreferrer">
                 style-loader
-              </a>
-              {' '}
-              and
-              {' '}
+              </a>{' '}
+              and{' '}
               <a href="https://github.com/jtangelder/sass-loader" target="_blank" rel="noopener noreferrer">
                 sass-loader
-              </a>
-              {' '}
+              </a>{' '}
               to allow import of stylesheets
             </li>
             <li>
               <a href="https://github.com/shakacode/bootstrap-sass-loader" target="_blank" rel="noopener noreferrer">
                 bootstrap-sass-loader
-              </a>
-              {' '}
+              </a>{' '}
               to customize Bootstrap
             </li>
             <li>
@@ -228,9 +206,7 @@ rendering
               </a>
             </li>
             <li>
-              <a href="http://socket.io/">socket.io</a>
-              {' '}
-for real-time communication
+              <a href="http://socket.io/">socket.io</a> for real-time communication
             </li>
           </ul>
 
@@ -239,94 +215,42 @@ for real-time communication
           <dl>
             <dt>Multiple components subscribing to same redux store slice</dt>
             <dd>
-              The
-              {' '}
-              <code>App.js</code>
-              {' '}
-that wraps all the pages contains an
-              {' '}
-              <code>InfoBar</code>
-              {' '}
-component that fetches
-              data from the server initially, but allows for the user to refresh the data from the client.
-              {' '}
-              <code>About.js</code>
-              {' '}
-contains a
-              <code>MiniInfoBar</code>
-              {' '}
-that displays the same data.
+              The <code>App.js</code> that wraps all the pages contains an <code>InfoBar</code> component that fetches
+              data from the server initially, but allows for the user to refresh the data from the client.{' '}
+              <code>About.js</code> contains a<code>MiniInfoBar</code> that displays the same data.
             </dd>
             <dt>Server-side data loading</dt>
             <dd>
-              The
-              {' '}
-              <Link to="/chat">Chat page</Link>
-              {' '}
-demonstrates how to fetch data asynchronously from some source that
-              is needed to complete the server-side rendering.
-              {' '}
-              <code>Chat.js</code>
+              The <Link to="/chat">Chat page</Link> demonstrates how to fetch data asynchronously from some source that
+              is needed to complete the server-side rendering. <code>Chat.js</code>
               's
-              <code>provideHooks()</code>
-              {' '}
-function is called before the chat page is loaded, on either the server or the
+              <code>provideHooks()</code> function is called before the chat page is loaded, on either the server or the
               client, allowing all the widget data to be loaded and ready for the page to render.
             </dd>
             <dt>Session based login</dt>
             <dd>
-              On the
-              {' '}
-              <Link to="/login">Login page</Link>
-              {' '}
-you can submit a username which will be sent to the server and
+              On the <Link to="/login">Login page</Link> you can submit a username which will be sent to the server and
               stored in the session. Subsequent refreshes will show that you are still logged in.
             </dd>
             <dt>Redirect after state change</dt>
             <dd>
-              After you log in, you will be redirected to a Login Success page. This
-              {' '}
-              <strike>magic</strike>
-              {' '}
-logic is
-              performed in
-              {' '}
-              <code>getDerivedStateFromProps()</code>
-              {' '}
-in
-              {' '}
-              <code>App.js</code>
-, but it could be done in any
-              component that listens to the appropriate store slice, via Redux's
-              {' '}
-              <code>@connect</code>
-, and pulls the
+              After you log in, you will be redirected to a Login Success page. This <strike>magic</strike> logic is
+              performed in <code>getDerivedStateFromProps()</code> in <code>App.js</code>, but it could be done in any
+              component that listens to the appropriate store slice, via Redux's <code>@connect</code>, and pulls the
               router from the context.
             </dd>
             <dt>Auth-required views</dt>
             <dd>
-              The aforementioned Login Success page is only visible to you if you are logged in. If you try to
-              {' '}
-              <Link to="/login-success">go there</Link>
-              {' '}
-when you are not logged in, you will be forwarded back to this
+              The aforementioned Login Success page is only visible to you if you are logged in. If you try to{' '}
+              <Link to="/login-success">go there</Link> when you are not logged in, you will be forwarded back to this
               home page. This
-              <strike>magic</strike>
-              {' '}
-logic is performed by the
-              <code>onEnter</code>
-              {' '}
-hook within
-              <code>routes.js</code>
-.
+              <strike>magic</strike> logic is performed by the
+              <code>onEnter</code> hook within
+              <code>routes.js</code>.
             </dd>
             <dt>WebSockets / socket.io</dt>
             <dd>
-              The
-              {' '}
-              <Link to="/chat">Chat</Link>
-              {' '}
-uses the socket.io technology for real-time communication between
+              The <Link to="/chat">Chat</Link> uses the socket.io technology for real-time communication between
               clients.
             </dd>
           </dl>

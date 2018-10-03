@@ -24,6 +24,7 @@
     "react/jsx-closing-tag-location": "off",
     "react/jsx-filename-extension": "off",
     "react/jsx-no-target-blank": "warn",
+    "react/jsx-one-expression-per-line": "off",
     "react/no-multi-comp": ["error", {"ignoreStateless": true}],
     "react/no-unescaped-entities": "off",
     "react/prefer-stateless-function": "warn",

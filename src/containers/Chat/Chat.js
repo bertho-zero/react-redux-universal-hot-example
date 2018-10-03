@@ -125,17 +125,11 @@ class Chat extends Component {
       <div className="container">
         <div className={cn('row', styles.chatWrapper)}>
           <div className={cn('col-sm-3', styles.userColumn)}>
-            <h2 className="text-center">
-              {visitors.authenticated.length + visitors.anonymous}
-              {' '}
-Users
-            </h2>
+            <h2 className="text-center">{visitors.authenticated.length + visitors.anonymous} Users</h2>
 
             <ul className="list-group">
               <li className="list-group-item text-center text-info">
-                <b>{visitors.anonymous}</b>
-                {' '}
-anonymous
+                <b>{visitors.anonymous}</b> anonymous
               </li>
               {visitors.authenticated.map(visitor => (
                 <li key={visitor._id} className="list-group-item">
@@ -155,8 +149,7 @@ anonymous
 
             <form onSubmit={this.handleSubmit}>
               <label htmlFor="message">
-                <em>{user ? user.email : 'Anonymous'}</em>
-                {' '}
+                <em>{user ? user.email : 'Anonymous'}</em>{' '}
               </label>
               <div className={cn('input-group', { 'has-error': error })}>
                 <input

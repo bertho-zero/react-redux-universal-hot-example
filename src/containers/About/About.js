@@ -38,8 +38,7 @@ class About extends Component {
           </a>
           ),
           <br />
-          but has since seen many contributions from the open source community. Thank you to
-          {' '}
+          but has since seen many contributions from the open source community. Thank you to{' '}
           <a
             href="https://github.com/bertho-zero/react-redux-universal-hot-example/graphs/contributors"
             target="_blank"
@@ -51,9 +50,7 @@ class About extends Component {
         </p>
 
         <h3>
-          Mini Bar
-          {' '}
-          <span style={{ color: '#aaa' }}>(not that kind)</span>
+          Mini Bar <span style={{ color: '#aaa' }}>(not that kind)</span>
         </h3>
 
         <p>

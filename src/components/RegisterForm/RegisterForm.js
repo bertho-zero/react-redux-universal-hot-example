@@ -46,9 +46,7 @@ const RegisterForm = ({ onSubmit, initialValues }) => (
           </p>
         )}
         <button className="btn btn-success" type="submit">
-          <i className="fa fa-sign-in" />
-          {' '}
-Register
+          <i className="fa fa-sign-in" /> Register
         </button>
       </form>
     )}

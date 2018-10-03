@@ -69,9 +69,7 @@ class Login extends Component {
 
   FacebookLoginButton = ({ facebookLogin }) => (
     <button type="button" className="btn btn-primary" onClick={facebookLogin}>
-      Login with
-      {' '}
-      <i className="fa fa-facebook-f" />
+      Login with <i className="fa fa-facebook-f" />
     </button>
   );
 
@@ -99,15 +97,12 @@ class Login extends Component {
           <div>
             <p>
               You are currently logged in as
-              {user.email}
-.
+              {user.email}.
             </p>
 
             <div>
               <button type="button" className="btn btn-danger" onClick={logout}>
-                <i className="fa fa-sign-out" />
-                {' '}
-Log Out
+                <i className="fa fa-sign-out" /> Log Out
               </button>
             </div>
           </div>

@@ -178,8 +178,7 @@ class App extends Component {
         <InfoBar />
 
         <div className="well text-center">
-          Have questions? Ask for help
-          {' '}
+          Have questions? Ask for help{' '}
           <a
             href="https://github.com/bertho-zero/react-redux-universal-hot-example/issues"
             target="_blank"
