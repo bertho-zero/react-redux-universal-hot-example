@@ -68,13 +68,12 @@ export function isLoaded(globalState) {
 export function load() {
   return {
     types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
-    promise: ({ app }) =>
-      app.service('messages').find({
-        query: {
-          $sort: { createdAt: -1 },
-          $limit: 25
-        }
-      })
+    promise: ({ app }) => app.service('messages').find({
+      query: {
+        $sort: { createdAt: -1 },
+        $limit: 25
+      }
+    })
   };
 }
 

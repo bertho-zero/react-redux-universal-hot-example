@@ -13,8 +13,8 @@ const Input = ({
     <div className="col-sm-10">
       <input {...input} {...rest} type={type} className="form-control" />
       {(error || submitError) && touched && <span className="glyphicon glyphicon-remove form-control-feedback" />}
-      {(error || submitError) &&
-        touched && (
+      {(error || submitError)
+        && touched && (
         <div className="text-danger">
           <strong>{error || submitError}</strong>
         </div>

@@ -14,7 +14,7 @@ import Alert from 'react-bootstrap/lib/Alert';
 import Helmet from 'react-helmet';
 import qs from 'qs';
 import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
-import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
+import { isLoaded as isAuthLoaded, load as loadAuth, logout as logoutAction } from 'redux/modules/auth';
 import { Notifs, InfoBar } from 'components';
 import config from 'config';
 
@@ -33,10 +33,10 @@ import config from 'config';
     notifs: state.notifs,
     user: state.auth.user
   }),
-  { logout, pushState: push }
+  { logout: logoutAction, pushState: push }
 )
 @withRouter
-export default class App extends Component {
+class App extends Component {
   static propTypes = {
     route: PropTypes.objectOf(PropTypes.any).isRequired,
     location: PropTypes.objectOf(PropTypes.any).isRequired,
@@ -50,13 +50,26 @@ export default class App extends Component {
     pushState: PropTypes.func.isRequired
   };
 
+  static contextTypes = {
+    store: PropTypes.objectOf(PropTypes.any).isRequired
+  };
+
   static defaultProps = {
     user: null
   };
 
-  static contextTypes = {
-    store: PropTypes.object.isRequired
+  state = {
+    user: this.props.user, // eslint-disable-line react/destructuring-assignment
+    prevProps: this.props // eslint-disable-line react/no-unused-state
   };
+
+  componentDidUpdate(prevProps) {
+    const { location } = this.props;
+
+    if (location !== prevProps.location) {
+      window.scrollTo(0, 0);
+    }
+  }
 
   static getDerivedStateFromProps(props, state) {
     const { prevProps } = state;
@@ -72,26 +85,17 @@ export default class App extends Component {
     }
 
     return {
+      user,
       // Store the previous props in state
-      prevProps: props,
-      user
+      prevProps: props
     };
   }
 
-  state = {
-    prevProps: this.props, // eslint-disable-line react/no-unused-state
-    user: this.props.user
-  };
-
-  componentDidUpdate(prevProps) {
-    if (this.props.location !== prevProps.location) {
-      window.scrollTo(0, 0);
-    }
-  }
-
   handleLogout = event => {
+    const { logout } = this.props;
+
     event.preventDefault();
-    this.props.logout();
+    logout();
   };
 
   render() {
@@ -181,9 +185,12 @@ export default class App extends Component {
             rel="noopener noreferrer"
           >
             on Github
-          </a>.
+          </a>
+          .
         </div>
       </div>
     );
   }
 }
+
+export default App;

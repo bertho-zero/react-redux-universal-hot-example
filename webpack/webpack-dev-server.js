@@ -1,14 +1,16 @@
-var Express = require('express');
-var webpack = require('webpack');
+require('../server.babel');
 
-var config = require('../src/config');
-var webpackConfig = require('./dev.config');
-var compiler = webpack(webpackConfig);
+const express = require('express');
+const webpack = require('webpack');
+const config = require('../src/config');
+const webpackConfig = require('./dev.config');
 
-var host = config.host || 'localhost';
-var port = (Number(config.port) + 1) || 3001;
-var serverOptions = {
-  contentBase: 'http://' + host + ':' + port,
+const compiler = webpack(webpackConfig);
+
+const host = config.host || 'localhost';
+const port = Number(config.port) + 1 || 3001;
+const serverOptions = {
+  contentBase: `http://${host}:${port}`,
   quiet: true,
   noInfo: true,
   hot: true,
@@ -18,12 +20,12 @@ var serverOptions = {
   headers: { 'Access-Control-Allow-Origin': '*' }
 };
 
-var app = new Express();
+const app = express();
 
 app.use(require('webpack-dev-middleware')(compiler, serverOptions));
 app.use(require('webpack-hot-middleware')(compiler));
 
-app.listen(port, function onAppListening(err) {
+app.listen(port, err => {
   if (err) {
     console.error(err);
   } else {

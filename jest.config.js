@@ -1,8 +1,5 @@
 module.exports = {
-  moduleDirectories: [
-    process.env.NODE_PATH,
-    'node_modules'
-  ],
+  moduleDirectories: [process.env.NODE_PATH, 'node_modules'],
   moduleNameMapper: {
     '\\.(jpg|jpeg|png|gif|eot|otf|svg|ttf|woff|woff2)$': '<rootDir>/__mocks__/fileMock.js',
     '\\.(css|less|scss)$': 'identity-obj-proxy'

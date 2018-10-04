@@ -6,7 +6,7 @@ import NProgress from 'nprogress';
 import asyncMatchRoutes from 'utils/asyncMatchRoutes';
 
 @withRouter
-export default class ReduxAsyncConnect extends Component {
+class ReduxAsyncConnect extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     history: PropTypes.objectOf(PropTypes.any).isRequired,
@@ -63,3 +63,5 @@ export default class ReduxAsyncConnect extends Component {
     return <Route location={previousLocation || location} render={() => children} />;
   }
 }
+
+export default ReduxAsyncConnect;

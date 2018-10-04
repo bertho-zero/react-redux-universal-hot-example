@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 @connect(state => ({
   online: state.online
 }))
-export default class Home extends Component {
+class Home extends Component {
   static propTypes = {
     online: PropTypes.bool.isRequired
   };
@@ -74,7 +74,8 @@ export default class Home extends Component {
               and maintained by{' '}
               <a href="https://github.com/bertho-zero" target="_blank" rel="noopener noreferrer">
                 @bertho-zero
-              </a>.
+              </a>
+              .
             </p>
           </div>
         </div>
@@ -156,7 +157,8 @@ export default class Home extends Component {
               for next generation DX (developer experience). Watch{' '}
               <a href="https://www.youtube.com/watch?v=xsSnOQynTHs" target="_blank" rel="noopener noreferrer">
                 Dan Abramov's talk
-              </a>.
+              </a>
+              .
             </li>
             <li>
               <a href="https://github.com/rackt/redux-router" target="_blank" rel="noopener noreferrer">
@@ -215,12 +217,13 @@ export default class Home extends Component {
             <dd>
               The <code>App.js</code> that wraps all the pages contains an <code>InfoBar</code> component that fetches
               data from the server initially, but allows for the user to refresh the data from the client.{' '}
-              <code>About.js</code> contains a <code>MiniInfoBar</code> that displays the same data.
+              <code>About.js</code> contains a<code>MiniInfoBar</code> that displays the same data.
             </dd>
             <dt>Server-side data loading</dt>
             <dd>
               The <Link to="/chat">Chat page</Link> demonstrates how to fetch data asynchronously from some source that
-              is needed to complete the server-side rendering. <code>Chat.js</code>'s
+              is needed to complete the server-side rendering. <code>Chat.js</code>
+              's
               <code>provideHooks()</code> function is called before the chat page is loaded, on either the server or the
               client, allowing all the widget data to be loaded and ready for the page to render.
             </dd>
@@ -240,8 +243,10 @@ export default class Home extends Component {
             <dd>
               The aforementioned Login Success page is only visible to you if you are logged in. If you try to{' '}
               <Link to="/login-success">go there</Link> when you are not logged in, you will be forwarded back to this
-              home page. This <strike>magic</strike> logic is performed by the
-              <code>onEnter</code> hook within <code>routes.js</code>.
+              home page. This
+              <strike>magic</strike> logic is performed by the
+              <code>onEnter</code> hook within
+              <code>routes.js</code>.
             </dd>
             <dt>WebSockets / socket.io</dt>
             <dd>
@@ -268,3 +273,5 @@ export default class Home extends Component {
     );
   }
 }
+
+export default Home;

@@ -5,19 +5,23 @@ import MiniInfoBar from 'components/MiniInfoBar/MiniInfoBar';
 import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
 
 @provideHooks({
-  fetch: ({ store: { dispatch, getState } }) =>
-    !isInfoLoaded(getState()) ? dispatch(loadInfo()).catch(() => null) : Promise.resolve()
+  fetch: ({ store: { dispatch, getState } }) => !isInfoLoaded(getState()) ? dispatch(loadInfo()).catch(() => null) : Promise.resolve()
 })
-export default class About extends Component {
+class About extends Component {
   state = {
     showKitten: false
   };
 
-  handleToggleKitten = () => this.setState({ showKitten: !this.state.showKitten });
+  handleToggleKitten = () => {
+    const { showKitten } = this.state;
+
+    this.setState({ showKitten: !showKitten });
+  };
 
   render() {
     const { showKitten } = this.state;
     const kitten = require('./kitten.jpg');
+
     return (
       <div className="container">
         <h1>About Us</h1>
@@ -27,10 +31,13 @@ export default class About extends Component {
           This project is maintained by Kévin Berthommier (
           <a href="https://github.com/bertho-zero" target="_blank" rel="noopener noreferrer">
             @bertho-zero
-          </a>) and was originally created by Erik Rasmussen (
+          </a>
+          ) and was originally created by Erik Rasmussen (
           <a href="https://twitter.com/erikras" target="_blank" rel="noopener noreferrer">
             @erikras
-          </a>),<br />
+          </a>
+          ),
+          <br />
           but has since seen many contributions from the open source community. Thank you to{' '}
           <a
             href="https://github.com/bertho-zero/react-redux-universal-hot-example/graphs/contributors"
@@ -38,7 +45,8 @@ export default class About extends Component {
             rel="noopener noreferrer"
           >
             all the contributors
-          </a>.
+          </a>
+          .
         </p>
 
         <h3>
@@ -57,6 +65,7 @@ export default class About extends Component {
         <p>
           Psst! Would you like to see a kitten?
           <button
+            type="button"
             className={`btn btn-${showKitten ? 'danger' : 'success'}`}
             style={{ marginLeft: 50 }}
             onClick={this.handleToggleKitten}
@@ -74,3 +83,5 @@ export default class About extends Component {
     );
   }
 }
+
+export default About;

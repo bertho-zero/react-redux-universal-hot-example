@@ -1,6 +1,6 @@
 const ONE_DAY = 60 * 60 * 24 * 1000;
 
-module.exports = {
+const config = {
   auth: {
     secret: 'super secret',
     cookie: {
@@ -22,3 +22,5 @@ module.exports = {
     }
   }
 };
+
+export default config;

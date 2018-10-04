@@ -12,14 +12,12 @@ class FacebookLogin extends Component {
     version: PropTypes.string,
     language: PropTypes.string,
     textButton: PropTypes.string,
-    typeButton: PropTypes.string,
     className: PropTypes.string,
     component: PropTypes.func.isRequired
   };
 
   static defaultProps = {
     textButton: 'Login with Facebook',
-    typeButton: 'button',
     className: '',
     scope: 'public_profile,email',
     xfbml: false,
@@ -67,16 +65,18 @@ class FacebookLogin extends Component {
   click = () => {
     const { scope, appId } = this.props;
     if (navigator.userAgent.match('CriOS')) {
-      window.location.href =
-        `https://www.facebook.com/dialog/oauth?client_id=${appId}` +
-        `&redirect_uri=${window.location.href}&state=facebookdirect&${scope}`;
+      window.location.href = `https://www.facebook.com/dialog/oauth?client_id=${appId}`
+        + `&redirect_uri=${window.location.href}&state=facebookdirect&${scope}`;
     } else {
       window.FB.login(
         response => {
-          if (response.authResponse) {
-            this.props.onLogin(null, response.authResponse);
+          const { onLogin } = this.props;
+          const { authResponse } = response;
+
+          if (authResponse) {
+            onLogin(null, authResponse);
           } else {
-            this.props.onLogin(response);
+            onLogin(response);
           }
         },
         { scope }
@@ -85,14 +85,12 @@ class FacebookLogin extends Component {
   };
 
   render() {
-    const {
-      className, textButton, typeButton, component: WrappedComponent
-    } = this.props;
+    const { className, textButton, component: WrappedComponent } = this.props;
 
     if (WrappedComponent) return <WrappedComponent facebookLogin={this.click} />;
 
     return (
-      <button className={className} onClick={this.click} type={typeButton}>
+      <button type="button" className={className} onClick={this.click}>
         {textButton}
       </button>
     );

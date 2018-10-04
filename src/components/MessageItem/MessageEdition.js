@@ -23,6 +23,7 @@ const MessageEdition = ({
             <span className="fa fa-check text-success" aria-hidden="true" />
           </button>
           <button
+            type="button"
             className={cn('btn btn-sm btn-link', styles.controlBtn)}
             tabIndex={0}
             title="Cancel"

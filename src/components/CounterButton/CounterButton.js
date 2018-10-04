@@ -8,7 +8,7 @@ import * as counterActions from 'redux/modules/counter';
   (state, { multireducerKey: key }) => ({ count: state.counter[key].count }),
   (dispatch, { multireducerKey: key }) => bindActionCreators(counterActions, dispatch, key)
 )
-export default class CounterButton extends Component {
+class CounterButton extends Component {
   static propTypes = {
     count: PropTypes.number.isRequired,
     increment: PropTypes.func.isRequired,
@@ -22,11 +22,15 @@ export default class CounterButton extends Component {
   render() {
     const { count, increment } = this.props;
     let { className } = this.props;
+
     className += ' btn btn-default';
+
     return (
-      <button className={className} onClick={increment}>
-        You have clicked me {count} time{count === 1 ? '' : 's'}.
+      <button type="button" className={className} onClick={increment}>
+        {`You have clicked me ${count} time${count === 1 ? '' : 's'}.`}
       </button>
     );
   }
 }
+
+export default CounterButton;

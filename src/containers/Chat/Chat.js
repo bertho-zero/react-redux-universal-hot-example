@@ -29,7 +29,7 @@ import { socket } from 'app';
   { ...chatActions }
 )
 @withApp
-export default class ChatFeathers extends Component {
+class Chat extends Component {
   static propTypes = {
     app: PropTypes.shape({
       service: PropTypes.func
@@ -62,34 +62,43 @@ export default class ChatFeathers extends Component {
   };
 
   componentDidMount() {
-    const service = this.props.app.service('messages');
+    const { app, addMessage, updateVisitors } = this.props;
 
-    service.on('created', this.props.addMessage);
+    const service = app.service('messages');
+
+    service.on('created', addMessage);
     setImmediate(() => this.scrollToBottom());
 
-    service.on('updateVisitors', this.props.updateVisitors);
+    service.on('updateVisitors', updateVisitors);
     socket.emit('joinChat');
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.messages.length !== this.props.messages.length) {
+    const { messages } = this.props;
+
+    if (prevProps.messages.length !== messages.length) {
       this.scrollToBottom();
     }
   }
 
   componentWillUnmount() {
-    this.props.app
+    const { app, addMessage, updateVisitors } = this.props;
+
+    app
       .service('messages')
-      .removeListener('created', this.props.addMessage)
-      .removeListener('updateVisitors', this.props.updateVisitors);
+      .removeListener('created', addMessage)
+      .removeListener('updateVisitors', updateVisitors);
     socket.emit('leaveChat');
   }
 
   handleSubmit = async event => {
+    const { app } = this.props;
+    const { message } = this.state;
+
     event.preventDefault();
 
     try {
-      await this.props.app.service('messages').create({ text: this.state.message });
+      await app.service('messages').create({ text: message });
       this.setState({
         message: '',
         error: false
@@ -108,7 +117,7 @@ export default class ChatFeathers extends Component {
     const {
       messages, visitors, user, patchMessage
     } = this.props;
-    const { error } = this.state;
+    const { message, error } = this.state;
 
     const styles = require('./Chat.scss');
 
@@ -133,14 +142,8 @@ export default class ChatFeathers extends Component {
             <h2 className="text-center">Messages</h2>
 
             <div className={styles.messages} ref={this.messageList}>
-              {messages.map(message => (
-                <MessageItem
-                  key={message._id}
-                  styles={styles}
-                  message={message}
-                  user={user}
-                  patchMessage={patchMessage}
-                />
+              {messages.map(msg => (
+                <MessageItem key={msg._id} styles={styles} message={msg} user={user} patchMessage={patchMessage} />
               ))}
             </div>
 
@@ -154,7 +157,7 @@ export default class ChatFeathers extends Component {
                   className="form-control"
                   name="message"
                   placeholder="Your message here..."
-                  value={this.state.message}
+                  value={message}
                   onChange={event => this.setState({ message: event.target.value })}
                 />
                 <span className="input-group-btn">
@@ -170,3 +173,5 @@ export default class ChatFeathers extends Component {
     );
   }
 }
+
+export default Chat;

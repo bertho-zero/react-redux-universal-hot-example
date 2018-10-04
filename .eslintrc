@@ -12,7 +12,7 @@
     "consistent-return": "off",
     "global-require": "off",
     "indent": ["error", 2, {"SwitchCase": 1}],
-    "max-len": ["error", 120, {"ignorePattern": "[^\\n\\r]{115,120}\\{(?:'|\") (?:'|\")\\}"}],
+    "max-len": ["warn", 120],
     "no-alert": "off",
     "no-confusing-arrow": "off",
     "no-console": "off",
@@ -24,6 +24,7 @@
     "react/jsx-closing-tag-location": "off",
     "react/jsx-filename-extension": "off",
     "react/jsx-no-target-blank": "warn",
+    "react/jsx-one-expression-per-line": "off",
     "react/no-multi-comp": ["error", {"ignoreStateless": true}],
     "react/no-unescaped-entities": "off",
     "react/prefer-stateless-function": "warn",
@@ -66,7 +67,6 @@
     "__DISABLE_SSR__": true,
     "__DEVTOOLS__": true,
     "__DLLS__": true,
-    "socket": true,
     "webpackIsomorphicTools": true
   }
 }

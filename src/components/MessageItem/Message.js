@@ -13,6 +13,7 @@ const Message = ({
         <Fragment>
           {' '}
           <button
+            type="button"
             className={cn('btn btn-sm btn-link', styles.controlBtn)}
             tabIndex={0}
             title="Edit"

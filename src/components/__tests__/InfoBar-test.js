@@ -30,9 +30,11 @@ describe('InfoBar', () => {
     helpers: { client },
     data: mockStore
   });
-  const renderer = renderIntoDocument(<Provider store={store} key="provider">
-    <InfoBar />
-  </Provider>);
+  const renderer = renderIntoDocument(
+    <Provider store={store} key="provider">
+      <InfoBar />
+    </Provider>
+  );
 
   it('should render correctly', () => {
     // eslint-disable-next-line no-unused-expressions

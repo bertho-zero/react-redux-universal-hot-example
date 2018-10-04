@@ -8,9 +8,12 @@ import FacebookLogin from 'components/FacebookLogin/FacebookLogin';
 import * as authActions from 'redux/modules/auth';
 import * as notifActions from 'redux/modules/notifs';
 
-@connect(state => ({ user: state.auth.user }), { ...notifActions, ...authActions })
+@connect(
+  state => ({ user: state.auth.user }),
+  { ...notifActions, ...authActions }
+)
 @withRouter
-export default class Login extends Component {
+class Login extends Component {
   static propTypes = {
     user: PropTypes.shape({
       email: PropTypes.string
@@ -28,12 +31,14 @@ export default class Login extends Component {
   onFacebookLogin = async (err, data) => {
     if (err) return;
 
+    const { login, history } = this.props;
+
     try {
-      await this.props.login('facebook', data);
+      await login('facebook', data);
       this.successLogin();
     } catch (error) {
       if (error.message === 'Incomplete oauth registration') {
-        this.props.history.push({
+        history.push({
           pathname: '/register',
           state: { oauth: error.data }
         });
@@ -44,13 +49,18 @@ export default class Login extends Component {
   };
 
   onLocalLogin = async data => {
-    const result = await this.props.login('local', data);
+    const { login } = this.props;
+
+    const result = await login('local', data);
     this.successLogin();
+
     return result;
   };
 
   successLogin = () => {
-    this.props.notifSend({
+    const { notifSend } = this.props;
+
+    notifSend({
       message: "You're logged in now !",
       kind: 'success',
       dismissAfter: 2000
@@ -58,13 +68,14 @@ export default class Login extends Component {
   };
 
   FacebookLoginButton = ({ facebookLogin }) => (
-    <button className="btn btn-primary" onClick={facebookLogin}>
+    <button type="button" className="btn btn-primary" onClick={facebookLogin}>
       Login with <i className="fa fa-facebook-f" />
     </button>
   );
 
   render() {
     const { user, logout } = this.props;
+
     return (
       <div className="container">
         <Helmet title="Login" />
@@ -84,10 +95,13 @@ export default class Login extends Component {
         )}
         {user && (
           <div>
-            <p>You are currently logged in as {user.email}.</p>
+            <p>
+              You are currently logged in as
+              {user.email}.
+            </p>
 
             <div>
-              <button className="btn btn-danger" onClick={logout}>
+              <button type="button" className="btn btn-danger" onClick={logout}>
                 <i className="fa fa-sign-out" /> Log Out
               </button>
             </div>
@@ -97,3 +111,5 @@ export default class Login extends Component {
     );
   }
 }
+
+export default Login;
