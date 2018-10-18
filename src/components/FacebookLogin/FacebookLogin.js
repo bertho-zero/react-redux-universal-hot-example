@@ -12,14 +12,12 @@ class FacebookLogin extends Component {
     version: PropTypes.string,
     language: PropTypes.string,
     textButton: PropTypes.string,
-    typeButton: PropTypes.string,
     className: PropTypes.string,
     component: PropTypes.func.isRequired
   };
 
   static defaultProps = {
     textButton: 'Login with Facebook',
-    typeButton: 'button',
     className: '',
     scope: 'public_profile,email',
     xfbml: false,
@@ -27,10 +25,12 @@ class FacebookLogin extends Component {
     version: '2.3',
     language: 'en_US',
     autoLoad: false
-  }
+  };
 
   componentDidMount() {
-    const { appId, xfbml, cookie, version, autoLoad, language } = this.props;
+    const {
+      appId, xfbml, cookie, version, autoLoad, language
+    } = this.props;
     let fbRoot = document.getElementById('fb-root');
 
     if (!fbRoot) {
@@ -45,7 +45,7 @@ class FacebookLogin extends Component {
         version: `v${version}`,
         appId,
         xfbml,
-        cookie,
+        cookie
       });
 
       if (autoLoad || window.location.search.includes('facebookdirect')) {
@@ -65,26 +65,32 @@ class FacebookLogin extends Component {
   click = () => {
     const { scope, appId } = this.props;
     if (navigator.userAgent.match('CriOS')) {
-      window.location.href = `https://www.facebook.com/dialog/oauth?client_id=${appId}` +
-        `&redirect_uri=${window.location.href}&state=facebookdirect&${scope}`;
+      window.location.href = `https://www.facebook.com/dialog/oauth?client_id=${appId}`
+        + `&redirect_uri=${window.location.href}&state=facebookdirect&${scope}`;
     } else {
-      window.FB.login(response => {
-        if (response.authResponse) {
-          this.props.onLogin(null, response.authResponse);
-        } else {
-          this.props.onLogin(response);
-        }
-      }, { scope });
+      window.FB.login(
+        response => {
+          const { onLogin } = this.props;
+          const { authResponse } = response;
+
+          if (authResponse) {
+            onLogin(null, authResponse);
+          } else {
+            onLogin(response);
+          }
+        },
+        { scope }
+      );
     }
   };
 
   render() {
-    const { className, textButton, typeButton, component: WrappedComponent } = this.props;
+    const { className, textButton, component: WrappedComponent } = this.props;
 
     if (WrappedComponent) return <WrappedComponent facebookLogin={this.click} />;
 
     return (
-      <button className={className} onClick={this.click} type={typeButton}>
+      <button type="button" className={className} onClick={this.click}>
         {textButton}
       </button>
     );

@@ -1,41 +1,33 @@
-import isPromise from 'is-promise';
 import * as validation from '../../src/utils/validation';
 
 function createAsyncValidator(rules, params) {
-  return (data = {}) => {
+  return async (data = {}) => {
     const errors = validation.createValidator(rules, params)(data);
 
-    const promises = Object.keys(errors)
-      .map(name => {
-        const error = errors[name];
-        const myResolve = () => ({ status: 'resolved', name });
-        const myReject = err => ({ status: 'rejected', name, error: err });
+    const finalErrors = await Object.keys(errors).reduce(async (result, name) => {
+      try {
+        const error = await errors[name];
+        return error ? Object.assign(result, { [name]: error }) : result;
+      } catch (error) {
+        return Object.assign(result, { [name]: error.message || error });
+      }
+    }, {});
 
-        if (isPromise(error)) {
-          return error.then(myResolve).catch(myReject);
-        }
+    if (Object.keys(finalErrors).length) {
+      throw finalErrors;
+    }
 
-        return error ? myReject() : myResolve();
-      });
-
-    return Promise.all(promises)
-      .then(results => {
-        const finalErrors = results
-          .filter(x => x.status === 'rejected')
-          .reduce((prev, next) => ({ ...prev, [next.name]: next.error }), {});
-
-        return Object.keys(finalErrors).length ? Promise.reject(finalErrors) : Promise.resolve(data);
-      });
+    return data;
   };
 }
 
 function unique(field) {
-  return (value, data, { hook }) => hook.service.find({ query: { [field]: value } })
-    .then(result => {
-      if (result.total !== 0) {
-        return Promise.reject('Already exist');
-      }
-    });
+  return async (value, data, { hook }) => {
+    const result = await hook.service.find({ query: { [field]: value } });
+    if (result.total !== 0) {
+      throw new Error('Already exist');
+    }
+  };
 }
 
 module.exports = {

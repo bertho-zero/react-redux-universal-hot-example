@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import LoginForm from 'components/LoginForm/LoginForm';
@@ -9,81 +10,106 @@ import * as notifActions from 'redux/modules/notifs';
 
 @connect(
   state => ({ user: state.auth.user }),
-  { ...notifActions, ...authActions })
-export default class Login extends Component {
+  { ...notifActions, ...authActions }
+)
+@withRouter
+class Login extends Component {
   static propTypes = {
-    user: PropTypes.object,
+    user: PropTypes.shape({
+      email: PropTypes.string
+    }),
     login: PropTypes.func.isRequired,
     logout: PropTypes.func.isRequired,
-    notifSend: PropTypes.func.isRequired
-  }
+    notifSend: PropTypes.func.isRequired,
+    history: PropTypes.objectOf(PropTypes.any).isRequired
+  };
 
   static defaultProps = {
     user: null
-  }
-
-  static contextTypes = {
-    router: PropTypes.object
-  }
-
-  onFacebookLogin = (err, data) => {
-    if (err) return;
-    this.props.login('facebook', data, false)
-      .then(this.successLogin)
-      .catch(error => {
-        if (error.message === 'Incomplete oauth registration') {
-          this.context.router.push({
-            pathname: '/register',
-            state: { oauth: error.data }
-          });
-        }
-      });
   };
 
-  login = data => this.props.login('local', data).then(this.successLogin);
+  onFacebookLogin = async (err, data) => {
+    if (err) return;
 
-  successLogin = data => {
-    this.props.notifSend({
-      message: 'You\'r logged !',
+    const { login, history } = this.props;
+
+    try {
+      await login('facebook', data);
+      this.successLogin();
+    } catch (error) {
+      if (error.message === 'Incomplete oauth registration') {
+        history.push({
+          pathname: '/register',
+          state: { oauth: error.data }
+        });
+      } else {
+        throw error;
+      }
+    }
+  };
+
+  onLocalLogin = async data => {
+    const { login } = this.props;
+
+    const result = await login('local', data);
+    this.successLogin();
+
+    return result;
+  };
+
+  successLogin = () => {
+    const { notifSend } = this.props;
+
+    notifSend({
+      message: "You're logged in now !",
       kind: 'success',
       dismissAfter: 2000
     });
-    return data;
   };
 
   FacebookLoginButton = ({ facebookLogin }) => (
-    <button className="btn btn-primary" onClick={facebookLogin}>
+    <button type="button" className="btn btn-primary" onClick={facebookLogin}>
       Login with <i className="fa fa-facebook-f" />
     </button>
   );
 
   render() {
     const { user, logout } = this.props;
+
     return (
       <div className="container">
         <Helmet title="Login" />
         <h1>Login</h1>
-        {!user && <div>
-          <LoginForm onSubmit={this.login} />
-          <p>This will "log you in" as this user, storing the username in the session of the API server.</p>
-          <FacebookLogin
-            appId="635147529978862"
-            /* autoLoad={true} */
-            fields="name,email,picture"
-            onLogin={this.onFacebookLogin}
-            component={this.FacebookLoginButton}
-          />
-        </div>
-        }
-        {user && <div>
-          <p>You are currently logged in as {user.email}.</p>
-
+        {!user && (
           <div>
-            <button className="btn btn-danger" onClick={logout}><i className="fa fa-sign-out" />{' '}Log Out</button>
+            <LoginForm onSubmit={this.onLocalLogin} />
+            <p>This will "log you in" as this user, storing the username in the session of the API server.</p>
+            <FacebookLogin
+              appId="635147529978862"
+              /* autoLoad={true} */
+              fields="name,email,picture"
+              onLogin={this.onFacebookLogin}
+              component={this.FacebookLoginButton}
+            />
           </div>
-        </div>
-        }
+        )}
+        {user && (
+          <div>
+            <p>
+              You are currently logged in as
+              {user.email}.
+            </p>
+
+            <div>
+              <button type="button" className="btn btn-danger" onClick={logout}>
+                <i className="fa fa-sign-out" /> Log Out
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
 }
+
+export default Login;

@@ -1,9 +1,11 @@
-var path = require('path');
-var webpack = require('webpack');
-var projectRootPath = path.resolve(__dirname, '../');
+const path = require('path');
+const webpack = require('webpack');
+
+const projectRootPath = path.resolve(__dirname, '../');
 
 module.exports = {
-  devtool: process.env.NODE_ENV === 'production' ? false : 'inline-source-map',
+  mode: 'development',
+  devtool: 'inline-source-map',
 
   output: {
     path: path.join(projectRootPath, 'static/dist/dlls'),
@@ -17,74 +19,82 @@ module.exports = {
 
   entry: {
     vendor: [
-      'babel-polyfill',
+      '@babel/polyfill',
 
-      // <babel-runtime>
       //
       // Generate this list using the following command against the stdout of
       // webpack running against the source bundle config (dev/prod.js):
       //
-      //    webpack --config webpack/dev.config.js --display-modules | egrep -o 'babel-runtime/\S+' | sed 's/\.js$//' | sort | uniq
-      'babel-runtime/core-js/array/from',
-      'babel-runtime/core-js/get-iterator',
-      'babel-runtime/core-js/is-iterable',
-      'babel-runtime/core-js/json/stringify',
-      'babel-runtime/core-js/number/is-integer',
-      'babel-runtime/core-js/number/is-safe-integer',
-      'babel-runtime/core-js/object/assign',
-      'babel-runtime/core-js/object/create',
-      'babel-runtime/core-js/object/define-property',
-      'babel-runtime/core-js/object/get-own-property-descriptor',
-      'babel-runtime/core-js/object/get-own-property-names',
-      'babel-runtime/core-js/object/get-prototype-of',
-      'babel-runtime/core-js/object/keys',
-      'babel-runtime/core-js/object/set-prototype-of',
-      'babel-runtime/core-js/promise',
-      'babel-runtime/core-js/symbol',
-      'babel-runtime/core-js/symbol/iterator',
-      'babel-runtime/helpers/class-call-check',
-      'babel-runtime/helpers/classCallCheck',
-      'babel-runtime/helpers/create-class',
-      'babel-runtime/helpers/createClass',
-      'babel-runtime/helpers/defineProperty',
-      'babel-runtime/helpers/extends',
-      'babel-runtime/helpers/get',
-      'babel-runtime/helpers/inherits',
-      'babel-runtime/helpers/interop-require-default',
-      'babel-runtime/helpers/interopRequireDefault',
-      'babel-runtime/helpers/object-without-properties',
-      'babel-runtime/helpers/objectWithoutProperties',
-      'babel-runtime/helpers/possibleConstructorReturn',
-      'babel-runtime/helpers/slicedToArray',
-      'babel-runtime/helpers/to-consumable-array',
-      'babel-runtime/helpers/toConsumableArray',
-      'babel-runtime/helpers/typeof',
+      // webpack --config webpack/dev.config.js --display-modules | egrep -o '@babel/runtime-corejs2/\S+' | sed 's/\.js$//' | sort | uniq
 
+      // <babel-runtime>
+      '@babel/runtime-corejs2/core-js/array/from.js',
+      '@babel/runtime-corejs2/core-js/array/is-array.js',
+      '@babel/runtime-corejs2/core-js/get-iterator.js',
+      '@babel/runtime-corejs2/core-js/is-iterable.js',
+      '@babel/runtime-corejs2/core-js/number/is-integer.js',
+      '@babel/runtime-corejs2/core-js/object/assign.js',
+      '@babel/runtime-corejs2/core-js/object/create.js',
+      '@babel/runtime-corejs2/core-js/object/define-property.js',
+      '@babel/runtime-corejs2/core-js/object/entries.js',
+      '@babel/runtime-corejs2/core-js/object/get-own-property-descriptor.js',
+      '@babel/runtime-corejs2/core-js/object/get-own-property-symbols.js',
+      '@babel/runtime-corejs2/core-js/object/get-prototype-of.js',
+      '@babel/runtime-corejs2/core-js/object/keys.js',
+      '@babel/runtime-corejs2/core-js/object/set-prototype-of.js',
+      '@babel/runtime-corejs2/core-js/promise.js',
+      '@babel/runtime-corejs2/core-js/set-immediate.js',
+      '@babel/runtime-corejs2/core-js/symbol/iterator.js',
+      '@babel/runtime-corejs2/core-js/symbol.js',
+      '@babel/runtime-corejs2/helpers/arrayWithHoles.js',
+      '@babel/runtime-corejs2/helpers/arrayWithoutHoles.js',
+      '@babel/runtime-corejs2/helpers/assertThisInitialized.js',
+      '@babel/runtime-corejs2/helpers/asyncToGenerator.js',
+      '@babel/runtime-corejs2/helpers/classCallCheck.js',
+      '@babel/runtime-corejs2/helpers/createClass.js',
+      '@babel/runtime-corejs2/helpers/defineProperty.js',
+      '@babel/runtime-corejs2/helpers/extends.js',
+      '@babel/runtime-corejs2/helpers/getPrototypeOf.js',
+      '@babel/runtime-corejs2/helpers/inherits.js',
+      '@babel/runtime-corejs2/helpers/iterableToArray.js',
+      '@babel/runtime-corejs2/helpers/iterableToArrayLimit.js',
+      '@babel/runtime-corejs2/helpers/nonIterableRest.js',
+      '@babel/runtime-corejs2/helpers/nonIterableSpread.js',
+      '@babel/runtime-corejs2/helpers/objectSpread.js',
+      '@babel/runtime-corejs2/helpers/objectWithoutProperties.js',
+      '@babel/runtime-corejs2/helpers/objectWithoutPropertiesLoose.js',
+      '@babel/runtime-corejs2/helpers/possibleConstructorReturn.js',
+      '@babel/runtime-corejs2/helpers/setPrototypeOf.js',
+      '@babel/runtime-corejs2/helpers/slicedToArray.js',
+      '@babel/runtime-corejs2/helpers/toConsumableArray.js',
+      '@babel/runtime-corejs2/helpers/typeof.js',
+      '@babel/runtime-corejs2/node_modules/regenerator-runtime/runtime.js',
+      '@babel/runtime-corejs2/node_modules/regenerator-runtime/runtime-module.js',
+      '@babel/runtime-corejs2/regenerator/index.js',
       // </babel-runtime>
 
+      'axios',
+      'final-form',
       'multireducer',
       'react',
       'react-bootstrap',
       'react-dom',
+      'react-final-form',
       'react-helmet',
       'react-hot-loader',
       'react-redux',
       'react-router',
       'react-router-bootstrap',
       'react-router-redux',
-      'react-router-scroll',
       'redux',
-      'redux-connect',
-      'redux-form',
       'serialize-javascript',
-      'socket.io-client',
-      'superagent'
+      'socket.io-client'
     ]
   },
 
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     }),
 
     new webpack.DllPlugin({

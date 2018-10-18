@@ -1,4 +1,4 @@
-FROM mhart/alpine-node:6
+FROM mhart/alpine-node:8
 
 # Install required dependencies (Alpine Linux packages)
 RUN apk update && \
@@ -17,16 +17,19 @@ RUN apk update && \
 
 # Add user and make it sudoer
 ARG uid=1000
-ARG user
-RUN adduser -DS -u $uid $user
+ARG user=username
+RUN set -x ; \
+  addgroup -g $uid -S $user ; \
+  adduser -u $uid -D -S -G $user $user \
+  && exit 0 ; exit 1
 RUN echo $user' ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-# Switch to directory for external dependencies (installed from source)
-WORKDIR /external
-
-# Install (global) NPM packages/dependencies
-RUN npm install -g \
-  node-gyp
+# Install (global) Yarn packages/dependencies
+RUN yarn global add node-gyp
+RUN git clone --recursive https://github.com/sass/node-sass.git \
+  && cd node-sass \
+  && yarn \
+  && node scripts/build -f
 
 # Make project directory with permissions
 RUN mkdir /project
@@ -37,5 +40,10 @@ WORKDIR /project
 # Copy required stuff
 COPY . .
 
-# Install (local) NPM packages and build
-RUN npm install && npm run postinstall
+# Give owner rights to the current user
+RUN chown -Rh $user:$user /project
+
+# Install (local) Yarn packages and build
+RUN yarn
+
+USER $user

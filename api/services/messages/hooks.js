@@ -1,5 +1,9 @@
-import { disallow, discard, populate } from 'feathers-hooks-common';
-import auth from 'feathers-authentication';
+import auth from '@feathersjs/authentication';
+import local from '@feathersjs/authentication-local';
+import { restrictToOwner } from 'feathers-authentication-hooks';
+import {
+  fastJoin, disallow, iff, isProvider, keep
+} from 'feathers-hooks-common';
 import { required } from 'utils/validation';
 import { validateHook as validate } from 'hooks';
 
@@ -7,54 +11,60 @@ const schemaValidator = {
   text: required
 };
 
-function populateUser() {
-  return populate({
-    schema: {
-      include: [{
-        nameAs: 'sentBy',
-        service: 'users',
-        parentField: 'sentBy',
-        childField: '_id'
-      }]
+function joinResolvers(context) {
+  const { app } = context;
+  const users = app.service('users');
+
+  return {
+    joins: {
+      author: () => async message => {
+        const author = message.sentBy ? await users.get(message.sentBy) : null;
+        message.author = author;
+        return message;
+      }
     }
-  });
+  };
 }
+
+const joinAuthor = [
+  fastJoin(joinResolvers, {
+    author: true
+  }),
+  local.hooks.protect('author.password')
+];
 
 const messagesHooks = {
   before: {
-    all: auth.hooks.authenticate('jwt'),
+    all: [],
     find: [],
     get: [],
     create: [
       validate(schemaValidator),
-      hook => {
-        hook.data = {
-          text: hook.data.text,
-          sentBy: hook.params.user._id, // Set the id of current user
+      context => {
+        const { data, params } = context;
+
+        context.data = {
+          text: data.text,
+          sentBy: params.user ? params.user._id : null, // Set the id of current user
           createdAt: new Date()
         };
       }
     ],
     update: disallow(),
-    patch: disallow(),
+    patch: [
+      auth.hooks.authenticate('jwt'),
+      restrictToOwner({ ownerField: 'sentBy' }),
+      iff(isProvider('external'), keep('text'))
+    ],
     remove: disallow()
   },
   after: {
     all: [],
-    find: [
-      populateUser(),
-      discard('sentBy.password')
-    ],
-    get: [
-      populateUser(),
-      discard('sentBy.password')
-    ],
-    create: [
-      populateUser(),
-      discard('sentBy.password')
-    ],
+    find: joinAuthor,
+    get: joinAuthor,
+    create: joinAuthor,
     update: [],
-    patch: [],
+    patch: joinAuthor,
     remove: []
   }
 };

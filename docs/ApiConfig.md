@@ -8,15 +8,14 @@ First things first, you need to add `APIHOST` settings in `package.json`. If you
 
 If the port you use differs between your dev & prod API hosts, you may want to get rid of the `APIPORT` setting, including it right in `APIHOST`. Same with the protocol – if you use HTTP in dev but HTTPS in prod, you may want to include the protocol right in `APIHOST`, and then get rid of the explicit `"http://"` found in the next section.
 
-## Update `ApiClient`
+## Update `apiClient`
 
-Open up `src/helpers/ApiClient.js`. You'll see this line:
+Open up `src/helpers/apiClient.js`. You'll see this line:
 
 ``` javascript
-   if (__SERVER__) {
-     // Prepend host and port of the API server to the path.
-    return 'http://' + config.apiHost + adjustedPath;
-   }
+  const instance = axios.create({
+    baseURL: __SERVER__ ? `http://${config.apiHost}:${config.apiPort}` : '/api'
+  });
 ```
 
 If you added `http://` or `https://` to your APIHOST setting, then you need to remove it here.
@@ -67,11 +66,9 @@ You can remove the whole `api` folder, as well as `bin/api.js`.
 
 Once you do that, you'll also need to remove the lines in `package.json` that called those things. Remove all this:
 
-* ` \"npm run start-prod-api\"` from the `start` script command
-* ` \"npm run start-dev-api\"` from the `dev` script command
+* ` \"yarn start-prod-api\"` from the `start` script command
+* ` \"yarn start-dev-api\"` from the `dev` script command
 * the `start-prod-api` and `start-dev-api` scripts altogether
 * the ` api` argument from the `lint` script
-* the `test-node` and `test-node-watch` scripts, which were there to test the demo API
-* the `start-prod-api` and `start-dev-api` settings in the `betterScripts` section
 
 If you want, you can also remove all references to `socket`, if you're not using it.

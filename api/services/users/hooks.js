@@ -1,10 +1,12 @@
-import { discard, iff, isProvider } from 'feathers-hooks-common';
-import auth from 'feathers-authentication';
-import local from 'feathers-authentication-local';
+import auth from '@feathersjs/authentication';
+import local from '@feathersjs/authentication-local';
+import errors from '@feathersjs/errors';
 import { restrictToOwner } from 'feathers-authentication-hooks';
-import errors from 'feathers-errors';
+import { discard } from 'feathers-hooks-common';
 import { validateHook } from 'hooks';
-import { required, email, match, unique } from 'utils/validation';
+import {
+  required, email, match, unique
+} from 'utils/validation';
 
 const schemaValidator = {
   email: [required, email, unique('email')],
@@ -13,11 +15,14 @@ const schemaValidator = {
 };
 
 function validate() {
-  return hook => {
-    if (hook.data.facebook && !hook.data.email) {
-      throw new errors.BadRequest('Incomplete oauth registration', hook.data);
+  return context => {
+    const { data } = context;
+
+    if (data.facebook && !data.email) {
+      throw new errors.BadRequest('Incomplete oauth registration', data);
     }
-    return validateHook(schemaValidator)(hook);
+
+    return validateHook(schemaValidator)(context);
   };
 }
 
@@ -25,26 +30,13 @@ const userHooks = {
   before: {
     find: auth.hooks.authenticate('jwt'),
     get: auth.hooks.authenticate('jwt'),
-    create: [
-      validate(),
-      discard('password_confirmation'),
-      local.hooks.hashPassword()
-    ],
-    update: [
-      auth.hooks.authenticate('jwt'),
-      restrictToOwner({ ownerField: '_id' })
-    ],
-    patch: [
-      auth.hooks.authenticate('jwt'),
-      restrictToOwner({ ownerField: '_id' })
-    ],
-    remove: [
-      auth.hooks.authenticate('jwt'),
-      restrictToOwner({ ownerField: '_id' })
-    ]
+    create: [validate(), discard('password_confirmation'), local.hooks.hashPassword()],
+    update: [auth.hooks.authenticate('jwt'), restrictToOwner({ ownerField: '_id' })],
+    patch: [auth.hooks.authenticate('jwt'), restrictToOwner({ ownerField: '_id' })],
+    remove: [auth.hooks.authenticate('jwt'), restrictToOwner({ ownerField: '_id' })]
   },
   after: {
-    all: iff(isProvider('external'), discard('password')),
+    all: local.hooks.protect('password'),
     find: [],
     get: [],
     create: [],

@@ -1,48 +1,47 @@
 {
-  "extends": "eslint-config-airbnb",
+  "extends": "airbnb",
   "env": {
     "browser": true,
     "node": true,
-    "mocha": true,
+    "jest": true,
     "es6": true
   },
   "rules": {
-    "react/no-multi-comp": "warn",
-    "react/jsx-first-prop-new-line": ["warn", "multiline"],
-    "react/prefer-stateless-function": "off",
-    "react/jsx-closing-bracket-location": "off",
-    "react/jsx-filename-extension": "off",
-    "react/self-closing-comp": "off",
-    "react/jsx-no-target-blank": "warn",
-    "react/no-find-dom-node": "warn",
-    "react/forbid-prop-types": "off",
-    "react/no-unescaped-entities": "off",
-    "import/default": "off",
-    "import/extensions": ["off"],
-    "import/no-duplicates": "off",
-    "import/named": "off",
-    "import/namespace": "off",
-    "import/no-unresolved": "off",
-    "import/no-named-as-default": "error",
-    "import/imports-first": "off",
-    "import/prefer-default-export": "off",
-    "import/no-extraneous-dependencies": "off",
-    "import/newline-after-import": "off",
-    "comma-dangle": "off", // not sure why airbnb turned this on. gross!
+    "arrow-parens": ["error", "as-needed"],
+    "comma-dangle": ["error", "only-multiline"],
     "consistent-return": "off",
-    "no-param-reassign": "off",
-    "prefer-template": "warn",
     "global-require": "off",
-    "no-case-declarations": "off",
-    "no-underscore-dangle": "off",
-    "arrow-parens": "off",
-    "class-methods-use-this": "off",
-    "no-bitwise": "off",
-    "no-plusplus": "off",
-    "no-console": "off",
+    "indent": ["error", 2, {"SwitchCase": 1}],
+    "max-len": ["warn", 120],
     "no-alert": "off",
-    "max-len": ["error", 120],
-    "indent": ["error", 2, {"SwitchCase": 1}]
+    "no-confusing-arrow": "off",
+    "no-console": "off",
+    "no-param-reassign": "off",
+    "no-underscore-dangle": "off",
+    "prefer-promise-reject-errors": "warn",
+    "prefer-template": "warn",
+    "react/forbid-prop-types": "warn",
+    "react/jsx-closing-tag-location": "off",
+    "react/jsx-filename-extension": "off",
+    "react/jsx-no-target-blank": "warn",
+    "react/jsx-one-expression-per-line": "off",
+    "react/no-multi-comp": ["error", {"ignoreStateless": true}],
+    "react/no-unescaped-entities": "off",
+    "react/prefer-stateless-function": "warn",
+    "jsx-a11y/label-has-for": ["error", {"allowChildren": true}],
+    "jsx-a11y/anchor-is-valid": [
+      "error",
+      {
+        "components": ["Link"],
+        "specialLink": ["to"],
+        "aspects": ["noHref", "invalidHref", "preferButton"]
+      }
+    ],
+    "import/default": "off",
+    "import/extensions": "off",
+    "import/no-extraneous-dependencies": "off",
+    "import/no-named-as-default": "error",
+    "import/no-unresolved": "off"
   },
   "plugins": [
     "react",
@@ -52,7 +51,8 @@
     "import/resolve": {
       "moduleDirectory": [
         "node_modules",
-        "src"
+        "src",
+        "api"
       ]
     }
   },
@@ -67,7 +67,6 @@
     "__DISABLE_SSR__": true,
     "__DEVTOOLS__": true,
     "__DLLS__": true,
-    "socket": true,
     "webpackIsomorphicTools": true
   }
 }

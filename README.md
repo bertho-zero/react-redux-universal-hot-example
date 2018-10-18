@@ -26,14 +26,15 @@ This is a starter boilerplate app I've put together using the following technolo
 * [Redux Dev Tools](https://github.com/reactjs/redux-devtools) for next generation DX (developer experience). Watch [Dan Abramov's talk](https://www.youtube.com/watch?v=xsSnOQynTHs).
 * [React Router Redux](https://github.com/reactjs/react-router-redux) Redux/React Router bindings.
 * [ESLint](http://eslint.org) to maintain a consistent code style
-* [redux-form](http://redux-form.com/) to manage form state in Redux
+* [react-final-form](https://github.com/final-form/react-final-form) to manage form state
 * [lru-memoize](https://github.com/erikras/lru-memoize) to speed up form validation
 * [multireducer](https://github.com/erikras/multireducer) to combine single reducers into one key-based reducer
 * [style-loader](https://github.com/webpack/style-loader), [sass-loader](https://github.com/jtangelder/sass-loader) and [less-loader](https://github.com/webpack/less-loader) to allow import of stylesheets in plain css, sass and less,
-* [bootstrap-loader](https://github.com/shakacode/bootstrap-loader) and [font-awesome-webpack](https://github.com/gowravshekar/font-awesome-webpack) to customize Bootstrap and FontAwesome
+* [bootstrap-loader](https://github.com/shakacode/bootstrap-loader) to customize Bootstrap
+* [font-awesome](https://github.com/FortAwesome/Font-Awesome)
 * [react-helmet](https://github.com/nfl/react-helmet) to manage title and meta tag information on both server and client
 * [webpack-isomorphic-tools](https://github.com/halt-hammerzeit/webpack-isomorphic-tools) to allow require() work for statics both on client and server
-* [Jest](https://facebook.github.io/jest/) and [mocha](https://mochajs.org/) to allow writing unit tests for the project.
+* [Jest](https://facebook.github.io/jest/) to allow writing unit tests for the project.
 
 I cobbled this together from a wide variety of similar "starter" repositories. As I post this in June 2015, all of these libraries are right at the bleeding edge of web development. They may fall out of fashion as quickly as they have come into it, but I personally believe that this stack is the future of web development and will survive for several years. I'm building my new projects like this, and I recommend that you do, too.
 
@@ -81,13 +82,13 @@ This new level of quality allows Progressive Web Apps to earn a place on the use
 ## Installation
 
 ```bash
-npm install
+yarn
 ```
 
 ## Running Dev Server
 
 ```bash
-npm run dev
+yarn dev
 ```
 
 The first time it may take a little while to generate the first `webpack-assets.json` and complain with a few dozen `[webpack-isomorphic-tools] (waiting for the first Webpack build to finish)` printouts, but be patient. Give it 30 seconds.
@@ -108,8 +109,8 @@ DevTools are not enabled during production by default.
 ## Building and Running Production Server
 
 ```bash
-npm run build
-npm run start
+yarn build
+yarn start
 ```
 
 ## Demo
@@ -133,7 +134,7 @@ We also spit out the `redux` state into a global `window.__data` variable in the
 
 #### Server-side Data Fetching
 
-The [redux-connect](https://www.npmjs.com/package/redux-connect) package exposes an API to return promises that need to be fulfilled before a route is rendered. It exposes a `<ReduxAsyncConnect />` container, which wraps our render tree on both [server](https://github.com/bertho-zero/react-redux-universal-hot-example/blob/master/src/server.js) and [client](https://github.com/bertho-zero/react-redux-universal-hot-example/blob/master/src/client.js). More documentation is available on the [redux-connect](https://www.npmjs.com/package/redux-connect) page.
+The [redial](https://www.npmjs.com/package/redial) package exposes an API to return promises that need to be fulfilled before a route is rendered. It exposes a `<ReduxAsyncConnect />` container, which wraps our render tree on both [server](https://github.com/bertho-zero/react-redux-universal-hot-example/blob/master/src/server.js) and [client](https://github.com/bertho-zero/react-redux-universal-hot-example/blob/master/src/client.js). More documentation is available on the [redial](https://www.npmjs.com/package/redial) page.
 
 #### Client Side
 
@@ -240,17 +241,15 @@ After this modification to both loaders you will be able to use scss and less fi
 
 #### Unit Tests
 
-The project uses [Jest](https://facebook.github.io/jest/) and [Mocha](https://mochajs.org/) to run your unit tests, it uses [Karma](http://karma-runner.github.io/0.13/index.html) as the test runner, it enables the feature that you are able to render your tests to the browser (e.g: Firefox, Chrome etc.), which means you are able to use the [Test Utilities](http://facebook.github.io/react/docs/test-utils.html) from Facebook api like `renderIntoDocument()`.
+The project uses [Jest](https://facebook.github.io/jest/) to run your unit tests.
 
-To run the tests in the project, just simply run `npm test` if you have `Chrome` installed, it will be automatically launched as a test service for you.
-
-To keep watching your test suites that you are working on, just set `singleRun: false` in the `karma.conf.js` file. Please be sure set it to `true` if you are running `npm test` on a continuous integration server (travis-ci, etc).
+To run the tests in the project, just simply run `yarn test` if you have `Chrome` installed, it will be automatically launched as a test service for you.
 
 ## Deployment on Heroku
 
 To get this project to work on Heroku, you need to:
 
-1. Remove the `"PORT": 8080` line from the `betterScripts` / `start-prod` section of `package.json`.
+1. Remove the `"PORT": 8080` line from the `start-prod` script of `package.json`.
 2. `heroku config:set NODE_ENV=production`
 3. `heroku config:set NODE_PATH=./src`
 4. `heroku config:set NPM_CONFIG_PRODUCTION=false`

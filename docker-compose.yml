@@ -1,0 +1,26 @@
+version: '3.4'
+services:
+  app:
+    build:
+      context: .
+
+  nginx:
+    image: nginx
+    restart: always
+    volumes:
+      - ./nginx:/home/nginx
+    links:
+      - app:app
+    environment:
+      - NGINX_HOST
+      - NGINX_PORT
+      - PORT
+    command: >
+      /bin/bash -c
+        "for filename in $$(find /home/nginx/ -type f -name '*'); do
+          mkdir -p $$(dirname $${filename/\/home\/nginx/\/etc\/nginx});
+          cat $$filename \
+            | envsubst \"`printf '$${%s} ' $$(bash -c \"compgen -A variable\")`\" \
+            | tee $${filename/\/home\/nginx/\/etc\/nginx};
+        done;
+        nginx -g 'daemon off;'"

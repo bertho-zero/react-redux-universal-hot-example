@@ -1,21 +1,14 @@
 import multireducer from 'multireducer';
 import { routerReducer } from 'react-router-redux';
-import { reducer as reduxAsyncConnect } from 'redux-connect';
-import { reducer as form } from 'redux-form';
 import auth from './modules/auth';
 import notifs from './modules/notifs';
 import counter from './modules/counter';
 import info from './modules/info';
-// import widgets from './modules/widgets';
-// import survey from './modules/survey';
-// import chat from './modules/chat';
 
 export default function createReducers(asyncReducers) {
   return {
-    routing: routerReducer,
-    reduxAsyncConnect,
+    router: routerReducer,
     online: (v = true) => v,
-    form,
     notifs,
     auth,
     counter: multireducer({
@@ -24,9 +17,6 @@ export default function createReducers(asyncReducers) {
       counter3: counter
     }),
     info,
-    // widgets,
-    // survey,
-    // chat,
     ...asyncReducers
   };
 }

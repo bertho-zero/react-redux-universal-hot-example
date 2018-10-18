@@ -8,29 +8,41 @@ import * as notifActions from 'redux/modules/notifs';
 
 @connect(
   () => ({}),
-  { ...notifActions, ...authActions })
-export default class Register extends Component {
+  { ...notifActions, ...authActions }
+)
+class Register extends Component {
   static propTypes = {
-    location: PropTypes.object.isRequired,
+    location: PropTypes.shape({
+      state: PropTypes.object
+    }).isRequired,
     register: PropTypes.func.isRequired,
     notifSend: PropTypes.func.isRequired
-  }
+  };
 
   getInitialValues = () => {
     const { location } = this.props;
+
     return location.state && location.state.oauth;
-  }
+  };
 
-  register = data => this.props.register(data).then(this.successRegister);
+  register = async data => {
+    const { register } = this.props;
 
-  successRegister = result => {
-    this.props.notifSend({
-      message: 'You\'r now registered !',
+    const result = await register(data);
+    this.successRegister();
+
+    return result;
+  };
+
+  successRegister = () => {
+    const { notifSend } = this.props;
+
+    notifSend({
+      message: "You're now registered !",
       kind: 'success',
       dismissAfter: 2000
     });
-    return result;
-  }
+  };
 
   render() {
     return (
@@ -42,3 +54,5 @@ export default class Register extends Component {
     );
   }
 }
+
+export default Register;
