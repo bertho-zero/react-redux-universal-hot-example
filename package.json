@@ -164,7 +164,7 @@
     "less": "^3.0.0-alpha.3",
     "less-loader": "^4.0.3",
     "lighthouse": "^3.0.3",
-    "lint-staged": "^7.0.1",
+    "lint-staged": "^8.0.0",
     "mini-css-extract-plugin": "^0.4.2",
     "node-sass": "^4.9.0",
     "piping": "^1.0.0-rc.4",
