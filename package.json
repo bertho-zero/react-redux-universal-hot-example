@@ -139,7 +139,7 @@
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.0.0",
     "babel-loader": "^8.0.0",
-    "bootstrap-loader": "^2.1.0",
+    "bootstrap-loader": "^3.0.2",
     "bootstrap-sass": "^3.3.7",
     "chai": "^4.1.1",
     "clean-webpack-plugin": "^0.1.15",
