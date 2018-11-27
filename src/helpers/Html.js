@@ -59,7 +59,9 @@ const Html = ({
         <div id="content" dangerouslySetInnerHTML={{ __html: content }} />
         {store && (
           <script
-            dangerouslySetInnerHTML={{ __html: `window.__data=${serialize(store.getState())};` }}
+            dangerouslySetInnerHTML={{
+              __html: `window.__PRELOADED__=true;window.__data=${serialize(store.getState())};`
+            }}
             charSet="UTF-8"
           />
         )}
