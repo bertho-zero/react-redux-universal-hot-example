@@ -43,7 +43,12 @@ class ReduxAsyncConnect extends Component {
         location: nextProps.location
       };
 
-      await trigger('fetch', components, triggerLocals);
+      // await fetch only on server
+      if (__SERVER__) {
+        await trigger('fetch', components, triggerLocals);
+      } else {
+        trigger('fetch', components, triggerLocals);
+      }
       if (__CLIENT__) {
         await trigger('defer', components, triggerLocals);
       }
