@@ -25,7 +25,10 @@ class ReduxAsyncConnect extends Component {
     const {
       history, location, routes, store, helpers
     } = this.props;
-    const navigated = nextProps.location !== location;
+    const {
+      location: { pathname, search }
+    } = nextProps;
+    const navigated = `${pathname}${search}` !== `${location.pathname}${location.search}`;
 
     if (navigated) {
       // save the location so we can render the old screen
