@@ -22,6 +22,9 @@ const serverOptions = {
 
 const app = express();
 
+// show webpack build progress in terminal
+compiler.apply(new webpack.ProgressPlugin());
+
 app.use(require('webpack-dev-middleware')(compiler, serverOptions));
 app.use(require('webpack-hot-middleware')(compiler));
 
