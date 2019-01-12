@@ -128,6 +128,9 @@ const webpackConfig = {
     // new webpack.LoaderOptionsPlugin({
     // }),
 
+    /* wepack build status - show webpack build progress in terminal */
+    new webpack.ProgressPlugin(),
+
     // hot reload
     new webpack.HotModuleReplacementPlugin(),
 

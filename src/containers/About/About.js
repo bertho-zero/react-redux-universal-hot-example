@@ -4,6 +4,7 @@ import { provideHooks } from 'redial';
 import MiniInfoBar from 'components/MiniInfoBar/MiniInfoBar';
 import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
 
+/* eslint-disable max-len */
 @provideHooks({
   fetch: ({ store: { dispatch, getState } }) => !isInfoLoaded(getState()) ? dispatch(loadInfo()).catch(() => null) : Promise.resolve()
 })
