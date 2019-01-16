@@ -163,7 +163,7 @@
     "jest-cli": "^23.0.0",
     "less": "^3.0.0-alpha.3",
     "less-loader": "^4.0.3",
-    "lighthouse": "^3.0.3",
+    "lighthouse": "^4.0.0",
     "lint-staged": "^7.0.1",
     "mini-css-extract-plugin": "^0.4.2",
     "node-sass": "^4.9.0",
