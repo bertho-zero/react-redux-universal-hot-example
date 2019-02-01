@@ -58,7 +58,7 @@ function isValidDLLs(dllNames, assetsPath) {
     try {
       // eslint-disable-next-line import/no-dynamic-require
       const manifest = require(path.join(projectRootPath, `webpack/dlls/${dllName}.json`));
-      const dll = fs.readFileSync(path.join(assetsPath, `dlls/dll__${dllName}.js`, 'utf8'));
+      const dll = fs.readFileSync(path.join(assetsPath, `dlls/dll__${dllName}.js`), 'utf8');
 
       if (dll.indexOf(manifest.name) === -1) {
         console.warn(`Invalid dll: ${dllName}`);
