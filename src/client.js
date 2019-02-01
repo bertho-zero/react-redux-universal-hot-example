@@ -140,7 +140,8 @@ initSocket();
   if (__DEVTOOLS__ && !window.devToolsExtension) {
     const devToolsDest = document.createElement('div');
     window.document.body.insertBefore(devToolsDest, null);
-    const DevTools = require('./containers/DevTools/DevTools');
+    let DevTools = require('./containers/DevTools/DevTools');
+    DevTools = DevTools.__esModule ? DevTools.default : DevTools;
     ReactDOM.hydrate(
       <Provider store={store}>
         <DevTools />
