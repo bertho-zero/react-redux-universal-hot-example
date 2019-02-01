@@ -10,7 +10,10 @@ class ReduxAsyncConnect extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     history: PropTypes.objectOf(PropTypes.any).isRequired,
-    location: PropTypes.objectOf(PropTypes.any).isRequired
+    location: PropTypes.objectOf(PropTypes.any).isRequired,
+    routes: PropTypes.arrayOf(PropTypes.object).isRequired,
+    store: PropTypes.objectOf(PropTypes.any).isRequired,
+    helpers: PropTypes.objectOf(PropTypes.any).isRequired
   };
 
   state = {
@@ -25,7 +28,10 @@ class ReduxAsyncConnect extends Component {
     const {
       history, location, routes, store, helpers
     } = this.props;
-    const navigated = nextProps.location !== location;
+    const {
+      location: { pathname, search }
+    } = nextProps;
+    const navigated = `${pathname}${search}` !== `${location.pathname}${location.search}`;
 
     if (navigated) {
       // save the location so we can render the old screen

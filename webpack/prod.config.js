@@ -169,6 +169,9 @@ module.exports = {
     extensions: ['.json', '.js', '.jsx']
   },
   plugins: [
+    /* wepack build status - show webpack build progress in terminal */
+    new webpack.ProgressPlugin(),
+
     new CleanPlugin([assetsPath], { root: projectRootPath }),
 
     // css files from the extract-text-plugin loader

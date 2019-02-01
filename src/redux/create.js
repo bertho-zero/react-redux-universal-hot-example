@@ -46,7 +46,8 @@ export default function createStore({
 
   if (__CLIENT__ && __DEVTOOLS__) {
     const { persistState } = require('redux-devtools');
-    const DevTools = require('../containers/DevTools/DevTools');
+    let DevTools = require('../containers/DevTools/DevTools');
+    DevTools = DevTools.__esModule ? DevTools.default : DevTools;
 
     Array.prototype.push.apply(enhancers, [
       window.devToolsExtension ? window.devToolsExtension() : DevTools.instrument(),
