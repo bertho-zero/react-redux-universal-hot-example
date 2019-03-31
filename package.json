@@ -169,7 +169,7 @@
     "node-sass": "^4.9.0",
     "piping": "^1.0.0-rc.4",
     "postcss": "^7.0.2",
-    "postcss-browser-reporter": "^0.5.0",
+    "postcss-browser-reporter": "^0.6.0",
     "postcss-cssnext": "^3.0.2",
     "postcss-import": "^12.0.0",
     "postcss-loader": "^3.0.0",
