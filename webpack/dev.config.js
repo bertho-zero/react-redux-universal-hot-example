@@ -53,18 +53,16 @@ const webpackConfig = {
   module: {
     rules: [
       {
+        enforce: 'pre',
+        test: /\.jsx$/,
+        exclude: /node_modules/,
+        loader: 'eslint-loader'
+      },
+      {
         test: /\.jsx?$/,
         include: [path.resolve(__dirname, '../src')],
-        loaders: [
-          {
-            loader: 'babel-loader',
-            options: babelLoaderQuery
-          },
-          {
-            loader: 'eslint-loader',
-            options: { emitWarning: true }
-          }
-        ]
+        loader: 'babel-loader',
+        options: babelLoaderQuery
       },
       {
         test: /\.json$/,

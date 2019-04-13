@@ -12,7 +12,7 @@ import http from 'http';
 import { StaticRouter } from 'react-router';
 import { ConnectedRouter } from 'react-router-redux';
 import { renderRoutes } from 'react-router-config';
-import createMemoryHistory from 'history/createMemoryHistory';
+import { createMemoryHistory } from 'history';
 import Loadable from 'react-loadable';
 import { getBundles } from 'react-loadable/webpack';
 import { trigger } from 'redial';

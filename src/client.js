@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom';
 import { ConnectedRouter } from 'react-router-redux';
 import { renderRoutes } from 'react-router-config';
 import { trigger } from 'redial';
-import createBrowserHistory from 'history/createBrowserHistory';
+import { createBrowserHistory } from 'history';
 import Loadable from 'react-loadable';
 import { AppContainer as HotEnabler } from 'react-hot-loader';
 import { getStoredState } from 'redux-persist';
