@@ -5,26 +5,26 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ConnectedRouter } from 'react-router-redux';
+import { Router } from 'react-router';
 import { renderRoutes } from 'react-router-config';
 import { trigger } from 'redial';
 import { createBrowserHistory } from 'history';
 import Loadable from 'react-loadable';
 import { AppContainer as HotEnabler } from 'react-hot-loader';
 import { getStoredState } from 'redux-persist';
-import { CookieStorage } from 'redux-persist-cookie-storage';
-import Cookies from 'cookies-js';
+import localForage from 'localforage';
 import { socket, createApp } from 'app';
 import createStore from 'redux/create';
 import apiClient from 'helpers/apiClient';
 import routes from 'routes';
 import isOnline from 'utils/isOnline';
 import asyncMatchRoutes from 'utils/asyncMatchRoutes';
-import { ReduxAsyncConnect, Provider } from 'components';
+import { RouterTrigger, Provider } from 'components';
+import NProgress from 'nprogress';
 
 const persistConfig = {
   key: 'root',
-  storage: new CookieStorage(Cookies),
+  storage: localForage,
   stateReconciler(inboundState, originalState) {
     // Ignore state from cookies, only use preloadedState from window object
     return originalState;
@@ -76,44 +76,59 @@ initSocket();
     persistConfig
   });
 
-  const hydrate = async _routes => {
-    const { components, match, params } = await asyncMatchRoutes(_routes, history.location.pathname);
-    const triggerLocals = {
-      ...providers,
-      store,
-      match,
-      params,
-      history,
-      location: history.location
+  const hydrate = _routes => {
+    const triggerHooks = async (pathname, indicator = true) => {
+      if (indicator) {
+        NProgress.start();
+      }
+
+      const { components, match, params } = await asyncMatchRoutes(_routes, pathname);
+      const triggerLocals = {
+        ...providers,
+        store,
+        match,
+        params,
+        history,
+        location: history.location
+      };
+
+      await trigger('inject', components, triggerLocals);
+
+      // Don't fetch data for initial route, server has already done the work:
+      if (window.__PRELOADED__) {
+        // Delete initial data so that subsequent data fetches can occur:
+        delete window.__PRELOADED__;
+      } else {
+        // Fetch mandatory data dependencies for 2nd route change onwards:
+        await trigger('fetch', components, triggerLocals);
+      }
+      await trigger('defer', components, triggerLocals);
+
+      if (indicator) {
+        NProgress.done();
+      }
     };
 
-    // Don't fetch data for initial route, server has already done the work:
-    if (window.__PRELOADED__) {
-      // Delete initial data so that subsequent data fetches can occur:
-      delete window.__PRELOADED__;
-    } else {
-      // Fetch mandatory data dependencies for 2nd route change onwards:
-      await trigger('fetch', components, triggerLocals);
-    }
-    await trigger('defer', components, triggerLocals);
-
-    ReactDOM.hydrate(
+    const element = (
       <HotEnabler>
         <Provider store={store} {...providers}>
-          <ConnectedRouter history={history}>
-            <ReduxAsyncConnect routes={_routes} store={store} helpers={providers}>
-              {renderRoutes(_routes)}
-            </ReduxAsyncConnect>
-          </ConnectedRouter>
+          <Router history={history}>
+            <RouterTrigger trigger={triggerHooks}>{renderRoutes(_routes)}</RouterTrigger>
+          </Router>
         </Provider>
-      </HotEnabler>,
-      dest
+      </HotEnabler>
     );
+
+    if (dest.hasChildNodes()) {
+      ReactDOM.hydrate(element, dest);
+    } else {
+      ReactDOM.render(element, dest);
+    }
   };
 
   await Loadable.preloadReady();
 
-  await hydrate(routes);
+  hydrate(routes);
 
   // Hot reload
   if (module.hot) {
@@ -128,27 +143,6 @@ initSocket();
   // Server-side rendering check
   if (process.env.NODE_ENV !== 'production') {
     window.React = React; // enable debugger
-
-    if (!dest || !dest.firstChild || !dest.firstChild.attributes || !dest.firstChild.attributes['data-reactroot']) {
-      console.error(
-        'Server-side React render was discarded.\n'
-          + 'Make sure that your initial render does not contain any client-side code.'
-      );
-    }
-  }
-
-  // Dev tools
-  if (__DEVTOOLS__ && !window.devToolsExtension) {
-    const devToolsDest = document.createElement('div');
-    window.document.body.insertBefore(devToolsDest, null);
-    let DevTools = require('./containers/DevTools/DevTools');
-    DevTools = DevTools.__esModule ? DevTools.default : DevTools;
-    ReactDOM.hydrate(
-      <Provider store={store}>
-        <DevTools />
-      </Provider>,
-      devToolsDest
-    );
   }
 
   // Service worker

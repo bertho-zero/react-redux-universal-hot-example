@@ -9,16 +9,12 @@ import cookieParser from 'cookie-parser';
 import httpProxy from 'http-proxy';
 import PrettyError from 'pretty-error';
 import http from 'http';
-import { StaticRouter } from 'react-router';
-import { ConnectedRouter } from 'react-router-redux';
+import { Router, StaticRouter } from 'react-router';
 import { renderRoutes } from 'react-router-config';
 import { createMemoryHistory } from 'history';
 import Loadable from 'react-loadable';
 import { getBundles } from 'react-loadable/webpack';
 import { trigger } from 'redial';
-import { getStoredState } from 'redux-persist';
-import { CookieStorage, NodeCookiesWrapper } from 'redux-persist-cookie-storage';
-import Cookies from 'cookies';
 import config from 'config';
 import createStore from 'redux/create';
 import apiClient from 'helpers/apiClient';
@@ -27,7 +23,7 @@ import routes from 'routes';
 import { createApp } from 'app';
 import { getChunks, waitChunks } from 'utils/chunks';
 import asyncMatchRoutes from 'utils/asyncMatchRoutes';
-import { ReduxAsyncConnect, Provider } from 'components';
+import { Provider } from 'components';
 
 const pretty = new PrettyError();
 const chunksPath = path.join(__dirname, '..', 'static', 'dist', 'loadable-chunks.json');
@@ -103,26 +99,9 @@ app.use(async (req, res) => {
   };
   const history = createMemoryHistory({ initialEntries: [req.originalUrl] });
 
-  const cookieJar = new NodeCookiesWrapper(new Cookies(req, res));
-
-  const persistConfig = {
-    key: 'root',
-    storage: new CookieStorage(cookieJar),
-    stateReconciler: (inboundState, originalState) => originalState,
-    whitelist: ['auth', 'info', 'chat']
-  };
-
-  let preloadedState;
-  try {
-    preloadedState = await getStoredState(persistConfig);
-  } catch (e) {
-    preloadedState = {};
-  }
-
   const store = createStore({
     history,
-    helpers: providers,
-    data: preloadedState
+    helpers: providers
   });
 
   function hydrate() {
@@ -136,27 +115,27 @@ app.use(async (req, res) => {
 
   try {
     const { components, match, params } = await asyncMatchRoutes(routes, req.path);
-    await trigger('fetch', components, {
+    const triggerLocals = {
       ...providers,
       store,
       match,
       params,
       history,
       location: history.location
-    });
+    };
+    await trigger('inject', components, triggerLocals);
+    await trigger('fetch', components, triggerLocals);
 
     const modules = [];
     const context = {};
     const component = (
       <Loadable.Capture report={moduleName => modules.push(moduleName)}>
         <Provider store={store} {...providers}>
-          <ConnectedRouter history={history}>
+          <Router history={history}>
             <StaticRouter location={req.originalUrl} context={context}>
-              <ReduxAsyncConnect routes={routes} store={store} helpers={providers}>
-                {renderRoutes(routes)}
-              </ReduxAsyncConnect>
+              {renderRoutes(routes)}
             </StaticRouter>
-          </ConnectedRouter>
+          </Router>
         </Provider>
       </Loadable.Capture>
     );
@@ -166,9 +145,9 @@ app.use(async (req, res) => {
       return res.redirect(301, context.url);
     }
 
-    const locationState = store.getState().router.location;
-    if (decodeURIComponent(req.originalUrl) !== decodeURIComponent(locationState.pathname + locationState.search)) {
-      return res.redirect(301, locationState.pathname);
+    const { location } = history;
+    if (decodeURIComponent(req.originalUrl) !== decodeURIComponent(location.pathname + location.search)) {
+      return res.redirect(301, location.pathname);
     }
 
     const bundles = getBundles(getChunks(), modules);

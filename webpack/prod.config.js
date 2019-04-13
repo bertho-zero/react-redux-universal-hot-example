@@ -5,7 +5,7 @@ const path = require('path');
 const webpack = require('webpack');
 const CleanPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const { ReactLoadablePlugin } = require('react-loadable/webpack');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -47,7 +47,7 @@ module.exports = {
     //   }
     // },
     minimizer: [
-      new UglifyJsPlugin({
+      new TerserPlugin({
         cache: true,
         parallel: true,
         sourceMap: true // set to true if you want JS source maps
@@ -172,7 +172,7 @@ module.exports = {
     /* wepack build status - show webpack build progress in terminal */
     new webpack.ProgressPlugin(),
 
-    new CleanPlugin([assetsPath], { root: projectRootPath }),
+    new CleanPlugin(),
 
     // css files from the extract-text-plugin loader
     new ExtractTextPlugin({

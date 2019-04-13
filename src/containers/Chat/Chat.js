@@ -9,9 +9,8 @@ import MessageItem from 'components/MessageItem/MessageItem';
 import { socket } from 'app';
 
 @provideHooks({
-  fetch: async ({ store: { dispatch, getState, inject } }) => {
-    inject({ chat: reducer });
-
+  inject: ({ store }) => store.inject({ chat: reducer }),
+  fetch: async ({ store: { dispatch, getState } }) => {
     const state = getState();
 
     if (state.online) {

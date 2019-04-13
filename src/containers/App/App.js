@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { push } from 'react-router-redux';
 import { renderRoutes } from 'react-router-config';
 import { provideHooks } from 'redial';
 import { IndexLinkContainer, LinkContainer } from 'react-router-bootstrap';
@@ -33,7 +32,7 @@ import config from 'config';
     notifs: state.notifs,
     user: state.auth.user
   }),
-  { logout: logoutAction, pushState: push }
+  { logout: logoutAction }
 )
 @withRouter
 class App extends Component {
@@ -46,12 +45,7 @@ class App extends Component {
     notifs: PropTypes.shape({
       global: PropTypes.array
     }).isRequired,
-    logout: PropTypes.func.isRequired,
-    pushState: PropTypes.func.isRequired
-  };
-
-  static contextTypes = {
-    store: PropTypes.objectOf(PropTypes.any).isRequired
+    logout: PropTypes.func.isRequired
   };
 
   static defaultProps = {
@@ -66,7 +60,7 @@ class App extends Component {
   componentDidUpdate(prevProps) {
     const { location } = this.props;
 
-    if (location !== prevProps.location) {
+    if (location.pathname !== prevProps.location.pathname) {
       window.scrollTo(0, 0);
     }
   }
@@ -78,10 +72,10 @@ class App extends Component {
 
     if (!prevProps.user && props.user) {
       const query = qs.parse(props.location.search, { ignoreQueryPrefix: true });
-      props.pushState(query.redirect || '/login-success');
+      props.history.push(query.redirect || '/login-success');
     } else if (prevProps.user && !props.user) {
       // logout
-      props.pushState('/');
+      props.history.push('/');
     }
 
     return {
