@@ -65,7 +65,6 @@ const Html = ({
             charSet="UTF-8"
           />
         )}
-        {__DLLS__ && <script key="dlls__vendor" src="/dist/dlls/dll__vendor.js" charSet="UTF-8" />}
         {assets.javascript && <script src={assets.javascript.main} charSet="UTF-8" />}
         {bundles.map(bundle => bundle && <script src={config.assetsPath + bundle.file} key={bundle.id} />)}
 

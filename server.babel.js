@@ -1,5 +1,6 @@
 //  enable runtime transpilation to use ES6/7 in node
-require('@babel/polyfill');
+require('core-js/stable');
+require('regenerator-runtime/runtime');
 
 const fs = require('fs');
 

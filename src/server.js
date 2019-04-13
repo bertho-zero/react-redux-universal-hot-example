@@ -1,4 +1,3 @@
-import fs from 'fs';
 import path from 'path';
 import express from 'express';
 import React from 'react';
@@ -54,14 +53,6 @@ app.use('/dist/service-worker.js', (req, res, next) => {
   res.setHeader('Service-Worker-Allowed', '/');
   res.setHeader('Cache-Control', 'no-store');
   return next();
-});
-
-app.use('/dist/dlls/:dllName.js', (req, res, next) => {
-  fs.access(
-    path.join(__dirname, '..', 'static', 'dist', 'dlls', `${req.params.dllName}.js`),
-    fs.constants.R_OK,
-    err => (err ? res.send(`console.log('No dll file found (${req.originalUrl})')`) : next())
-  );
 });
 
 app.use(express.static(path.join(__dirname, '..', 'static')));

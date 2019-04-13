@@ -7,8 +7,6 @@ static/dist/
 *.iml
 webpack-assets.json
 webpack-stats.json
-.happypack/
-webpack/dlls/*.json
 api/**/*.nedb
 *.report.html
 coverage/
