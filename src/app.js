@@ -22,19 +22,18 @@ export function createApp(req) {
   }
 
   if (__SERVER__ && req) {
-    const token = req.header('authorization') || (req.cookies && req.cookies['feathers-jwt']);
     const app = configureApp(
       rest(host('/api')).axios(
         axios.create({
           headers: {
             Cookie: req.get('cookie'),
-            Authorization: token
+            Authorization: req.header('authorization')
           }
         })
       )
     );
 
-    app.set('accessToken', token);
+    app.set('accessToken', req.cookies && req.cookies['feathers-jwt']);
 
     return app;
   }
