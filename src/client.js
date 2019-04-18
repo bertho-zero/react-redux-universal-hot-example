@@ -76,44 +76,40 @@ initSocket();
     persistConfig
   });
 
-  const hydrate = _routes => {
-    const triggerHooks = async (pathname, indicator = true) => {
-      if (indicator) {
-        NProgress.start();
-      }
+  const triggerHooks = async (_routes, pathname) => {
+    NProgress.start();
 
-      const { components, match, params } = await asyncMatchRoutes(_routes, pathname);
-      const triggerLocals = {
-        ...providers,
-        store,
-        match,
-        params,
-        history,
-        location: history.location
-      };
-
-      await trigger('inject', components, triggerLocals);
-
-      // Don't fetch data for initial route, server has already done the work:
-      if (window.__PRELOADED__) {
-        // Delete initial data so that subsequent data fetches can occur:
-        delete window.__PRELOADED__;
-      } else {
-        // Fetch mandatory data dependencies for 2nd route change onwards:
-        await trigger('fetch', components, triggerLocals);
-      }
-      await trigger('defer', components, triggerLocals);
-
-      if (indicator) {
-        NProgress.done();
-      }
+    const { components, match, params } = await asyncMatchRoutes(_routes, pathname);
+    const triggerLocals = {
+      ...providers,
+      store,
+      match,
+      params,
+      history,
+      location: history.location
     };
 
+    await trigger('inject', components, triggerLocals);
+
+    // Don't fetch data for initial route, server has already done the work:
+    if (window.__PRELOADED__) {
+      // Delete initial data so that subsequent data fetches can occur:
+      delete window.__PRELOADED__;
+    } else {
+      // Fetch mandatory data dependencies for 2nd route change onwards:
+      await trigger('fetch', components, triggerLocals);
+    }
+    await trigger('defer', components, triggerLocals);
+
+    NProgress.done();
+  };
+
+  const hydrate = _routes => {
     const element = (
       <HotEnabler>
         <Provider store={store} {...providers}>
           <Router history={history}>
-            <RouterTrigger trigger={triggerHooks}>{renderRoutes(_routes)}</RouterTrigger>
+            <RouterTrigger trigger={pathname => triggerHooks(_routes, pathname)}>{renderRoutes(_routes)}</RouterTrigger>
           </Router>
         </Provider>
       </HotEnabler>
