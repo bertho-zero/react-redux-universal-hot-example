@@ -70,7 +70,7 @@
     "express-session": "^1.15.5",
     "feathers-authentication-hooks": "^0.3.0",
     "feathers-hooks-common": "^4.10.0",
-    "feathers-nedb": "^4.0.1",
+    "feathers-nedb": "^5.0.1",
     "final-form": "^4.6.1",
     "history": "^4.7.2",
     "http-proxy": "^1.16.2",
