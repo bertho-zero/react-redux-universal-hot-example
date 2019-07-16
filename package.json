@@ -71,7 +71,7 @@
     "feathers-authentication-hooks": "^0.3.0",
     "feathers-hooks-common": "^4.10.0",
     "feathers-nedb": "^4.0.1",
-    "final-form": "^4.6.1",
+    "final-form": "4.18.1",
     "history": "^4.7.2",
     "http-proxy": "^1.16.2",
     "js-cookie": "^2.1.3",
