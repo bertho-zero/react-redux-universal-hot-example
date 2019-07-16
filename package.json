@@ -160,7 +160,7 @@
     "less-loader": "^4.0.3",
     "lighthouse": "^4.3.0",
     "lint-staged": "^8.1.5",
-    "mini-css-extract-plugin": "^0.6.0",
+    "mini-css-extract-plugin": "^0.8.0",
     "node-sass": "^4.9.0",
     "piping": "^1.0.0-rc.4",
     "postcss": "^7.0.2",
