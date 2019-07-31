@@ -130,9 +130,7 @@ initSocket();
   if (module.hot) {
     module.hot.accept('./routes', () => {
       const nextRoutes = require('./routes');
-      hydrate(nextRoutes.__esModule ? nextRoutes.default : nextRoutes).catch(err => {
-        console.error('Error on routes reload:', err);
-      });
+      hydrate(nextRoutes.__esModule ? nextRoutes.default : nextRoutes);
     });
   }
 
