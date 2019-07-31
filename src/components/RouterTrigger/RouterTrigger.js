@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter, Route } from 'react-router';
+import { hot } from 'react-hot-loader/root';
 
 @withRouter
 class RouterTrigger extends Component {
@@ -91,4 +92,4 @@ class RouterTrigger extends Component {
   }
 }
 
-export default RouterTrigger;
+export default hot(RouterTrigger);
