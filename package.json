@@ -156,7 +156,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.7.1",
     "jest-cli": "^24.7.1",
-    "less": "^3.0.0-alpha.3",
+    "less": "^3.10.1",
     "less-loader": "^4.0.3",
     "lighthouse": "^4.3.0",
     "lint-staged": "^8.1.5",
