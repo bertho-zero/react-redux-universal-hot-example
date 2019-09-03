@@ -1,5 +1,5 @@
 {
-  "bootstrapVersion": 3,
+  "bootstrapVersion": 4,
   "preBootstrapCustomizations": "./src/theme/variables.scss",
   "appStyles": "./src/theme/app.scss",
   "loglevel": "disabled",
@@ -9,14 +9,15 @@
         "style-loader?sourceMap",
         "css-loader?sourceMap&importLoaders=2",
         "resolve-url-loader",
+        "postcss-loader?sourceMap",
         "sass-loader?sourceMap"
       ],
       "extractStyles": false
     },
     "production": {
       "styleLoaders": [
-        "style-loader",
         "css-loader?importLoaders=1",
+        "postcss-loader?sourceMap",
         "sass-loader?sourceMap"
       ],
       "extractStyles": true
@@ -36,44 +37,5 @@
     "tab": false,
     "affix": false
   },
-  "styles": {
-    "mixins": true,
-    "normalize": true,
-    "print": true,
-    "glyphicons": true,
-    "scaffolding": true,
-    "type": true,
-    "code": true,
-    "grid": true,
-    "tables": true,
-    "forms": true,
-    "buttons": true,
-    "component-animations": true,
-    "dropdowns": true,
-    "button-groups": true,
-    "input-groups": true,
-    "navs": true,
-    "navbar": true,
-    "breadcrumbs": true,
-    "pagination": true,
-    "pager": true,
-    "labels": true,
-    "badges": true,
-    "jumbotron": true,
-    "thumbnails": true,
-    "alerts": true,
-    "progress-bars": true,
-    "media": true,
-    "list-group": true,
-    "panels": true,
-    "wells": true,
-    "responsive-embed": true,
-    "close": true,
-    "modals": true,
-    "tooltip": true,
-    "popovers": true,
-    "carousel": true,
-    "utilities": true,
-    "responsive-utilities": true
-  }
+  "styles": true
 }

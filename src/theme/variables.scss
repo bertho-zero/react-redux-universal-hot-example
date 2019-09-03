@@ -1,4 +1,4 @@
-@import '~bootstrap-sass/assets/stylesheets/bootstrap/variables';
+@import "~bootstrap/scss/_functions.scss";
 
 /**
  *  Define scss variables here.
@@ -22,5 +22,5 @@ $brand-info: #5bc0de;
 
 $text-color: #333;
 
-$font-size-base: 14px;
+$font-size-base: 0.875rem;
 $font-family-sans-serif: "Helvetica Neue", Helvetica, sans-serif;
