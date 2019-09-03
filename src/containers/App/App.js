@@ -6,10 +6,10 @@ import { withRouter } from 'react-router';
 import { renderRoutes } from 'react-router-config';
 import { provideHooks } from 'redial';
 import { IndexLinkContainer, LinkContainer } from 'react-router-bootstrap';
-import Navbar from 'react-bootstrap/lib/Navbar';
-import Nav from 'react-bootstrap/lib/Nav';
-import NavItem from 'react-bootstrap/lib/NavItem';
-import Alert from 'react-bootstrap/lib/Alert';
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
+import Alert from 'react-bootstrap/Alert';
+
 import Helmet from 'react-helmet';
 import qs from 'qs';
 import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
@@ -100,42 +100,39 @@ class App extends Component {
     return (
       <div className={styles.app}>
         <Helmet {...config.app.head} />
-        <Navbar fixedTop>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <IndexLinkContainer to="/" activeStyle={{ color: '#33e0ff' }} className={styles.title}>
-                <div className={styles.brand}>
-                  <span>{config.app.title}</span>
-                </div>
-              </IndexLinkContainer>
-            </Navbar.Brand>
-            <Navbar.Toggle />
-          </Navbar.Header>
-
-          <Navbar.Collapse>
-            <Nav navbar>
+        <Navbar bg="light">
+          <Navbar.Brand>
+            <IndexLinkContainer to="/" activeStyle={{ color: '#33e0ff' }} className={styles.title}>
+              <div className={styles.brand}>
+                <span>{config.app.title}</span>
+              </div>
+            </IndexLinkContainer>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mr-auto">
               <LinkContainer to="/chat">
-                <NavItem>Chat</NavItem>
+                <Nav.Link>Chat</Nav.Link>
               </LinkContainer>
               <LinkContainer to="/about">
-                <NavItem>About Us</NavItem>
+                <Nav.Link>About Us</Nav.Link>
               </LinkContainer>
 
               {!user && (
                 <LinkContainer to="/login">
-                  <NavItem>Login</NavItem>
+                  <Nav.Link>Login</Nav.Link>
                 </LinkContainer>
               )}
               {!user && (
                 <LinkContainer to="/register">
-                  <NavItem>Register</NavItem>
+                  <Nav.Link>Register</Nav.Link>
                 </LinkContainer>
               )}
               {user && (
                 <LinkContainer to="/logout">
-                  <NavItem className="logout-link" onClick={this.handleLogout}>
+                  <Nav.Link className="logout-link" onClick={this.handleLogout}>
                     Logout
-                  </NavItem>
+                  </Nav.Link>
                 </LinkContainer>
               )}
             </Nav>
@@ -144,18 +141,17 @@ class App extends Component {
                 <strong>{user.email}</strong>
               </p>
             )}
-            <Nav navbar pullRight>
-              <NavItem
+            <Nav>
+              <Nav.Link
                 target="_blank"
                 title="View on Github"
                 href="https://github.com/bertho-zero/react-redux-universal-hot-example"
               >
                 <i className="fa fa-github" />
-              </NavItem>
+              </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-
         <div className={styles.appContent}>
           {notifs.global && (
             <div className="container">

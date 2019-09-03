@@ -4,7 +4,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const CleanPlugin = require('clean-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const { ReactLoadablePlugin } = require('react-loadable/webpack');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
@@ -35,17 +35,16 @@ module.exports = {
   },
   optimization: {
     // for MiniCssExtractPlugin:
-    //
-    // splitChunks: {
-    //   cacheGroups: {
-    //     styles: {
-    //       name: 'styles',
-    //       test: /\.(less|scss)$/,
-    //       chunks: 'all',
-    //       enforce: true
-    //     }
-    //   }
-    // },
+    splitChunks: {
+      cacheGroups: {
+        styles: {
+          name: 'styles',
+          test: /\.(less|scss)$/,
+          chunks: 'all',
+          enforce: true
+        }
+      }
+    },
     minimizer: [
       new TerserPlugin({
         cache: true,
@@ -63,69 +62,65 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        loader: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                modules: true,
-                importLoaders: 2,
-                sourceMap: true
-              }
-            },
-            {
-              loader: 'postcss-loader',
-              options: {
-                sourceMap: true,
-                config: {
-                  path: 'postcss.config.js'
-                }
-              }
-            },
-            {
-              loader: 'less-loader',
-              options: {
-                outputStyle: 'expanded',
-                sourceMap: true,
-                sourceMapContents: true
+        loader: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              importLoaders: 2,
+              sourceMap: true
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: true,
+              config: {
+                path: 'postcss.config.js'
               }
             }
-          ]
-        })
+          },
+          {
+            loader: 'less-loader',
+            options: {
+              outputStyle: 'expanded',
+              sourceMap: true,
+              sourceMapContents: true
+            }
+          },
+        ]
       },
       {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                modules: true,
-                importLoaders: 2,
-                sourceMap: true
-              }
-            },
-            {
-              loader: 'postcss-loader',
-              options: {
-                sourceMap: true,
-                config: {
-                  path: 'postcss.config.js'
-                }
-              }
-            },
-            {
-              loader: 'sass-loader',
-              options: {
-                outputStyle: 'expanded',
-                sourceMap: true,
-                sourceMapContents: true
+        loader: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              importLoaders: 2,
+              sourceMap: true
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: true,
+              config: {
+                path: 'postcss.config.js'
               }
             }
-          ]
-        })
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              outputStyle: 'expanded',
+              sourceMap: true,
+              sourceMapContents: true
+            }
+          },
+        ]
       },
       {
         test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/,
@@ -169,15 +164,30 @@ module.exports = {
     extensions: ['.json', '.js', '.jsx']
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      Tether: 'tether',
+      'window.Tether': 'tether',
+      Popper: ['popper.js', 'default'],
+      Alert: 'exports-loader?Alert!bootstrap/js/dist/alert',
+      Button: 'exports-loader?Button!bootstrap/js/dist/button',
+      Carousel: 'exports-loader?Carousel!bootstrap/js/dist/carousel',
+      Collapse: 'exports-loader?Collapse!bootstrap/js/dist/collapse',
+      Dropdown: 'exports-loader?Dropdown!bootstrap/js/dist/dropdown',
+      Modal: 'exports-loader?Modal!bootstrap/js/dist/modal',
+      Popover: 'exports-loader?Popover!bootstrap/js/dist/popover',
+      Scrollspy: 'exports-loader?Scrollspy!bootstrap/js/dist/scrollspy',
+      Tab: 'exports-loader?Tab!bootstrap/js/dist/tab',
+      Tooltip: 'exports-loader?Tooltip!bootstrap/js/dist/tooltip',
+      Util: 'exports-loader?Util!bootstrap/js/dist/util',
+    }),
     /* wepack build status - show webpack build progress in terminal */
     new webpack.ProgressPlugin(),
 
     new CleanPlugin(),
 
     // css files from the extract-text-plugin loader
-    new ExtractTextPlugin({
+    new MiniCssExtractPlugin({
       filename: '[name]-[chunkhash].css',
-      // disable: false,
       allChunks: true
     }),
 
