@@ -56,7 +56,7 @@
     "@feathersjs/errors": "^3.2.0",
     "@feathersjs/express": "^1.1.2",
     "@feathersjs/feathers": "^3.0.2",
-    "@feathersjs/rest-client": "^1.3.2",
+    "@feathersjs/rest-client": "^4.3.3",
     "@feathersjs/socketio": "^3.0.1",
     "@feathersjs/socketio-client": "^1.0.1",
     "axios": "^0.18.0",
