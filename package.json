@@ -49,7 +49,7 @@
     "@babel/register": "^7.4.0",
     "@babel/runtime-corejs3": "^7.4.3",
     "@feathersjs/authentication": "^2.1.0",
-    "@feathersjs/authentication-client": "^1.0.1",
+    "@feathersjs/authentication-client": "^4.3.5",
     "@feathersjs/authentication-jwt": "^2.0.0",
     "@feathersjs/authentication-local": "^1.0.2",
     "@feathersjs/authentication-oauth2": "^1.0.2",
