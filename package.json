@@ -46,7 +46,7 @@
     "docker-down": "docker-compose down"
   },
   "dependencies": {
-    "@babel/register": "^7.4.0",
+    "@babel/register": "^7.6.2",
     "@babel/runtime-corejs3": "^7.4.3",
     "@feathersjs/authentication": "^2.1.0",
     "@feathersjs/authentication-client": "^1.0.1",
