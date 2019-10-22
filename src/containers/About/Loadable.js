@@ -1,9 +1,7 @@
-import React from 'react';
-import Loadable from 'react-loadable';
+import DefaultLoader from 'components/DefaultLoader';
 
-const AboutLoadable = Loadable({
-  loader: () => import('./About' /* webpackChunkName: 'about' */).then(module => module.default),
-  loading: () => <div>Loading</div>
+const AboutLoadable = DefaultLoader({
+  loader: () => import('./About' /* webpackChunkName: 'about' */).then(module => module.default)
 });
 
 export default AboutLoadable;

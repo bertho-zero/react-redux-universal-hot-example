@@ -1,9 +1,7 @@
-import React from 'react';
-import Loadable from 'react-loadable';
+import DefaultLoader from 'components/DefaultLoader';
 
-const LoginLoadable = Loadable({
-  loader: () => import('./Login' /* webpackChunkName: 'login' */).then(module => module.default),
-  loading: () => <div>Loading</div>
+const LoginLoadable = DefaultLoader({
+  loader: () => import('./Login' /* webpackChunkName: 'login' */).then(module => module.default)
 });
 
 export default LoginLoadable;
