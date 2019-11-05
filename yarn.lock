@@ -966,10 +966,10 @@
     core-js "^2.5.7"
     regenerator-runtime "^0.12.0"
 
-"@babel/runtime-corejs3@^7.4.3":
-  version "7.4.3"
-  resolved "https://registry.yarnpkg.com/@babel/runtime-corejs3/-/runtime-corejs3-7.4.3.tgz#32a5114bdf255f2eed3078f07d675f774adbb394"
-  integrity sha512-12jcdiSTZu6bLXyjCqD4E8/rFoctaLjR/MvIiI4I4kvqFEnifeDbaChDpYHrt9meOXbkDpykXdqhXfRJCJYHxQ==
+"@babel/runtime-corejs3@^7.7.0":
+  version "7.7.0"
+  resolved "https://registry.yarnpkg.com/@babel/runtime-corejs3/-/runtime-corejs3-7.7.0.tgz#fe7e822c7d582d5119bddee430115df3bc7efa6f"
+  integrity sha512-fdNLfplVJktJoinhrhEN84fWHViZZ0WIENUf3oKPBcBP5+kZIm8uMGehUbv7Rg4qYTIVGIy9DuVxItwowxqZDg==
   dependencies:
     core-js-pure "^3.0.0"
     regenerator-runtime "^0.13.2"
