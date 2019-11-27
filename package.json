@@ -57,7 +57,7 @@
     "@feathersjs/express": "^1.1.2",
     "@feathersjs/feathers": "^3.0.2",
     "@feathersjs/rest-client": "^1.3.2",
-    "@feathersjs/socketio": "^3.0.1",
+    "@feathersjs/socketio": "^4.4.1",
     "@feathersjs/socketio-client": "^1.0.1",
     "axios": "^0.18.0",
     "body-parser": "^1.16.1",
