@@ -69,7 +69,7 @@
     "express": "^4.15.4",
     "express-session": "^1.15.5",
     "feathers-authentication-hooks": "^0.3.0",
-    "feathers-hooks-common": "^4.10.0",
+    "feathers-hooks-common": "^5.0.0",
     "feathers-nedb": "^4.0.1",
     "final-form": "^4.6.1",
     "history": "^4.7.2",
