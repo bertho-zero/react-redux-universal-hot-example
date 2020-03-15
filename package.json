@@ -63,7 +63,7 @@
     "body-parser": "^1.16.1",
     "classnames": "^2.2.5",
     "compression": "^1.6.2",
-    "cookie-parser": "^1.4.3",
+    "cookie-parser": "^1.4.5",
     "cookies-js": "^1.2.3",
     "core-js": "^3.0.1",
     "express": "^4.15.4",
