@@ -86,7 +86,7 @@
     "pretty-error": "^2.0.2",
     "prop-types": "^15.5.8",
     "qs": "^6.5.2",
-    "react": "^16.8.6",
+    "react": "^16.13.1",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.8.6",
     "react-final-form": "^4.1.0",
