@@ -78,7 +78,7 @@
     "localforage": "^1.4.3",
     "lodash": "^4.17.10",
     "lru-memoize": "^1.0.1",
-    "morgan": "^1.8.1",
+    "morgan": "^1.10.0",
     "multireducer": "^3.1.0",
     "nedb": "^1.8.0",
     "nprogress": "^0.2.0",
