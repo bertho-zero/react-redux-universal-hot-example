@@ -988,12 +988,19 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
-"@babel/runtime@^7.1.2", "@babel/runtime@^7.3.1", "@babel/runtime@^7.3.4", "@babel/runtime@^7.4.3":
+"@babel/runtime@^7.1.2", "@babel/runtime@^7.3.4", "@babel/runtime@^7.4.3":
   version "7.4.3"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.4.3.tgz#79888e452034223ad9609187a0ad1fe0d2ad4bdc"
   integrity sha512-9lsJwJLxDh/T3Q3SZszfWOTkk3pHbkmH+3KY+zwIDmsNlxsumuhS2TH3NIpktU4kNvfzy+k3eLT7aTJSPTo0OA==
   dependencies:
     regenerator-runtime "^0.13.2"
+
+"@babel/runtime@^7.8.3":
+  version "7.9.2"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.9.2.tgz#d90df0583a3a252f09aaa619665367bae518db06"
+  integrity sha512-NE2DtOdufG7R5vnfQUTehdTfNycfUANEtCa9PssN9O/xmTzP4E08UI797ixaei6hBEVL9BI/PsdJS5x7mWoB9Q==
+  dependencies:
+    regenerator-runtime "^0.13.4"
 
 "@babel/template@^7.0.0", "@babel/template@^7.2.2", "@babel/template@^7.4.0":
   version "7.4.0"
@@ -4766,12 +4773,12 @@ fill-range@^4.0.0:
     repeat-string "^1.6.1"
     to-regex-range "^2.1.0"
 
-final-form@^4.6.1:
-  version "4.12.0"
-  resolved "https://registry.yarnpkg.com/final-form/-/final-form-4.12.0.tgz#1844e2a3bc9789d51115c76a94d0ea6a19e219c0"
-  integrity sha512-z1fSzDNmIBlDjRMaluM3WgDbcwCFpPm7mvopplgXGMRS49MXR+1n//lteLwPURdGQNOZhWm3GwiEJanEHCItww==
+final-form@^4.19.0:
+  version "4.19.0"
+  resolved "https://registry.yarnpkg.com/final-form/-/final-form-4.19.0.tgz#d8f62ca392155a45e0d1599c89f9dcc668ccf0a1"
+  integrity sha512-3vm8qdbe66OqvjZIDAFqMx9Td6nj09cNEHF2N2a6NfBN7/RS4sF8ryxQa3PPBG+CsIqido0DA+AVPPpTIjB85A==
   dependencies:
-    "@babel/runtime" "^7.3.1"
+    "@babel/runtime" "^7.8.3"
 
 finalhandler@1.1.1:
   version "1.1.1"
@@ -10096,6 +10103,11 @@ regenerator-runtime@^0.13.2:
   version "0.13.2"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.2.tgz#32e59c9a6fb9b1a4aff09b4930ca2d4477343447"
   integrity sha512-S/TQAZJO+D3m9xeN1WTI8dLKBBiRgXBlTJvbWjCThHWZj9EvHK70Ff50/tYj2J/fvBY6JtFVwRuazHN2E7M9BA==
+
+regenerator-runtime@^0.13.4:
+  version "0.13.5"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.5.tgz#d878a1d094b4306d10b9096484b33ebd55e26697"
+  integrity sha512-ZS5w8CpKFinUzOwW3c83oPeVXoNsrLsaCoLtJvAClH135j/R77RuymhiSErhm2lKcwSCIpmvIWSbDkIfAqKQlA==
 
 regenerator-transform@^0.13.4:
   version "0.13.4"
