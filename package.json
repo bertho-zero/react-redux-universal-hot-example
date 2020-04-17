@@ -67,7 +67,7 @@
     "cookies-js": "^1.2.3",
     "core-js": "^3.0.1",
     "express": "^4.15.4",
-    "express-session": "^1.15.5",
+    "express-session": "^1.17.1",
     "feathers-authentication-hooks": "^0.3.0",
     "feathers-hooks-common": "^4.10.0",
     "feathers-nedb": "^4.0.1",
