@@ -2129,10 +2129,10 @@ babel-loader@^8.0.0:
     mkdirp "^0.5.1"
     util.promisify "^1.0.0"
 
-babel-plugin-dynamic-import-node@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/babel-plugin-dynamic-import-node/-/babel-plugin-dynamic-import-node-2.2.0.tgz#c0adfb07d95f4a4495e9aaac6ec386c4d7c2524e"
-  integrity sha512-fP899ELUnTaBcIzmrW7nniyqqdYWrWuJUyPWHxFa/c7r7hS6KC8FscNfLlBNIoPSc55kYMGEEKjPjJGCLbE1qA==
+babel-plugin-dynamic-import-node@^2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/babel-plugin-dynamic-import-node/-/babel-plugin-dynamic-import-node-2.3.2.tgz#14fb5accb300f9aac0151949f6192259f1403c4a"
+  integrity sha512-yvczAMjbc73xira9yTyF1XnEmkX8QwlUhmxuhimeMUeAaA6s7busTPRVDzhVG7eeBdNcRiZ/mAwFrJ9It4vQcg==
   dependencies:
     object.assign "^4.1.0"
 
