@@ -172,7 +172,7 @@
     "postcss-url": "^8.0.0",
     "prettier-eslint-cli": "^4.6.1",
     "react-a11y": "^1.0.0",
-    "react-hot-loader": "^4.0.0",
+    "react-hot-loader": "^4.12.21",
     "resolve-url-loader": "^2.2.1",
     "sass-loader": "^7.0.1",
     "style-loader": "^0.23.0",
