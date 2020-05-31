@@ -129,7 +129,7 @@
     "@babel/plugin-transform-react-jsx-source": "^7.10.1",
     "@babel/plugin-transform-runtime": "^7.10.1",
     "@babel/preset-env": "^7.10.2",
-    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-react": "^7.10.1",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.7.1",
